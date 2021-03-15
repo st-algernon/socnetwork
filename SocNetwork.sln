@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1000
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocNetwork", "SocNetwork\SocNetwork.csproj", "{10579409-BB17-4CD1-B839-CF4D528CDCF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocNetwork", "SocNetwork\SocNetwork.csproj", "{89C25A08-912D-4082-B4DF-DE4CF8AFF616}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{10579409-BB17-4CD1-B839-CF4D528CDCF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10579409-BB17-4CD1-B839-CF4D528CDCF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10579409-BB17-4CD1-B839-CF4D528CDCF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10579409-BB17-4CD1-B839-CF4D528CDCF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89C25A08-912D-4082-B4DF-DE4CF8AFF616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89C25A08-912D-4082-B4DF-DE4CF8AFF616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89C25A08-912D-4082-B4DF-DE4CF8AFF616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89C25A08-912D-4082-B4DF-DE4CF8AFF616}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0C935288-FEA1-4647-9104-3C4860B57ADB}
+		SolutionGuid = {124FBC0A-E66C-455D-BC9F-CF348D7C64B9}
 	EndGlobalSection
 EndGlobal
