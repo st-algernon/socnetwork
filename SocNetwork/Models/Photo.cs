@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    [Table("Videos")]
-    public class Video : AttachedFile
+    [Table("Photos")]
+    public class Photo : AttachedFile
     {
     }
 }

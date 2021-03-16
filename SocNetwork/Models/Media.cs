@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    public class Tag
+    public class Media
     {
         public int Id { get; set; }
-        public string Content { get; set; }
-        public List<Post> Posts { get; set; }
+        public string MimeType { get; set; }
+        public string Path { get; set; }
     }
 }

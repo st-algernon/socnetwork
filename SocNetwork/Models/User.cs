@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,26 +26,19 @@ namespace SocNetwork.Models
         Unspecified
     }
 
-    public enum AccountStatus
+    [Table("Users")]
+    public class User : Account
     {
-        IsActive,
-        Reported,
-        Blocked
-    }
-
-    public class User
-    {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
         public string Username { get; set; }
         public string Bio { get; set; }
         public DateTime BirthDate { get; set; }
         public string Location { get; set; }
         public Gender Gender { get; set; }
-        public DateTime RegistrationDate { get; set; }
         public Relationship Relationship { get; set; }
-        public DateTime LastVisited { get; set; }
-        public AccountStatus AccountStatus { get; set; }
+        public string AvatarPath { get; set; }
+        public string CoverPath { get; set; }
+        public List<Post> Posts { get; set; }
+        public List<Conversation> Conversations { get; set; }
     }
 }
