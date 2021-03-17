@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    [Table("Comments")]
-    public class Comment : Post
+    [Table("Reposts")]
+    public class Repost : Post
     {
-        public Guid PostId { get; set; }
-        public Post Post { get; set; }
+        public Guid OriginalPostId { get; set; }
     }
 }

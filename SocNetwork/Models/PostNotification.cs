@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    [Table("Admins")]
-    public class Admin : Account
+    [Table("PostNotifications")]
+    public class PostNotification : Notification
     {
-
+        public Guid PostId { get; set; }
     }
 }

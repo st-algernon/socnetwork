@@ -22,6 +22,10 @@ namespace SocNetwork
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = "Server=(localdb)\\mssqllocaldb;Database=SocNetworkDB;Trusted_Connection=True;";
+            services.AddDbContext<SocNetworkContext>(options =>
+                options.UseSqlServer(connection));
+
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

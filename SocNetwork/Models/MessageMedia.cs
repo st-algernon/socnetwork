@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    [Table("Comments")]
-    public class Comment : Post
+    [Table("MessageMedia")]
+    public class MessageMedia : Media
     {
-        public Guid PostId { get; set; }
-        public Post Post { get; set; }
+        public Guid MessageId { get; set; }
+        public Message Message { get; set; }
     }
 }

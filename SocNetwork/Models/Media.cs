@@ -7,8 +7,10 @@ namespace SocNetwork.Models
 {
     public class Media
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string MimeType { get; set; }
         public string Path { get; set; }
+        public int Size { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

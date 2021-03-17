@@ -1,26 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
+    public enum MessageState
+    {
+        IsSent,
+        IsRead
+    }
+
     public enum MessageStatus {
-        Edited,
-        Deleted
+        IsEdited,
+        IsDeleted
     }
 
     public class Message
     {
-        public int Id { get; set; }
-        public int AuthorId { get; set; }
+        public Guid Id { get; set; }
+        public Guid AuthorId { get; set; }
+        [ForeignKey("AuthorId")]
         public User User { get; set; }
-        public int ConversationId { get; set; }
+        public Guid ConversationId { get; set; }
         public Conversation Conversation { get; set; }
         public string Text { get; set; }
-        public DateTime SentAt { get; set; }
-        public int ReplyTo { get; set; }
-        public List<AttachedFile> AttachedFiles { get; set; }
+        public DateTime CreationDate { get; set; }
+        public List<MessageMedia> MessageAttachments { get; set; }
         public MessageStatus MessageStatus { get; set; }
+        public MessageState MessageState { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace SocNetwork.Models
         Unspecified
     }
 
-    public enum Relationship
+    public enum MaritalStatus
     {
         Engaged,
         InARelationship,
@@ -35,10 +35,10 @@ namespace SocNetwork.Models
         public DateTime BirthDate { get; set; }
         public string Location { get; set; }
         public Gender Gender { get; set; }
-        public Relationship Relationship { get; set; }
+        public MaritalStatus MaritalStatus { get; set; }
         public string AvatarPath { get; set; }
         public string CoverPath { get; set; }
-        public List<Post> Posts { get; set; }
         public List<Conversation> Conversations { get; set; }
+        public List<UserPost> UserPosts { get; set; }
     }
 }

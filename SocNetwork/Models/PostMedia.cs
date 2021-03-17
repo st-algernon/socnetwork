@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    [Table("Moderators")]
-    public class Moderator : Account
+    [Table("PostMedia")]
+    public class PostMedia : Media
     {
+        public Guid PostId { get; set; }
+        public Post Post { get; set; }
     }
 }
