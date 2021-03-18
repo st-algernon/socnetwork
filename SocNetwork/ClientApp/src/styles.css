@@ -1,16 +1,260 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+	font-family: 'Deezer';
+	src: url(assets/fonts/Deezer/deezer-bold.woff2) format('woff2');
+}
 
-/* Provide sufficient contrast against white background */
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
 a {
-  color: #0366d6;
+	text-decoration: none;
 }
 
-code {
-  color: #e01a76;
+ul {
+	list-style: none;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+button {
+	border: none;
+	background-color: transparent;
+}
+
+textarea {
+	border: none;
+	resize: none;
+	outline: none;
+	overflow: hidden;
+	color: #484848;
+	width: 100%;
+}
+
+/*FLEXIBLE box*/
+
+.flex {
+	display: flex;
+}
+
+.flex.row {
+	flex-direction: row;
+}
+
+.flex.row_r {
+	flex-direction: row-reverse;
+}
+
+.flex.col {
+	flex-direction: column;
+}
+
+.flex.col_r {
+	flex-direction: column-reverse;
+}
+
+.flex.wrap {
+	flex-wrap: wrap;
+}
+
+.flex.jc-sb {
+	justify-content: space-between;
+}
+
+.flex.jc-sa {
+	justify-content: space-around;
+}
+
+.flex.jc-c {
+	justify-content: center;
+}
+
+.flex.jc-fs {
+	justify-content: flex-start; /*default value*/
+}
+
+.flex.jc-fe {
+	justify-content: flex-end;
+}
+
+.flex.ai-s {
+	align-items: stretch; /*default value*/
+}
+
+.flex.ai-c {
+	align-items: center;
+}
+
+.flex.ai-fs {
+	align-items: flex-start;
+}
+
+.flex.ai-fe {
+	align-items: flex-end;
+}
+
+.flex.ai-bl {
+	align-items: baseline;
+}
+
+.flex.ac-s {
+	align-content: stretch; /*default value*/
+}
+
+.flex.ac-c {
+	align-content: center;
+}
+
+.flex.ac-sb {
+	align-content: space-between;
+}
+
+.flex.ac-sa {
+	align-content: space-around;
+}
+
+.flex.ac-fe {
+	align-content: flex-end;
+}
+
+.flex > .fs-0 {
+	flex-shrink: 0;
+}
+
+.flex > .fg-1 {
+	flex-grow: 1;
+}
+
+.flex > .as-c {
+	align-self: center;
+}
+
+.flex > .as-fs {
+	align-self: flex-start;
+}
+
+.flex > .as-fe {
+	align-self: flex-end;
+}
+
+.flex > .as-s {
+	align-self: stretch;
+}
+
+.flex > .as-bl {
+	align-self: baseline;
+}
+
+/*SHARED styles*/
+
+.hidden {
+	display: none;
+}
+
+.avatar-box {
+	border-radius: 50%;
+	overflow: hidden;
+	flex-shrink: 0;
+}
+
+.avatar-box img {
+	width: 100%;
+}
+
+.square-20 {
+	width: 20px;
+	height: 20px;
+}
+
+.square-22 {
+	width: 22px;
+	height: 22px;
+}
+
+.square-24 {
+	width: 24px;
+	height: 24px;
+}
+
+.square-26 {
+	width: 26px;
+	height: 26px;
+}
+
+.square-28 {
+	width: 28px;
+	height: 28px;
+}
+
+.square-32 {
+	width: 32px;
+	height: 32px;
+}
+
+.square-40 {
+	width: 40px;
+	height: 40px;
+}
+
+.square-44 {
+	width: 44px;
+	height: 44px;
+}
+
+.square-48 {
+	width: 48px;
+	height: 48px;
+}
+
+.square-64 {
+	width: 64px;
+	height: 64px;
+}
+
+.square-128 {
+	width: 128px;
+	height: 128px;
+}
+
+.round {
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.round.r-18 {
+	background-size: 18px;
+}
+
+.round.r-20 {
+	background-size: 20px;
+}
+
+.round.r-22 {
+	background-size: 22px;
+}
+
+.hashtag {
+	color: #1da1f2;
+	text-decoration: none;
+}
+
+.btn-outlined {
+	padding: 8px 14px;
+	color: #1da1f2;
+	border: 1px solid #1da1f2;
+	background: #fff;
+	border-radius: 20px;
+	font-weight: bold;
+}
+
+.btn-outlined:hover {
+	color: #fff;
+	border: 1px solid #1da1f2;
+	background: #1da1f2;
+}
+
+body {
+	background-color: rgb(230, 236, 240);
+	font-family: 'Nunito', 'Open-sans', sans-serif;
 }

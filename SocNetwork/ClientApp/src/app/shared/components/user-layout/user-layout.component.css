@@ -1,0 +1,314 @@
+/* HEADER */
+
+header {
+	position: fixed;
+	width: 100%;
+	padding: 7px 20px;
+	background: #fff;
+	z-index: 11;
+	border-bottom: 1px solid #F4F4F4;
+	box-sizing: border-box;
+}
+
+.logo {
+	font-family: 'Concert One', cursive;
+	width: 200px;
+	height: 40px;
+	color: #00a3e8!important;
+	font-size: 30px;
+	text-align: right;
+	line-height: 35px;
+}
+
+.logo::before {
+	content: "";
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+	display: inline-block;
+	background: url(../../../../assets/images/logo.png) no-repeat;
+	background-size: 100%;
+	vertical-align: top;
+}
+
+	.logo a {
+		color: #00a3e8 !important;
+	  text-decoration: none;
+		outline: none;
+	}
+
+.search-profile-wrap {
+	width: 350px;
+}
+
+.search-form input {
+	background: url(../../../../assets/images/search.png) 10px center no-repeat;
+	border-radius: 20px;
+	padding: 10px 30px 10px 40px;
+	border: none;
+	background-color: rgb(230, 236, 240);
+	background-size: 20px 20px;
+	width: 300px;
+}
+
+.search-form input:focus {
+	background: url(../../../../assets/images/search-hover.png) 10px center no-repeat;
+	border: 1px solid #1da1f2;
+	outline: none;
+	background-color: #fff;
+	background-size: 20px 20px;
+}
+
+.top-profile-menu {
+	position: relative;
+}
+
+.top-profile-menu > .avatar-box:hover {
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+.top-profile-menu .drop-down-menu {
+	width: 300px;
+	margin-top: 12px;
+	background: #fff;
+	box-shadow: 2px 2px 10px #ccc, -2px -2px 10px #ccc;
+	border-radius: 8px;
+	position: absolute;
+	right: 0px;
+	top: 30px;
+	overflow: hidden;
+}
+
+.top-profile-menu .drop-down-menu::after {
+	content: "";
+	position: absolute;
+	top: -14px;
+	right: 9px;	
+	border: 7px solid transparent;
+	border-bottom: 7px solid #fff;
+}
+
+.top-profile-menu .drop-down-menu a {
+	display: block;
+	position: relative;
+	margin: 0px 10px;
+	text-decoration: none;
+	color: #222;
+	padding: 10px;
+	width: 280px;
+	box-sizing: border-box;
+}
+
+.top-profile-menu .drop-down-menu a.menu-header {
+	border-bottom: 1px solid #eee;
+	width: 100%;
+	margin: 0px;
+	font-family: 'Deezer', 'Open-sans', sans-serif;
+}
+
+.top-profile-menu .drop-down-menu ul.menu-body {
+	margin: 5px 0px;
+	list-style: none;
+}
+
+.top-profile-menu .drop-down-menu a:hover {
+	background: #E3F4FF;
+	border-radius: 8px;
+}
+
+.top-profile-menu .drop-down-menu a.menu-header:hover {
+	border-radius: 0px;
+}
+
+.top-profile-menu .drop-down-menu .avatar-box {
+	margin: 0px 20px 0px 8px;
+}
+
+.top-profile-menu .drop-down-menu .svg-icon {
+	position: absolute;
+	right: 20px;
+	top: 14px;
+	transition: transform linear 0.2s;
+}
+
+.top-profile-menu .drop-down-menu a.menu-header .svg-icon {
+	top: 24px;
+	right: 30px;
+}
+
+.top-profile-menu .drop-down-menu a:hover .svg-icon {
+	transform: translateX(5px);
+}
+
+/* ASIDE */
+
+aside {
+	position: fixed;
+	background: #fff;
+	border-radius: 0px 15px 15px 0px;
+	padding: 20px 30px 10px 10px;
+	left: 0px;
+	top: 64px;
+	min-width: 270px;
+	width: 25.7%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.main-nav {
+	width: 165px;
+	position: absolute;
+	right: 84px;
+	font-family: 'Deezer', 'Open-sans', sans-serif;
+}
+
+.main-nav ul {
+	list-style: none;
+}
+
+.main-nav a {
+	display: inline-block;
+	color: #333;
+	font-size: 20px;
+	padding: 7px;
+	border-radius: 17px;
+	width: 100%;
+	padding-left: 48px;
+	margin-bottom: 10px;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: 8px center;
+	background-size: 25px;
+}
+
+.main-nav a:hover {
+	background-color: #E3F4FF;
+	color: #1da1f2;
+}
+
+.main-nav a[data-state="current"] {
+	color: #1da1f2;
+}
+
+.main-nav a.profile {
+	background-image: url(../../../../assets/images/home.png);
+}
+
+.main-nav a.profile[data-state="current"] {
+	background-image: url(../../../../assets/images/home-hover.png);
+}
+
+.main-nav a.profile:hover {
+	background-image: url(../../../../assets/images/home-hover.png);
+}
+
+.main-nav a.news {
+	background-image: url(../../../../assets/images/news.png);
+}
+
+.main-nav a.news[data-state="current"] {
+	background-image: url(../../../../assets/images/news-hover.png);
+}
+
+.main-nav a.news:hover {
+	background-image: url(../../../../assets/images/news-hover.png);
+}
+
+.main-nav a.messages {
+	background-image: url(../../../../assets/images/chat.png);
+}
+
+.main-nav a.messages[data-state="current"] {
+	background-image: url(../../../../assets/images/chat-hover.png);
+}
+
+.main-nav a.messages:hover {
+	background-image: url(../../../../assets/images/chat-hover.png);
+}
+
+.main-nav a.friends {
+	background-image: url(../../../../assets/images/friends.png);
+}
+
+.main-nav a.friends[data-state="current"] {
+	background-image: url(../../../../assets/images/friends-hover.png);
+}
+
+.main-nav a.friends:hover {
+	background-image: url(../../../../assets/images/friends-hover.png);
+}
+
+.main-nav a.photos {
+	background-image: url(../../../../assets/images/photos.png);
+}
+
+.main-nav a.photos[data-state="current"] {
+	background-image: url(../../../../assets/images/photos-hover.png);
+}
+
+.main-nav a.photos:hover {
+	background-image: url(../../../../assets/images/photos-hover.png);
+}
+
+.main-nav a.communities[data-state="current"] {
+	background-image: url(../../../../assets/images/communities-hover.png);
+}
+
+.main-nav a.communities {
+	background-image: url(../../../../assets/images/communities.png);
+}
+
+.main-nav a.communities:hover {
+	background-image: url(../../../../assets/images/communities-hover.png);
+}
+
+.main-nav a.music {
+	background-image: url(../../../../assets/images/music.png);
+}
+
+.main-nav a.music[data-state="current"] {
+	background-image: url(../../../../assets/images/music-hover.png);
+}
+
+.main-nav a.music:hover {
+	background-image: url(../../../../assets/images/music-hover.png);
+}
+
+.main-nav a.video {
+	background-image: url(../../../../assets/images/video.png);
+}
+
+.main-nav a.video[data-state="current"] {
+	background-image: url(../../../../assets/images/video-hover.png);
+}
+
+.main-nav a.video:hover {
+	background-image: url(../../../../assets/images/video-hover.png);
+}
+
+.main-nav a.bookmarks {
+	background-image: url(../../../../assets/images/bookmarks.png);
+}
+
+.main-nav a.bookmarks[data-state="current"] {
+	background-image: url(../../../../assets/images/bookmarks-hover.png);
+}
+
+.main-nav a.bookmarks:hover {
+	background-image: url(../../../../assets/images/bookmarks-hover.png);
+}
+
+.right-col {
+	position: fixed;
+	background: #fff;
+	border-radius: 15px 0px 0px 15px;
+	width: 25.7%;
+	min-width: 270px;
+	height: 100%;
+	padding: 10px 10px 10px 30px;
+	right: 0px;
+	top: 64px;
+	z-index: 9;
+	box-sizing: border-box;
+}
