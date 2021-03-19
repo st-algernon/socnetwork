@@ -1,1 +1,64 @@
-<p>auth-page works!</p>
+<div class="wrapper">
+  <header class="flex fd-r">
+    <div class="logo">algernon</div>
+  </header>
+  <main>
+    <div class="sign-box">
+      <div class="sign-switches flex fd-r" data-container="sign-switches">
+        <button [attr.data-state]="isSignIn ? 'active' : 'inactive'" (click)="chooseSignIn()">
+          Sign in
+        </button>
+        <button [attr.data-state]="isSignUp ? 'active' : 'inactive'" (click)="chooseSignUp()">
+          Sign up
+        </button>
+      </div>
+
+      <form *ngIf="isSignIn" method="post" id="sign-in">
+        <div class="error-field">
+          <p></p>
+        </div>
+        <p class="flex fd-r jc-sb">
+          <label>Nickname:</label>
+          <input type="text" name="nickname" placeholder="banan4ik" />
+        </p>
+        <p class="flex fd-r jc-sb">
+          <label>Password:</label>
+          <input type="password" name="password" placeholder="*********" />
+        </p>
+        <p class="sign-box-btn">
+          <button type="submit" class="sign-btn">Sign in</button>
+        </p>
+        <p class="forgot-password">
+          <a href="index.html">Forgot your password?</a>
+        </p>
+      </form>
+
+      <form *ngIf="isSignUp" action="sign/sign-up" id="sign-up" method="post">
+        <p class="flex fd-r jc-sb">
+          <label>Name:</label>
+            <input type="text" name="name" placeholder="Ivan Ivanov" />
+        </p>
+        <p class="flex fd-r jc-sb">
+          <label>Nickname:</label>
+          <input type="text" name="nickname" placeholder="banan4ik" />
+        </p>
+        <p class="flex fd-r jc-sb">
+          <label>Email:</label>
+          <input type="email" name="email" placeholder="name@example.com" />
+        </p>
+        <p class="flex fd-r jc-sb">
+          <label>Password:</label>
+          <input type="password" name="password" placeholder="*********" />
+        </p>
+        <p class="sign-box-btn">
+          <button type="submit" class="sign-btn">Sign up</button>
+        </p>
+        <p class="note">
+          By clicking “Sign up”, you agree to our
+          <a href="#">terms of service</a> and
+          <a href="#">privacy statement</a>.
+        </p>
+      </form>
+    </div>
+  </main>
+</div>

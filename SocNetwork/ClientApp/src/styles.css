@@ -36,24 +36,28 @@ textarea {
 	display: flex;
 }
 
-.flex.row {
+.flex.fd-r {
 	flex-direction: row;
 }
 
-.flex.row_r {
+.flex.fd-rr {
 	flex-direction: row-reverse;
 }
 
-.flex.col {
+.flex.fd-c {
 	flex-direction: column;
 }
 
-.flex.col_r {
+.flex.fd-cr {
 	flex-direction: column-reverse;
 }
 
-.flex.wrap {
+.flex.fw-w {
 	flex-wrap: wrap;
+}
+
+.flex.fw-nw {
+	flex-wrap: nowrap;
 }
 
 .flex.jc-sb {

@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { PreloadAllModules, RouterModule, Routes } from "@angular/router";
+import { AuthPageComponent } from "./auth-page/auth-page.component";
 import { MessengerPageComponent } from "./messenger-page/messenger-page.component";
 import { NewsPageComponent } from "./news-page/news-page.component";
 import { ProfilePageComponent } from "./profile-page/profile-page.component";
@@ -14,6 +15,7 @@ const routes : Routes = [
           { path: 'messenger', component: MessengerPageComponent }
         ]
     },
+    { path: 'auth', component: AuthPageComponent },
     { path: '**', component: NotFoundPageComponent }
 ];
 

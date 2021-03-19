@@ -7,9 +7,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthPageComponent implements OnInit {
 
+  isSignIn: boolean;
+  isSignUp: boolean;
+
   constructor() { }
 
   ngOnInit() {
+    this.chooseSignIn();
+  }
+
+  chooseSignIn() {
+    this.isSignIn = true;
+    this.isSignUp = false;
+  }
+
+  chooseSignUp() {
+    this.isSignIn = false;
+    this.isSignUp = true;
   }
 
 }
