@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using SocNetwork.Configuration;
 using SocNetwork.Models;
 
 namespace SocNetwork
@@ -22,9 +25,8 @@ namespace SocNetwork
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = "Server=(localdb)\\mssqllocaldb;Database=SocNetworkDB;Trusted_Connection=True;";
-            services.AddDbContext<SocNetworkContext>(options =>
-                options.UseSqlServer(connection));
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<SocNetworkContext>(options => options.UseSqlServer(connection));
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -32,6 +34,24 @@ namespace SocNetwork
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = JwtConfig.ISSUER,
+
+                        ValidateAudience = true,
+                        ValidAudience = JwtConfig.AUDIENCE,
+
+                        ValidateLifetime = true,
+
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey(),
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,6 +76,9 @@ namespace SocNetwork
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
