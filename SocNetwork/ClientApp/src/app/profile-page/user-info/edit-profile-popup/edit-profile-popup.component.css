@@ -1,0 +1,186 @@
+.modal-win-back {
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 20;
+}
+
+#edit-profile-win[data-state="inactive"] {
+	display: none;
+}
+
+#edit-profile-win[data-state="active"] {
+	display: block;
+}
+
+#edit-profile-win .win-content {
+	position: absolute;
+	top: 30px;
+	left: 33%;
+	right: 33%;
+	min-width: 515px;
+	background: #fff;
+	border-radius: 15px;
+	border: 1px solid #ddd;
+	z-index: 21;
+	overflow: hidden;
+}
+
+.win-content .content-title {
+	width: 100%;
+	height: 45px;
+	border-bottom: 1px solid #eee;
+	color: #333;
+}
+
+.content-title .close-btn {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	background-image: url(../../../../assets/images/plus-hover.png);
+	transform: rotate(45deg);
+	outline: none;
+}
+
+.content-title .close-btn:hover {
+	background-color: #D5EFFF;
+}
+
+.win-content .edit-info-form {
+	position: relative;
+	max-height: 590px;
+}
+
+.win-content .photo-cover {
+	width: 100%;
+	height: 150px;
+	position: relative;
+	overflow: hidden;
+}
+
+.win-content .photo-cover > img {
+	max-width: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.win-content .user-avatar-back {
+	width: 98px;
+	height: 98px;
+	padding: 4px;
+	border-radius: 50%;
+	background: #fff;
+	position: absolute;
+	top: 100px;
+	left: 15px;
+}
+
+.win-content .user-avatar {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	position: relative;
+	overflow: hidden;
+}
+
+.win-content .user-avatar > img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.win-content .photo-upload-wrap {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.25);
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+}
+
+.win-content .photo-upload-wrap .upload-btn {
+	width: 38px;
+	height: 38px;
+	border-radius: 50%;
+	position: absolute;
+	top: calc(50% - 38px / 2);
+	left: calc(50% - 38px / 2);
+}
+
+.win-content .photo-upload-wrap .upload-btn:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.win-content .photo-upload-wrap .upload-btn img {
+	width: 24px;
+}
+
+.win-content .input-fields {
+	max-width: 350px;
+	padding: 25px 25px 15px 0px;
+	overflow-y: auto;
+}
+
+.input-fields .group {
+	position: relative;
+	margin-bottom: 20px;
+	width: 100%;
+}
+
+.input-fields input, .input-fields textarea {
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 16px;
+  padding: 10px;
+  display: block;
+  border-radius: 15px;
+	border: 1px solid #999;
+	height: 40px;
+}
+
+.input-fields label {
+  color: #999;
+  font-size: 18px;
+  position: absolute;
+  pointer-events: none;
+  left: 10px;
+  top: 10px;
+  transition: 0.2s ease all;
+	padding: 0px 4px;
+}
+
+.input-fields input:focus, .input-fields input:valid,
+.input-fields textarea:focus, .input-fields textarea:valid {
+	outline: none;
+	border: 1px solid #1da1f2;
+}
+
+.input-fields input:focus ~ label, .input-fields input:valid ~ label,
+.input-fields textarea:focus ~ label, .input-fields textarea:valid ~ label {
+  top: -10px;
+  font-size: 14px;
+  color: #1da1f2;
+	background: #fff;
+}
+
+.input-fields .name-wrap .group:first-of-type {
+	width: 50%;
+	margin-right: 15px;
+}
+
+.win-content .save-info-btn {
+	border-radius: 20px;
+	font-weight: bold;
+	padding: 8px 16px;
+	color: #fff;
+	border: 1px solid #1da1f2;
+	background: #1da1f2;
+}
+
+.win-content .save-info-btn:hover {
+	background: #0D93E5;
+}

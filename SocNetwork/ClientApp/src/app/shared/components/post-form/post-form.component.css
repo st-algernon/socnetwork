@@ -1,0 +1,84 @@
+.make-post-box {
+	margin-top: 10px;
+	background: #fff;
+	border-radius: 15px;
+	padding: 12px 15px;
+	color: #272727;
+}
+
+.make-post-box form {
+	flex-basis: 624px;
+}
+
+.make-post-box textarea{
+	margin-top: 14px;
+	font-size: 18px;
+	height: 20px;
+}
+
+.make-post-box .media-box {
+	max-height: 420px;
+	border-radius: 15px;
+	overflow: hidden;
+	margin: 15px 0px;
+}
+
+.make-post-box .media-box img {
+	object-fit: cover;
+	object-position: center;
+	width: 40%;
+	max-height: 210px;
+	flex-grow: 1;
+	margin: 0px 2px 2px 0px;
+}
+
+.make-post-box .media-box img:first-of-type {
+	max-height: 420px;
+}
+
+.make-post-box .avatar-box {
+	margin-right: 10px;
+}
+
+.make-post-box .make-post-footer {
+	flex-grow: 1;
+}
+
+.make-post-box .make-post-footer .submit-btn {
+	border: none;
+	color: #fff;
+	padding: 10px 18px;
+	border-radius: 19px;
+	font-weight: bold;
+	font-size: 16px;
+	outline: none;
+	cursor: pointer;
+}
+
+.make-post-box .make-post-footer .submit-btn[data-state="unable"] {
+	background-color: #A7D9F8;
+}
+
+.make-post-box .make-post-footer .submit-btn[data-state="able"] {
+	background-color: #1da1f2;
+}
+
+.attach {
+	list-style: none;
+}
+
+.attach .add-picture-btn {
+	background-image: url(../../../../assets/images/picture.png);
+}
+
+.attach .add-music-btn {
+	background-image: url(../../../../assets/images/add-music.png);
+}
+
+.attach .add-video-btn {
+	background-image: url(../../../../assets/images/add-video.png);
+}
+
+.attach .add-emoji-btn {
+	background-image: url(../../../../assets/images/emoji.png);
+}

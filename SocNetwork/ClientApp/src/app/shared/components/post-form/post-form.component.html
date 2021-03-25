@@ -1,0 +1,23 @@
+<section class="make-post-box flex fd-r jc-sb ai-fs">
+    <span class="avatar-box square-48">
+        <img src="../../../../assets/images/empty_photo.jpg" alt="photo" >
+    </span>
+    <form action="user/create-new-post" method="post" id="new-post-form" enctype="multipart/form-data">
+        <textarea name="post-text" placeholder="What's new?" data-action="switch-submit-btn"></textarea>
+        <div class="make-post-footer flex fd-r ai-fe jc-sb">
+            <ul class="attach flex fd-r jc-sb" data-container="attach">
+                <li class="add-picture-btn round r-20 square-28" data-action="picture">
+                    <input type="file" name="pictures[]" class="hidden" data-action="switch-submit-btn" multiple/>
+                </li>
+                <li class="add-music-btn round r-20 square-28" data-action="music">
+                    <input type="file" name="music" class="hidden"/>
+                </li>
+                <li class="add-video-btn round r-22 square-28" data-action="video">
+                    <input type="file" name="video" class="hidden"/>
+                </li>
+                <li class="add-emoji-btn round r-22 square-28" data-action="emoji"></li>
+            </ul>
+            <button type="submit" class="submit-btn" data-state="unable">Post</button>
+        </div>
+    </form>
+</section>

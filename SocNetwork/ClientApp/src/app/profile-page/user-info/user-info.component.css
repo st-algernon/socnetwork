@@ -1,0 +1,163 @@
+.wrap {
+    width: 100%;
+}
+
+.user-info {
+	position: relative;
+	width: 47%;
+	background: #fff;
+	border-radius: 15px;
+	overflow: hidden;
+}
+
+.user-info .photo-cover {
+	width: 100%;
+	height: 220px;
+	border-radius: 15px 15px 0px 0px;
+	background-color: #ccd6dd;
+	overflow: hidden;
+	position: relative;
+    margin-bottom: 10px;
+}
+
+.user-info .photo-cover img {
+	width: 100%;
+	height: 220px;
+	object-fit: cover;
+	object-position: center;
+}
+
+.user-info .photo-cover .photo-input-btn {
+	width: 100%;
+	height: 60px;
+	background: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	bottom: 5px;
+}
+
+.user-info .user-avatar-back {
+	width: 128px;
+	height: 128px;
+	padding: 4px;
+	border-radius: 50%;
+	background: #fff;
+	border: 1px solid #eee;
+	position: absolute;
+	top: 151px;
+	left: 15px;
+}
+
+.user-info .user-avatar {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	overflow: hidden;
+}
+
+.user-info .user-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.user-info .user-avatar .photo-input-btn {
+	width: 100%;
+	height: 40px;
+	background: rgba(0, 0, 0, 0.5);
+	transition: transform linear 0.1s;
+}
+
+.user-info .user-avatar:hover .photo-input-btn {
+	transform: translateY(-40px);
+}
+
+.user-info .wrap-info {
+	padding: 0px 25px 10px 25px;
+	flex-basis: 518px;
+}
+
+    .user-info .source-name {
+        font: bold 20px 'Deezer';
+        color: #333;
+        margin-left: 170px;
+    }
+
+.user-info .nick-name {
+	font-size: 16px;
+	color: #676767;
+	margin-left: 170px;
+}
+
+.user-info .edit-profile-btn {
+	margin-right: 25px;
+	border-radius: 20px;
+	font-weight: bold;
+	padding: 8px 14px;
+	color: #1da1f2;
+	border: 1px solid #1da1f2;
+	background: #fff;
+}
+
+.user-info .edit-profile-btn:hover {
+	color: #fff;
+	border: 1px solid #1da1f2;
+	background: #1da1f2;
+}
+
+.user-info .bio {
+	margin-top: 15px;
+	color: #333;
+}
+
+.user-info .follow-wrap {
+	font-size: 17px;
+	width: 100%;
+	margin: 12px 0px;
+}
+
+.user-info .follow-wrap > li {
+	font-size: 17px;
+	color: #7f7f7f;
+	cursor: pointer;
+}
+
+.user-info .follow-wrap > li > span {
+	color: #333;
+}
+
+.user-info .follow-wrap > li:hover span {
+	color: #1da1f2;
+}
+
+.user-info .short-info {
+	width: 100%;
+	margin: 5px 0px;
+	font-size: 15px;
+	color: #777;
+}
+
+.user-info .short-info > li {
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 17px;
+	margin-right: 15px;
+	padding-left: 22px;
+}
+
+.user-info .short-info .residence {
+	background-image:  url(../../../assets/images/location.png);
+}
+
+.user-info .short-info .birthday {
+	background-image: url(../../../assets/images/born.png);
+}
+
+.user-info .short-info .relationship {
+	background-image: url(../../../assets/images/heart.png);
+}
+
+.user-info .short-info .more-details {
+	background-image: url(../../../assets/images/more-horizont.png);
+	margin: 0px 0px 0px 10px;
+}

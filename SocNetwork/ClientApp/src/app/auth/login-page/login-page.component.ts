@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AccountLoginRequest } from '../shared/interfaces';
-import { AuthService } from '../shared/services/auth.service';
+import { AccountLoginRequest } from '../../shared/interfaces';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
-  selector: 'app-auth-page',
-  templateUrl: './auth-page.component.html',
-  styleUrls: ['./auth-page.component.css']
+  selector: 'login-auth-page',
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.css']
 })
-export class AuthPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit {
 
   form: FormGroup;
   submitted = false;

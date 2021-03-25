@@ -1,0 +1,63 @@
+<div id="edit-profile-win" class="modal-win-back" (click)="close()" *ngIf="isOpened">
+    <div class="win-content">
+        <div class="content-title flex fd-c jc-c ai-c">
+            <button (click)="close()" class="close-btn round r-22 square-32"></button>
+            <h3>Edit profile</h3>
+        </div>
+        <form action="user/edit-info" method="post" enctype="multipart/form-data" class="edit-info-form flex fd-c ai-fe">
+            <div class="photo-cover" data-container="image-box">
+                <img src="../../../../assets/images/rick-and-morty-5.jpg" alt="photo-cover">
+                <div class="photo-upload-wrap">
+                    <div class="upload-btn flex jc-c ai-c">
+                        <img src="../../../assets/images/add-photo.png" alt="">
+                    </div>
+                    <input type="file" name="cover-photo" class="hidden"/>
+                </div>
+            </div>
+            <div class="user-avatar-back">
+                <div class="user-avatar" data-container="image-box">
+                    <img src="../../../../assets/images/авка.jpg" alt="avatar">
+                    <div class="photo-upload-wrap">
+                        <div class="upload-btn flex jc-c ai-c">
+                            <img src="../../../../assets/images/add-photo.png" alt="">
+                        </div>
+                        <input type="file" name="avatar" class="hidden"/>
+                    </div>
+                </div>
+            </div>
+            <div class="input-fields flex fd-c ai-fe">
+                <div class="name-wrap flex fd-r">
+                    <p class="group">
+                        <input type="text" name="first-name" maxlength="15"/>
+                        <label for="">first name</label>
+                    </p>
+                    <p class="group">
+                        <input type="text" name="last-name" maxlength="20"/>
+                        <label for="">last name</label>
+                    </p>
+                </div>
+                <p class="group">
+                    <input type="text" name="nickname" maxlength="25"/>
+                    <label for="">nickname</label>
+                </p>
+                <p class="group">
+                    <input type="email" name="email" maxlength="40"/>
+                    <label for="">email</label>
+                </p>
+                <p class="group">
+                    <textarea type="text" name="about_myself" maxlength="255"></textarea>
+                    <label for="">bio</label>
+                </p>
+                <p class="group">
+                    <input type="tel" name="phone" pattern="+38(0[0-9]{2})-[0-9]{3}-[0-9]{4}" placeholder="+38 (0 _ _) - _ _ _ - _ _ _ _"/>
+                    <label for="">phone</label>
+                </p>
+                <p class="group">
+                    <input type="text" name="home-town"/>
+                    <label for="">home town</label>
+                </p>
+                <button type="submit" class="save-info-btn as-fe">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
