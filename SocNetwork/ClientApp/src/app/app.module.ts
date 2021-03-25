@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -16,7 +15,12 @@ import { SavedPageComponent } from './saved-page/saved-page.component';
 import { MessengerPageComponent } from './messenger-page/messenger-page.component';
 import { UserLayoutComponent } from './shared/components/user-layout/user-layout.component';
 import { NotFoundPageComponent } from './shared/components/not-found-page/not-found-page.component';
+import { AuthLayoutComponent } from './shared/components/auth-layout/auth-layout.component';
 import { AuthPageComponent } from './auth-page/auth-page.component';
+import { RegistrationPageComponent } from './auth-page/registration-page/registration-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from './shared/services/auth.service';
+import { AuthGuard } from './shared/services/auth.guard';
 
 @NgModule({
   declarations: [
@@ -32,14 +36,18 @@ import { AuthPageComponent } from './auth-page/auth-page.component';
     MessengerPageComponent,
     UserLayoutComponent,
     NotFoundPageComponent,
-    AuthPageComponent
+    AuthPageComponent,
+    RegistrationPageComponent,
+    AuthLayoutComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

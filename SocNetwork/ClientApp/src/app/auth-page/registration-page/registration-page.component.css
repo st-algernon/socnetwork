@@ -21,11 +21,12 @@ main .sign-box {
   padding: 10px;
   margin-top: 170px;
   border-radius: 5px;
-  background: #373737 url("../../assets/images/bg.png") 0 0 repeat;
+  background: #373737 url("../../../assets/images/bg.png") 0 0 repeat;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 main .sign-box form {
+  position: relative;
   margin: 30px auto;
   width: 400px;
   padding-right: 32px;
@@ -81,13 +82,13 @@ label {
 
 .sign-box-btn {
   position: absolute;
-  top: 12px;
+  top: 110px;
   right: -32px;
   width: 48px;
   height: 48px;
   padding: 8px;
   border-radius: 48px;
-  background: #373737 url("../../assets/images/bg.png") 0 0 repeat;
+  background: #373737 url("../../../assets/images/bg.png") 0 0 repeat;
 }
 
 .sign-btn {
@@ -131,7 +132,7 @@ label {
   left: 12px;
   width: 25px;
   height: 19px;
-  background: url("../../assets/images/arrow.png") 0 0 no-repeat;
+  background: url("../../../assets/images/arrow.png") 0 0 no-repeat;
 }
 
 .sign-btn:focus {
@@ -143,21 +144,10 @@ label {
   box-shadow: none;
 }
 
+.form-footer {
+  margin: 30px 20px 0px 15px;
+}
+
 .validation {
   padding-left: 100px;
-}
-
-.form-footer {
-  font-size: 13px;
-  font-weight: 100;
-  letter-spacing: 1px;
-}
-
-.form-footer .forgot-password {
-  padding-left: 100px;
-  color: #bbb !important;
-}
-
-.form-footer .create-account {
-  padding-left: 10px;
 }

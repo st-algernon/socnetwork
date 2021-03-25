@@ -1,64 +1,44 @@
-<div class="wrapper">
-  <header class="flex fd-r">
-    <div class="logo">algernon</div>
-  </header>
-  <main>
-    <div class="sign-box">
-      <div class="sign-switches flex fd-r" data-container="sign-switches">
-        <button [attr.data-state]="isSignIn ? 'active' : 'inactive'" (click)="chooseSignIn()">
-          Sign in
-        </button>
-        <button [attr.data-state]="isSignUp ? 'active' : 'inactive'" (click)="chooseSignUp()">
-          Sign up
-        </button>
+<main>
+  <div class="sign-box">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="validation" *ngIf="email?.invalid && email?.touched">
+        <small *ngIf="email?.errors?.required">Email is required. </small>
+        <small *ngIf="email?.errors?.email">Enter a valid e-mail</small>
       </div>
-
-      <form *ngIf="isSignIn" method="post" id="sign-in">
-        <div class="error-field">
-          <p></p>
-        </div>
-        <p class="flex fd-r jc-sb">
-          <label>Nickname:</label>
-          <input type="text" name="nickname" placeholder="banan4ik" />
-        </p>
-        <p class="flex fd-r jc-sb">
-          <label>Password:</label>
-          <input type="password" name="password" placeholder="*********" />
-        </p>
-        <p class="sign-box-btn">
-          <button type="submit" class="sign-btn">Sign in</button>
-        </p>
-        <p class="forgot-password">
-          <a href="index.html">Forgot your password?</a>
-        </p>
-      </form>
-
-      <form *ngIf="isSignUp" action="sign/sign-up" id="sign-up" method="post">
-        <p class="flex fd-r jc-sb">
-          <label>Name:</label>
-            <input type="text" name="name" placeholder="Ivan Ivanov" />
-        </p>
-        <p class="flex fd-r jc-sb">
-          <label>Nickname:</label>
-          <input type="text" name="nickname" placeholder="banan4ik" />
-        </p>
-        <p class="flex fd-r jc-sb">
+      <div class="validation" *ngIf="password?.invalid && password?.touched">
+        <small *ngIf="password?.errors?.required">Password is required</small>
+        <small *ngIf="password?.errors?.minlength"
+          >Password must be at least
+          {{ password?.errors?.minlength?.requiredLength }} characters long.
+          {{ password?.errors?.minlength?.actualLength }} characters are now
+          entered</small
+        >
+      </div>
+      <div class="controls-box">
+        <div class="form-control flex fd-r jc-sb">
           <label>Email:</label>
-          <input type="email" name="email" placeholder="name@example.com" />
-        </p>
-        <p class="flex fd-r jc-sb">
+          <input
+            type="text"
+            formControlName="email"
+            placeholder="example@mail.com"
+          />
+        </div>
+        <div class="form-control flex fd-r jc-sb">
           <label>Password:</label>
-          <input type="password" name="password" placeholder="*********" />
-        </p>
-        <p class="sign-box-btn">
-          <button type="submit" class="sign-btn">Sign up</button>
-        </p>
-        <p class="note">
-          By clicking “Sign up”, you agree to our
-          <a href="#">terms of service</a> and
-          <a href="#">privacy statement</a>.
-        </p>
-      </form>
-    </div>
-  </main>
-</div>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="*********"
+          />
+        </div>
+        <div class="sign-box-btn">
+          <button type="submit" [disabled]="form.invalid || submitted" class="sign-btn">Sign in</button>
+        </div>
+      </div>
+      <div class="form-footer">
+        <a class="forgot-password">Forgot your password?</a>
+        <a class="create-account" routerLink="sign-up">Create an account</a>
+      </div>
+    </form>
+  </div>
+</main>

@@ -21,8 +21,7 @@ namespace SocNetwork.Models
     {
         public Guid Id { get; set; }
         public Guid AuthorId { get; set; }
-        [ForeignKey("AuthorId")]
-        public User User { get; set; }
+        public User Author { get; set; }
         public Guid ConversationId { get; set; }
         public Conversation Conversation { get; set; }
         public string Text { get; set; }
