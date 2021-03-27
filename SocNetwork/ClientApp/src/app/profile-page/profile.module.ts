@@ -7,6 +7,7 @@ import { PostFormComponent } from "../shared/components/post-form/post-form.comp
 import { PostComponent } from "../shared/components/post/post.component";
 import { CommonModule } from "@angular/common";
 import { EditProfilePopupComponent } from './user-info/edit-profile-popup/edit-profile-popup.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -19,7 +20,9 @@ import { EditProfilePopupComponent } from './user-info/edit-profile-popup/edit-p
     ],
     imports: [
         ProfileRoutingModule,
-        CommonModule
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule
     ],
     exports: [],
     providers: []

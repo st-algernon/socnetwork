@@ -38,8 +38,13 @@ export class RegistrationPageComponent implements OnInit {
   ngOnInit() {
     this.form = new FormGroup ({
       email: new FormControl(null, [Validators.email, Validators.required]),
-      name: new FormControl(null, [Validators.minLength(3), Validators.required]),
-      username: new FormControl(null, [Validators.required]),
+      name: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[A-Za-zА-Яа-я ]*$'), 
+        Validators.minLength(3),
+        Validators.maxLength(35)]
+      ),
+      username: new FormControl(null, [Validators.pattern('^[A-Za-z0-9_]{3,15}$'), Validators.required]),
       password: new FormControl(null, [Validators.minLength(6), Validators.required])
     });
   }

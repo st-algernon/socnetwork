@@ -11,13 +11,15 @@ import { UserLayoutComponent } from './shared/components/user-layout/user-layout
 import { CommonModule } from '@angular/common';
 import { ProfileMenuPopupComponent } from './shared/components/user-layout/profile-menu-popup/profile-menu-popup.component';
 import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
+import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserLayoutComponent,
     ProfileMenuPopupComponent,
-    SearchResultPopupComponent
+    SearchResultPopupComponent,
+    DropdownComponent
   ],
   imports: [
     CommonModule,

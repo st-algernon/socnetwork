@@ -14,7 +14,4 @@ export class UserInfoComponent implements OnInit {
   ngOnInit() {
   }
 
-  openEditProfilePopup() {
-    this.editProfileFlag = true;
-  }
 }

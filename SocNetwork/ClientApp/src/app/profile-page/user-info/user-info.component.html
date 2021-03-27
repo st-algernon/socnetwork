@@ -13,7 +13,7 @@
       </div>
       <a
         class="edit-profile-btn"
-        (click)="openEditProfilePopup()"
+        (click)="editProfileFlag = true"
         >Edit profile</a
       >
     </div>
@@ -35,4 +35,4 @@
     </div>
   </section>
 </div>
-<app-edit-profile-popup [isOpened]="editProfileFlag"></app-edit-profile-popup>
+<app-edit-profile-popup *ngIf="editProfileFlag" (onClose)="editProfileFlag = false"></app-edit-profile-popup>

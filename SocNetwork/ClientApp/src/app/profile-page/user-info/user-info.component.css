@@ -97,6 +97,7 @@
 	color: #1da1f2;
 	border: 1px solid #1da1f2;
 	background: #fff;
+	cursor: pointer;
 }
 
 .user-info .edit-profile-btn:hover {

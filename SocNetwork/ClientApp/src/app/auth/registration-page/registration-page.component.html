@@ -8,9 +8,15 @@
           >Name must be at least
           {{ name?.errors?.minlength?.requiredLength }} characters long.</small
         >
+        <small *ngIf="name?.errors?.pattern">The name can only contain letters and a space.</small>
+        <small *ngIf="name?.errors?.maxlength">
+          Name must be at least
+          {{ name?.errors?.maxlength?.requiredLength }} characters long
+        </small>
       </div>
       <div class="validation" *ngIf="username?.invalid && username?.touched">
         <small *ngIf="username?.errors?.required">Username is required</small>
+        <small *ngIf="username?.errors?.pattern">The username can only contain Latin letters, numbers, and underscores</small>
       </div>
       <div class="validation" *ngIf="email?.invalid && email?.touched">
         <small *ngIf="email?.errors?.required">Email is required</small>

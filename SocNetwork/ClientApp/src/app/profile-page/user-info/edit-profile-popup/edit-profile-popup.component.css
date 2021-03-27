@@ -1,4 +1,4 @@
-.modal-win-back {
+.overflow {
 	position: fixed;
 	top: 0px;
 	bottom: 0px;
@@ -6,6 +6,15 @@
 	right: 0px;
 	background: rgba(0, 0, 0, 0.5);
 	z-index: 20;
+}
+
+#edit-profile-win {
+	position: fixed;
+	top: 30px;
+	left: 33%;
+	right: 33%;
+	min-width: 515px;
+	z-index: 21;
 }
 
 #edit-profile-win[data-state="inactive"] {
@@ -17,11 +26,6 @@
 }
 
 #edit-profile-win .win-content {
-	position: absolute;
-	top: 30px;
-	left: 33%;
-	right: 33%;
-	min-width: 515px;
 	background: #fff;
 	border-radius: 15px;
 	border: 1px solid #ddd;
@@ -120,7 +124,7 @@
 }
 
 .win-content .input-fields {
-	max-width: 350px;
+	width: 350px;
 	padding: 25px 25px 15px 0px;
 	overflow-y: auto;
 }
@@ -131,45 +135,45 @@
 	width: 100%;
 }
 
-.input-fields input, .input-fields textarea {
+.group input, .group textarea {
 	box-sizing: border-box;
 	width: 100%;
 	font-size: 16px;
-  padding: 10px;
-  display: block;
-  border-radius: 15px;
-	border: 1px solid #999;
+	padding: 10px;
+	display: block;
 	height: 40px;
+	border-radius: 15px;
+	outline: none;
+	border: 1px solid #1da1f2;
+	color: #333;
 }
 
-.input-fields label {
-  color: #999;
-  font-size: 18px;
-  position: absolute;
-  pointer-events: none;
-  left: 10px;
-  top: 10px;
-  transition: 0.2s ease all;
+.group textarea {
+	max-height: 80px;
+}
+
+.group label {
+	top: -10px;
+	font-size: 14px;
+	color: #1da1f2;
+	background: #fff;
+	position: absolute;
+	pointer-events: none;
+	left: 10px;
 	padding: 0px 4px;
 }
 
-.input-fields input:focus, .input-fields input:valid,
-.input-fields textarea:focus, .input-fields textarea:valid {
-	outline: none;
-	border: 1px solid #1da1f2;
+.win-content .form-actions {
+	width: 100%;
 }
 
-.input-fields input:focus ~ label, .input-fields input:valid ~ label,
-.input-fields textarea:focus ~ label, .input-fields textarea:valid ~ label {
-  top: -10px;
-  font-size: 14px;
-  color: #1da1f2;
-	background: #fff;
+.win-content .advanced-editing {
+	font-size: 16px;
+	color: #1da1f2;
 }
 
-.input-fields .name-wrap .group:first-of-type {
-	width: 50%;
-	margin-right: 15px;
+.win-content .advanced-editing:hover {
+	text-decoration: underline;
 }
 
 .win-content .save-info-btn {
@@ -183,4 +187,102 @@
 
 .win-content .save-info-btn:hover {
 	background: #0D93E5;
+}
+
+.date-of-birth {
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 16px;
+	padding-top: 8px;
+	display: block;
+	border-radius: 15px;
+	border: 1px solid #1da1f2;
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.date-of-birth input {
+	box-sizing: border-box;
+	width: 30%;
+	font-size: 16px;
+	padding: 2px 10px;
+	border-radius: 15px;
+	border: none;
+	background: #eee;
+	margin: 0px 5px;
+	outline: none;
+	margin-bottom: 8px;
+}
+
+.date-of-birth label {
+	position: absolute;
+	pointer-events: none;
+	left: 10px;
+	transition: 0.2s ease all;
+	padding: 0px 4px;
+	top: -12px;
+	font-size: 14px;
+	color: #1da1f2;
+	background: #fff;
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown input {
+	cursor: pointer;
+}
+
+.dropdown input:disabled {
+	background: inherit;
+}
+
+.dropdown .mark {
+	border: 6px solid transparent;
+	position: absolute;
+	top: 17px;
+	right: 12px;
+	width: 0px;
+	height: 0px;
+}
+
+.dropdown .mark.up {
+	border-bottom-color: #1da1f2;	
+}
+
+.dropdown .mark.down {
+	border-top-color: #1da1f2;
+}
+
+.dropdown-menu {
+	width: 100%;
+	margin-top: 5px;
+	box-sizing: border-box;
+	font-size: 16px;
+	padding: 10px;
+	border-radius: 15px;
+	border: 1px solid #1da1f2;
+}
+
+.dropdown-menu > div {
+	cursor: pointer;
+	border-radius: 15px;
+	color: #1da1f2;
+	padding-left: 10px;
+}
+
+.dropdown-menu > div:hover {
+	background: #1da1f2;
+	border-radius: 15px;
+	color: #fff;
+}
+
+.collapse {
+	display: none;
+}
+
+.validation {
+	font-size: 14px;
+	padding: 0px 8px;
 }
