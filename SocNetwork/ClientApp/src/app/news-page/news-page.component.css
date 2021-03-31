@@ -1,0 +1,11 @@
+:host {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+	width: 47%;
+	margin-top: 54px;
+	box-sizing: border-box;
+}
