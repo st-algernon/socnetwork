@@ -1,0 +1,71 @@
+main {
+	width: 47%;
+	height: 100%;
+	margin-top: 64px;
+	box-sizing: border-box;
+	border-radius: 15px;
+	background: #fff;
+}
+
+.users-header {
+	position: fixed;
+	width: 47%;
+	height: 100px;
+	padding-top: 8px;
+	background: #fff;
+	border-radius: 15px 15px 0px 0px;
+}
+
+.users-header .back-btn {
+	position: absolute;
+	left: 10px;
+	top: 12px;
+	padding: 5px 20px;
+	color: #7f7f7f;
+	font-size: 16px;
+	background: url(../../../assets/images/back.png) left center no-repeat;
+	background-size: 15px;
+}
+
+.users-header .back-btn:hover {
+	color: #1da1f2;
+	background: url(../../../assets/images/back-hover.png) left center no-repeat;	
+	background-size: 15px;
+}
+
+.users-header .source-name {
+	font-weight: bold;
+	color: #333;
+}
+
+.users-header .nick-name {
+	font-size: 14px;
+	color: #555;
+}
+
+.users-header .user-switches button {
+	box-sizing: border-box;
+	width: 50%;
+	padding: 10px;
+	outline: none;
+	font-size: 15px;
+}
+
+.users-header button[data-state="active"] {
+	color: #1da1f2;
+	border-bottom: 2px solid #1da1f2;
+}
+
+.users-header button[data-state="active"]:hover {
+	background-color: #E3F4FF;
+}
+
+.users-header button[data-state="inactive"] {
+	color: #aaa;
+}
+
+.users-header button[data-state="inactive"]:hover {
+	color: #1da1f2;
+	background-color: #E3F4FF;
+}
+
