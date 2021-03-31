@@ -44,7 +44,7 @@
 	position: absolute;
 	left: 10px;
 	top: 10px;
-	background-image: url(../../../../assets/images/plus-hover.png);
+	background-image: url(../../../assets/images/plus-hover.png);
 	transform: rotate(45deg);
 	outline: none;
 }

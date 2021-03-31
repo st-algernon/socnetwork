@@ -1,4 +1,59 @@
-<main class="flex fd-c jc-c">
-    <app-user-info></app-user-info>
-    <app-user-wall></app-user-wall>
+<main>
+    <section class="user-info">
+        <div class="photo-cover"></div>
+        <div class="user-avatar-back">
+          <div class="user-avatar">
+            <img src="../../assets/images/авка.jpg" alt="avatar" />
+          </div>
+        </div>
+        <div class="flex fd-r jc-sb ai-c">
+          <div class="flex fd-c">
+            <span class="source-name">Mr. Algernon</span>
+            <span class="nick-name">@mr.algernon</span>
+          </div>
+          <a class="edit-profile-btn" (click)="editProfileFlag = true">Edit profile</a>
+        </div>
+        <div class="flex fd-r jc-fe">
+          <div class="wrap-info flex fd-c">
+            <div class="bio">You are weighed and found very light. 67 kg.</div>
+            <ul class="follow-wrap flex fd-r jc-sb">
+              <li class=""><span>30</span> posts</li>
+              <li class=""><span>24</span> followers</li>
+              <li class=""><span>10</span> following</li>
+            </ul>
+            <ul class="short-info flex fd-r">
+              <li class="residence">Zhytomyr</li>
+              <li class="birthday">Born June 26, 1998</li>
+              <li class="relationship">Married</li>
+              <li class="more-details"></li>
+            </ul>
+          </div>
+        </div>
+    </section>
+
+    <app-edit-profile-popup
+        *ngIf="editProfileFlag"
+        (onClose)="editProfileFlag = false"
+    ></app-edit-profile-popup>    
+
+    <section class="user-wall">
+        <app-post-form></app-post-form>
+        <section class="wall-header flex row jc-sb">
+          <div data-container="post-switches">
+            <button data-action="loadAll" data-state="active">All posts</button>
+            <button data-action="loadByMe" data-state="inactive">
+              Written by me
+            </button>
+          </div>
+          <form action="" method="get" class="search-form flex col jc-c">
+            <input
+              type="search"
+              name="search_field"
+              placeholder="Search for people and groups"
+              autocomplete="off"
+            />
+          </form>
+        </section>
+        <app-post [isOnWall]="true"></app-post>
+    </section>      
 </main>

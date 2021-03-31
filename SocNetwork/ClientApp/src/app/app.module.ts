@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { ProfileMenuPopupComponent } from './shared/components/user-layout/profile-menu-popup/profile-menu-popup.component';
 import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
+import { NotFoundPageComponent } from './shared/components/not-found-page/not-found-page.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DropdownComponent } from './shared/components/dropdown/dropdown.compone
     UserLayoutComponent,
     ProfileMenuPopupComponent,
     SearchResultPopupComponent,
-    DropdownComponent
+    DropdownComponent,
+    NotFoundPageComponent
   ],
   imports: [
     CommonModule,
