@@ -1,0 +1,86 @@
+:host {
+    display: flex;
+    justify-content: center;
+}
+
+main {
+	width: 47%;
+	min-height: calc(100% - 64px);
+	position: absolute;
+	top: 64px;
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 15px 15px 0px 0px;
+	padding: 10px;
+}
+
+main .main-header {
+	margin-bottom: 10px;
+}
+
+main .main-header .search-box {
+	width: 100%;
+}
+
+main .main-header .search-box input {
+	background: url(../../assets/images/search.png) 10px center no-repeat;
+	border-radius: 20px;
+	padding: 10px 30px 10px 40px;
+	border: none;
+	background-size: 22px 22px;
+	width: 100%;
+	font-size: 15px;
+	outline: none;
+}
+
+main .main-header .search-box input:focus {
+	background: url(../../assets/images/search-hover.png) 10px center no-repeat;
+	background-size: 22px 22px;
+}
+
+main .main-header .new-chat-btn {
+	background-image: url(../../assets/images/plus.png);	
+}
+
+main .main-header .new-chat-btn:hover {
+	background-image: url(../../assets/images/plus-hover.png);
+}
+
+main .dialog {
+	padding: 7px 0px;
+	border-bottom: 1px solid #F8F8F8;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+main .dialog:hover {
+	background-color: #f5f8fa;
+}
+
+main .dialog:last-of-type {
+	border-bottom: none;
+}
+
+main .dialog > .avatar-box {
+	margin: 0px 12px;
+}
+
+main .dialog .message-wrap {
+	flex-grow: 1;
+}
+
+main .dialog .message-wrap .source-name {
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 5px;
+}
+
+main .dialog .message-wrap .last-message > .avatar-box {
+	margin-right: 8px;
+}
+
+main .dialog .message-wrap .last-message > .message-text {
+	flex-grow: 1;
+	color: #555;
+	font-size: 14px;
+}
