@@ -4,7 +4,8 @@ import { ProfilePageComponent } from './profile-page.component';
 
 
 const routes: Routes = [
-  { path: '', component: ProfilePageComponent }
+  { path: '', component: ProfilePageComponent },
+  { path: 'followers', loadChildren: () => import('./followers-page/followers.module').then(m => m.FollowersModule) },
 ];
 
 @NgModule({
