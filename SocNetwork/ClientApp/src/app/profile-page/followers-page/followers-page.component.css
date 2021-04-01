@@ -6,9 +6,9 @@
 
 main {
     width: 47%;
-	min-height: calc(100% - 64px);
+	min-height: calc(100% - 54px);
 	position: absolute;
-	top: 64px;
+	top: 54px;
 	box-sizing: border-box;
 	background: #fff;
 	border-radius: 15px 15px 0px 0px;
@@ -17,16 +17,21 @@ main {
 .users-header {
 	position: fixed;
 	width: 47%;
-	height: 100px;
+	background-color: rgb(230, 236, 240);
+}
+
+.users-header .header-content {
+	margin-top: 10px;
+	border-radius: 15px 15px 0px 0px;
+	height: 95px;
 	padding-top: 8px;
 	background: #fff;
-	border-radius: 15px 15px 0px 0px;
 }
 
 .users-header .back-btn {
 	position: absolute;
 	left: 10px;
-	top: 12px;
+	top: 18px;
 	padding: 5px 20px;
 	color: #7f7f7f;
 	font-size: 16px;
@@ -38,16 +43,6 @@ main {
 	color: #1da1f2;
 	background: url(../../../assets/images/back-hover.png) left center no-repeat;	
 	background-size: 15px;
-}
-
-.users-header .source-name {
-	font-weight: bold;
-	color: #333;
-}
-
-.users-header .nick-name {
-	font-size: 14px;
-	color: #555;
 }
 
 .users-header .user-switches button {
@@ -69,6 +64,7 @@ main {
 
 .users-header button[data-state="inactive"] {
 	color: #aaa;
+	border-bottom: 1px solid #ddd;
 }
 
 .users-header button[data-state="inactive"]:hover {
@@ -77,9 +73,27 @@ main {
 }
 
 .user-list {
-    margin-top: 110px;
+    margin-top: 115px;
 }
 
 .user-list .user {
-    padding: 10px 15px
+    padding: 10px 0px 5px 0px;
+	margin: 0px 15px;
+	border-bottom: 1px solid #ddd;
+}
+
+.user .source-name {
+	padding-left: 12px;
+}
+
+.user .nick-name {
+	padding-left: 12px;
+}
+
+.user .bio {
+	font-size: 14px;
+	max-height: 40px;
+	overflow: hidden;
+	color: #333;
+	padding: 5px 5px 0px 52px;
 }
