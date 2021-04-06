@@ -6,6 +6,7 @@ import { PostComponent } from "../shared/components/post/post.component";
 import { CommonModule } from "@angular/common";
 import { EditProfilePopupComponent } from './edit-profile-popup/edit-profile-popup.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { UsersService } from "../shared/services/users.service";
 
 @NgModule({
     declarations: [
@@ -18,9 +19,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
         ProfileRoutingModule,
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     exports: [],
-    providers: []
+    providers: [UsersService]
 })
 export class ProfileModule {}

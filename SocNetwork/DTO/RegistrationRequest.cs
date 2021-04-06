@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO
 {
-    public class AccountRegistrationRequest  
+    public class RegistrationRequest  
     {
         public string Name { get; set; }
         public string Username { get; set; }

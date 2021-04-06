@@ -1,21 +1,14 @@
-﻿--DELETE FROM Accounts;
---DELETE FROM Books;
---DELETE FROM Customers;
---DELETE FROM Sellers;
---DELETE FROM Transactions;
---DELETE FROM CustomerBook;
+﻿INSERT INTO Accounts(Id, Email, Password, CreationDate, AccountType)
+VALUES 
+(NEWID(), 'bogdan@mail.com', HASHBYTES('SHA2_256', CONVERT(NVARCHAR(32),'123456')), CONVERT(DATETIME, '2021-03-27 08:48:32'), 0)
+--(NEWID(), 'ilya@mail.com', '123456', convert(datetime, '2021-03-27 08:48:32'), 0),
+--(NEWID(), 'anna@mail.com', '123456', convert(datetime, '2021-03-27 08:48:32'), 0),
+--(NEWID(), 'nina@mail.com', '123456', convert(datetime, '2021-03-27 08:48:32'), 0),
+--(NEWID(), 'bohdan@mail.com', '123456', convert(datetime, '2021-03-27 08:48:32'), 0),
+--(NEWID(), 'pasha@mail.com', '123456', convert(datetime, '2021-03-27 08:48:32'), 0),
+--(NEWID(), 'inna@mail.com', '123456', convert(datetime, '2021-03-27 08:48:32'), 0)
 
---INSERT INTO Accounts(Name, Email, Password, Role)
---VALUES 
---(N'ТОВ Богдан', 'bogdan@mail.com', '123456', 0), 
---(N'ТОВ Ілля', 'ilya@mail.com', '123456', 0),
---(N'Анна Загурська', 'anna@mail.com', '123456', 1),
---(N'Ніна Нідзельська', 'nina@mail.com', '123456', 1),
---(N'Алєксєєв Богдан', 'bohdan@mail.com', '123456', 1),
---(N'Паша Богда', 'pasha@mail.com', '123456', 1),
---(N'Вольська Інна', 'inna@mail.com', '123456', 1)
-
---INSERT INTO Sellers(Id, SellerPhoto)
+--INSERT INTO Users(Id, Name, Username)
 --VALUES 
 --(1, null), 
 --(2, null)

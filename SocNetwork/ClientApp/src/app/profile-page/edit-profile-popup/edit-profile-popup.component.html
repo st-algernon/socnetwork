@@ -119,13 +119,13 @@
             </small>
           </div>
         </div>
-        <div class="group">
+        <!-- <div class="group">
           <div class="dropdown" (click)="toggleFor(marital_status_menu)">
             <input
               type="text"
               #input_marital_status
               formControlName="maritalStatus"
-              disabled
+              [attr.disabled]="true"
             />
             <label for="">marital status</label>
             <div class="mark down"></div>
@@ -142,14 +142,15 @@
             <div>In a complicated</div>
             <div>Unspecified</div>
           </div>
-        </div>
+        </div> -->
+
         <div class="group">
           <div class="dropdown" (click)="toggleFor(gender_menu)">
             <input
               type="text"
               #input_gender
               formControlName="gender"
-              disabled
+              [attr.disabled]="true"
             />
             <label for="">gender</label>
             <div class="mark down"></div>

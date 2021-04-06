@@ -27,7 +27,7 @@ namespace SocNetwork.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(AccountLoginRequest request)
+        public IActionResult Login(LoginRequest request)
         {
             Account account = db.Accounts.FirstOrDefault(a => a.Email == request.Email
                  && a.Password == ComputeSha256Hash(request.Password));
@@ -52,20 +52,22 @@ namespace SocNetwork.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(AccountRegistrationRequest request)
+        public IActionResult Register(RegistrationRequest request)
         {
-            Account account = db.Accounts.FirstOrDefault(a => a.Email == request.Email);
+            User user = db.Users.FirstOrDefault(
+                u => u.Email == request.Email || u.Username == request.Username
+            );
             
-            if (account != null)
+            if (user != null)
             {
                 return BadRequest(new AuthResponse()
                 {
                     Result = false,
-                    Errors = new List<string>() { "A user with this email already exists" }
+                    Errors = new List<string>() { "A user with this email or username already exists" }
                 });
             }
 
-            var user = new User
+            user = new User
             {
                 Id = Guid.NewGuid(),
                 Name = request.Name,
@@ -116,7 +118,7 @@ namespace SocNetwork.Controllers
                     notBefore: now,
                     claims: new List<Claim>
                     {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, account.Email),
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString()),
                         new Claim(ClaimsIdentity.DefaultRoleClaimType, account.AccountType.ToString())
                     },
                     expires: now.Add(TimeSpan.FromMinutes(JwtConfig.LIFETIME)),

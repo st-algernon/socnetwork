@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SocNetwork.Configuration;
 using SocNetwork.Models;
+using SocNetwork.Extensions.Middleware;
 
 namespace SocNetwork
 {
@@ -79,6 +80,8 @@ namespace SocNetwork
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseUserDefinition();
 
             app.UseEndpoints(endpoints =>
             {

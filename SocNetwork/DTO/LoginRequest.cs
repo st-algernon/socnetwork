@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO
 {
-    public class AccountLoginRequest
+    public class LoginRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }

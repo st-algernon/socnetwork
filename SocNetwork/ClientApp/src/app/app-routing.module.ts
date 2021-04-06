@@ -7,7 +7,7 @@ import { AuthGuard } from "./shared/services/auth.guard";
 const routes : Routes = [
     { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path: '', component: UserLayoutComponent, children: [
-        { path: 'profile', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule) }
+        { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule) }
     ] },
     { path: '**', component: NotFoundPageComponent }
 ];
