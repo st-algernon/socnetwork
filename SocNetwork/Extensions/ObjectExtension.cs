@@ -24,7 +24,25 @@ namespace SocNetwork.Extensions
                     var p = destProps.First(x => x.Name == sourceProp.Name);
 
                     if(p.CanWrite) {
-                        p.SetValue(dest, sourceProp.GetValue(source, null), null);
+
+                        object parsed = null;
+
+                        if (p.PropertyType == typeof(DateTime))
+                        {
+                            parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                        }
+
+                        if (p.PropertyType.BaseType == typeof(Enum))
+                        {
+                            parsed = Enum.Parse(p.PropertyType, sourceProp.GetValue(source).ToString());
+                        }
+
+                        if (p.PropertyType == typeof(Guid))
+                        {
+                            parsed = Guid.Parse(sourceProp.GetValue(source).ToString());
+                        }
+
+                        p.SetValue(dest, parsed ?? sourceProp.GetValue(source));
                     }
                 }
 

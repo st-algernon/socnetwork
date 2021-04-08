@@ -128,7 +128,7 @@ namespace SocNetwork.Controllers
             {
                 return BadRequest();
             }
-            else if (currentUser.Id == request.Id)
+            else if (currentUser.Id.ToString() == request.Id)
             {
                 request.CopyPropertiesTo<EditProfileRequest, User>(currentUser);
 

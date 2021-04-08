@@ -37,6 +37,8 @@ export class UsersService {
         const token = new HttpHeaders().set('Authorization', 'Bearer ' + this.authService.token);
 
         return this.http.put(`${environment.apiUrl}/users`, editProfileRequest, { headers: token })
-        .pipe(tap(console.log));
+        .pipe(
+            map(() => { return true })
+        );
     }
 }

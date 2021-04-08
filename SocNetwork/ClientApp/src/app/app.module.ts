@@ -21,7 +21,7 @@ import { NotFoundPageComponent } from './shared/components/not-found-page/not-fo
     ProfileMenuPopupComponent,
     SearchResultPopupComponent,
     DropdownComponent,
-    NotFoundPageComponent
+    NotFoundPageComponent,
   ],
   imports: [
     CommonModule,

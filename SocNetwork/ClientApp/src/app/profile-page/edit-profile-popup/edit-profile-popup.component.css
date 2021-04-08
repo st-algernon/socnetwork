@@ -228,62 +228,6 @@
 	background: #fff;
 }
 
-.dropdown {
-	position: relative;
-}
-
-.dropdown input {
-	cursor: pointer;
-}
-
-.dropdown input:disabled {
-	background: inherit;
-}
-
-.dropdown .mark {
-	border: 6px solid transparent;
-	position: absolute;
-	top: 17px;
-	right: 12px;
-	width: 0px;
-	height: 0px;
-}
-
-.dropdown .mark.up {
-	border-bottom-color: #1da1f2;	
-}
-
-.dropdown .mark.down {
-	border-top-color: #1da1f2;
-}
-
-.dropdown-menu {
-	width: 100%;
-	margin-top: 5px;
-	box-sizing: border-box;
-	font-size: 16px;
-	padding: 10px;
-	border-radius: 15px;
-	border: 1px solid #1da1f2;
-}
-
-.dropdown-menu > div {
-	cursor: pointer;
-	border-radius: 15px;
-	color: #1da1f2;
-	padding-left: 10px;
-}
-
-.dropdown-menu > div:hover {
-	background: #1da1f2;
-	border-radius: 15px;
-	color: #fff;
-}
-
-.collapse {
-	display: none;
-}
-
 .validation {
 	font-size: 14px;
 	padding: 0px 8px;

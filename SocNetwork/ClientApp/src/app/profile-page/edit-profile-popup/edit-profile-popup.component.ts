@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { User } from 'src/app/shared/interfaces';
+import { EditProfileRequest, User } from 'src/app/shared/interfaces';
+import { GenderOptions, MaritalStatusOptions, Options } from 'src/app/shared/enums-options';
+import { UsersService } from 'src/app/shared/services/users.service';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { MediaService } from 'src/app/shared/services/media.service';
 
 @Component({
   selector: 'app-edit-profile-popup',
@@ -14,6 +18,22 @@ export class EditProfilePopupComponent implements OnInit {
   @Input() user: User;
 
   @Output() onClose = new EventEmitter<boolean>();
+
+  genderSelect = { 
+    label: 'gender',
+    options: GenderOptions,
+    selected: null
+  };
+
+  maritalStatusSelect = {
+    label: 'marital status',
+    options: MaritalStatusOptions,
+    selected: null
+  };
+
+  selectedGender: Options;
+
+  selectedMaritalStatus: Options;
 
   get name() {
     return this.form.get('name');
@@ -39,36 +59,30 @@ export class EditProfilePopupComponent implements OnInit {
     return this.form.get('bio');
   }
 
-  get maritalStatus() {
-    return this.form.get('maritalStatus');
-  }
-
-  get gender() {
-    return this.form.get('gender');
-  }
-
-  selectedCar: number;
-
-  cars = [
-      { id: 1, name: 'Volvo' },
-      { id: 2, name: 'Saab' },
-      { id: 3, name: 'Opel' },
-      { id: 4, name: 'Audi' },
-  ];
-  
-  constructor() { }
+  constructor(
+    private usersService: UsersService,
+    private mediaService: MediaService
+    ) { }
 
   ngOnInit() {
+
+    let day: number;
+    let month: number;
+    let year: number;
+
+    if (this.user.birthDate.getUTCFullYear() > 1900) {
+      day = this.user.birthDate.getUTCDate();
+      month = this.user.birthDate.getUTCMonth();
+      year = this.user.birthDate.getUTCFullYear()
+    }
 
     this.form = new FormGroup({
       name: new FormControl(this.user.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
       username: new FormControl(this.user.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
-      dayOfBirth: new FormControl(this.user.birthDate.getUTCDate(), [Validators.min(1), Validators.max(31)]),
-      monthOfBirth: new FormControl(this.user.birthDate.getUTCMonth(), [Validators.min(1), Validators.max(12)]),
-      yearOfBirth: new FormControl(this.user.birthDate.getUTCFullYear(), [Validators.min(1900), Validators.max(new Date().getFullYear())]),
-      bio: new FormControl(this.user.bio, [Validators.maxLength(50)]),
-      maritalStatus: new FormControl(this.user.maritalStatus),
-      gender: new FormControl(this.user.gender)
+      dayOfBirth: new FormControl(day, [Validators.min(1), Validators.max(31)]),
+      monthOfBirth: new FormControl(month, [Validators.min(1), Validators.max(12)]),
+      yearOfBirth: new FormControl(year, [Validators.min(1900), Validators.max(new Date().getFullYear())]),
+      bio: new FormControl(this.user.bio, [Validators.maxLength(50)])
     });
   }
 
@@ -76,22 +90,69 @@ export class EditProfilePopupComponent implements OnInit {
     this.onClose.emit(false);
   }
 
-  toggleFor(element: HTMLElement) {
-    element.classList.toggle('collapse');
-  }
-
-  chooseFor(event: MouseEvent, input: HTMLInputElement) {
-    if(event.currentTarget == event.target) {
-      return
-    }
-    
-    input.value = (event.target as HTMLElement).innerText;
-  }
-
   submit() {
     if(this.form.invalid) {
       return
     }
+
+    const birthDate = new Date(
+      this.form.value.yearOfBirth, 
+      this.form.value.monthOfBirth,
+      this.form.value.dayOfBirth
+    );
+
+    const request: EditProfileRequest = {
+      id: this.user.id,
+      email: this.user.email,
+      name: this.form.value.name,
+      username: this.form.value.username,
+      bio: this.form.value.bio,
+      birthDate: birthDate.toJSON(),
+      location: this.user.location,
+      gender: this.selectedGender.key,
+      maritalStatus: this.selectedMaritalStatus.key
+    }
+
+    this.usersService.editProfile(request).subscribe();
   }
 
+  previewImage(file: File, previewImageBox: HTMLImageElement) {
+
+    if (file.type.match('image*')) {
+      
+      const reader = new FileReader();
+      
+      reader.onload = function(e: ProgressEvent) {     
+        previewImageBox.src = (e.target as FileReader).result.toString();
+      };
+   
+      reader.readAsDataURL(file);
+    }
+  }
+
+  uploadImage(files: FileList, previewImageBox: HTMLImageElement) {
+
+    if (files.length === 0) {
+      return;
+    }
+
+    let fileToUpload = <File>files[0];
+
+    this.previewImage(fileToUpload, previewImageBox);
+
+    console.log(fileToUpload);
+
+    const formData = new FormData();
+
+    formData.set('file', fileToUpload, fileToUpload.name);
+
+    this.mediaService.uploadFile(formData).subscribe(event => {
+      console.log(event);
+      if (event.type === HttpEventType.UploadProgress)
+        console.log('progress ' + Math.round(100 * event.loaded / event.total));
+      else if (event.type === HttpEventType.Response) {
+        console.log('Upload success.');
+      }
+    });
+  }
 }

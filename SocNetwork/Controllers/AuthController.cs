@@ -4,6 +4,7 @@ using SocNetwork.Configuration;
 using SocNetwork.DTO;
 using SocNetwork.DTO.Response;
 using SocNetwork.Models;
+using SocNetwork.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -30,7 +31,7 @@ namespace SocNetwork.Controllers
         public IActionResult Login(LoginRequest request)
         {
             Account account = db.Accounts.FirstOrDefault(a => a.Email == request.Email
-                 && a.Password == ComputeSha256Hash(request.Password));
+                 && a.Password == HashHelper.ComputeSha256Hash(request.Password));
 
             if (account == null)
             {
@@ -73,7 +74,7 @@ namespace SocNetwork.Controllers
                 Name = request.Name,
                 Email = request.Email,
                 Username = request.Username,
-                Password = ComputeSha256Hash(request.Password),
+                Password = HashHelper.ComputeSha256Hash(request.Password),
                 CreationDate = DateTime.UtcNow
             };
 
@@ -88,23 +89,6 @@ namespace SocNetwork.Controllers
                 ExpiresIn = JwtConfig.LIFETIME,
                 Token = token
             });
-        }
-
-        private string ComputeSha256Hash(string data) 
-        {
-            using (SHA256 sha256Hash = SHA256.Create())  
-            {  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(data + HashConfig.SALT));  
-  
-                StringBuilder builder = new StringBuilder();  
-
-                for (int i = 0; i < bytes.Length; i++)  
-                {  
-                    builder.Append(bytes[i].ToString("x2"));  
-                }  
-
-                return builder.ToString(); 
-            }
         }
 
         private string GenerateJwt(Account account)

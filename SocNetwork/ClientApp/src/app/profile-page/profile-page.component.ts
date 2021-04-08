@@ -41,6 +41,7 @@ export class ProfilePageComponent implements OnInit {
       })
     ).subscribe((response: User) => {
       this.user = response;
+      console.log(this.user);
     });
   }
 }
