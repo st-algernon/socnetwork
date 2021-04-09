@@ -1,11 +1,11 @@
-enum AccountStatus
+export enum AccountStatus
 {
     IsActivated,
     IsReported,
     IsDeleted
 }
 
-enum Gender
+export enum Gender
 {
     Unspecified,
     Male,
@@ -15,7 +15,7 @@ enum Gender
     Intersex
 }
 
-enum MaritalStatus
+export enum MaritalStatus
 {
     Unspecified,
     Engaged,
@@ -23,4 +23,9 @@ enum MaritalStatus
     InSingle,
     ItsComplicated,
     Married
+}
+
+export enum MediaFor {
+    Avatar,
+    Cover
 }

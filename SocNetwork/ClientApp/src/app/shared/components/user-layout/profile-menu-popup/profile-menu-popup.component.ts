@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { User } from 'src/app/shared/interfaces';
 
 @Component({
   selector: 'app-profile-menu-popup',
@@ -7,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileMenuPopupComponent implements OnInit {
 
+  @Input() user: User;
+  
   constructor() { }
 
   ngOnInit() {

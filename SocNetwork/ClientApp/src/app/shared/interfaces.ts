@@ -1,3 +1,5 @@
+import { AccountStatus, Gender, MaritalStatus } from "./enums";
+
 export interface AccountLoginRequest {
     email: string
     password: string
@@ -48,5 +50,7 @@ export interface User {
     birthDate: Date,
     location: string,
     gender: Gender,
-    maritalStatus: MaritalStatus
+    maritalStatus: MaritalStatus,
+    pathToAvatar: string,
+    pathToCover: string
 }

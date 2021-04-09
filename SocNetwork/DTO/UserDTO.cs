@@ -21,5 +21,7 @@ namespace SocNetwork.DTO
         public string Location { get; set; }
         public Gender Gender { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
+        public string PathToAvatar { get; set; }
+        public string PathToCover { get; set; }
     }
 }

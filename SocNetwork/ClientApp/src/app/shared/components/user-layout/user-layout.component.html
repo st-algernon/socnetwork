@@ -7,9 +7,9 @@
     </form>
     <div class="top-profile-menu flex fd-c ai-fe">
       <div class="avatar-box square-32">
-        <img src="../../../../assets/images/empty_photo.jpg" alt="photo" />
+        <img [src]="user.pathToAvatar" alt="photo" />
       </div>
-      <app-profile-menu-popup *ngIf="false"></app-profile-menu-popup>
+      <app-profile-menu-popup [user]="user" *ngIf="false"></app-profile-menu-popup>
     </div>
   </div>
 </header>

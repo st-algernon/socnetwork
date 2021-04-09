@@ -2,9 +2,9 @@
     <a href="#" class="menu-header">
       <span class="flex fd-r ai-c">
         <span class="avatar-box square-40">
-          <img src="../../../../../assets/images/empty_photo.jpg" alt="photo" />
+          <img [src]="user.pathToAvatar" alt="photo" />
         </span>
-        <span>First Name</span>
+        <span>{{ user.name }}</span>
         <svg
           class="svg-icon"
           focusable="false"

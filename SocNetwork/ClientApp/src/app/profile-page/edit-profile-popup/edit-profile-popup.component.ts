@@ -5,6 +5,7 @@ import { GenderOptions, MaritalStatusOptions, Options } from 'src/app/shared/enu
 import { UsersService } from 'src/app/shared/services/users.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { MediaService } from 'src/app/shared/services/media.service';
+import { Gender, MediaFor } from 'src/app/shared/enums';
 
 @Component({
   selector: 'app-edit-profile-popup',
@@ -22,18 +23,22 @@ export class EditProfilePopupComponent implements OnInit {
   genderSelect = { 
     label: 'gender',
     options: GenderOptions,
-    selected: null
+    selected: null //GenderOptions.find(o => o.key == this.user.gender.toString())
   };
 
   maritalStatusSelect = {
     label: 'marital status',
     options: MaritalStatusOptions,
-    selected: null
+    selected: null //MaritalStatusOptions.find(o => o.key == this.user.maritalStatus.toString())
   };
 
   selectedGender: Options;
 
   selectedMaritalStatus: Options;
+
+  coverFiles: FileList;
+
+  avatarFiles: FileList;
 
   get name() {
     return this.form.get('name');
@@ -82,7 +87,7 @@ export class EditProfilePopupComponent implements OnInit {
       dayOfBirth: new FormControl(day, [Validators.min(1), Validators.max(31)]),
       monthOfBirth: new FormControl(month, [Validators.min(1), Validators.max(12)]),
       yearOfBirth: new FormControl(year, [Validators.min(1900), Validators.max(new Date().getFullYear())]),
-      bio: new FormControl(this.user.bio, [Validators.maxLength(50)])
+      bio: new FormControl(this.user.bio, [Validators.maxLength(50)]),
     });
   }
 
@@ -113,6 +118,8 @@ export class EditProfilePopupComponent implements OnInit {
       maritalStatus: this.selectedMaritalStatus.key
     }
 
+    this.uploadImage(this.coverFiles, MediaFor.Cover);
+    this.uploadImage(this.avatarFiles, MediaFor.Avatar);
     this.usersService.editProfile(request).subscribe();
   }
 
@@ -130,7 +137,7 @@ export class EditProfilePopupComponent implements OnInit {
     }
   }
 
-  uploadImage(files: FileList, previewImageBox: HTMLImageElement) {
+  uploadImage(files: FileList, mediaFor: MediaFor) {
 
     if (files.length === 0) {
       return;
@@ -138,21 +145,10 @@ export class EditProfilePopupComponent implements OnInit {
 
     let fileToUpload = <File>files[0];
 
-    this.previewImage(fileToUpload, previewImageBox);
-
-    console.log(fileToUpload);
-
     const formData = new FormData();
 
     formData.set('file', fileToUpload, fileToUpload.name);
 
-    this.mediaService.uploadFile(formData).subscribe(event => {
-      console.log(event);
-      if (event.type === HttpEventType.UploadProgress)
-        console.log('progress ' + Math.round(100 * event.loaded / event.total));
-      else if (event.type === HttpEventType.Response) {
-        console.log('Upload success.');
-      }
-    });
+    this.mediaService.uploadProfileMedia(formData, mediaFor).subscribe();
   }
 }

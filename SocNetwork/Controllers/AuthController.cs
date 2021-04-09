@@ -70,7 +70,6 @@ namespace SocNetwork.Controllers
 
             user = new User
             {
-                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Email = request.Email,
                 Username = request.Username,

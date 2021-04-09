@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Net.Mime;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -39,14 +40,10 @@ namespace SocNetwork.Controllers
             return "value";
         }
 
-        // POST api/<MediaController>
-        [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> Post()
+        private string SaveFile(IFormFile file)
         {
             try
             {
-                var formCollection = await Request.ReadFormAsync();
-                var file = formCollection.Files.First();
                 var folderName = Path.Combine("Resources", file.ContentType);
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
@@ -57,28 +54,76 @@ namespace SocNetwork.Controllers
 
                 if (file.Length > 0)
                 {
-                    //var fileName = file.FileName.Substring(0, file.FileName.IndexOf('.'));
-                    var fileName = file.FileName;
-                    var hashedFileName = HashHelper.ComputeSha256Hash(fileName);
-                    var fullPath = Path.Combine(pathToSave, hashedFileName);
-                    var dbPath = Path.Combine(folderName, hashedFileName);
+                    var name = Guid.NewGuid().ToString();
+                    var format = file.ContentType[(file.ContentType.IndexOf('/') + 1)..];
+                    var fullFileName = name + '.' + format;
+
+                    var fullPath = Path.Combine(pathToSave, fullFileName);
+                    var dbPath = Path.Combine(folderName, fullFileName);
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
                     }
 
-                    return Ok(new { dbPath });
+                    return dbPath;
                 }
                 else
                 {
-                    return BadRequest();
+                    return null;
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex}");
+                return ex.Message;
             }
+        }
+
+        private void ResetCurrentImage(User user, MediaFor resetFor)
+        {
+            var media = db.ProfileMedia.Where(
+                        m => m.ProfileId == user.Id
+                          && m.MediaFor == resetFor)
+                        ?.ToList();
+
+            var medialist = media.ToList();
+
+            foreach (var m in media)
+            {
+                m.IsCurrent = false;
+            }
+
+            db.SaveChanges();
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("profile"), DisableRequestSizeLimit]
+        public async Task<IActionResult> ProfileMedia()
+        {
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var formCollection = await Request.ReadFormAsync();
+            var mediaForStr = Request.Headers["Media-For"][0];
+            var mediaFor = (MediaFor) Enum.Parse(typeof(MediaFor), mediaForStr);
+            var file = formCollection.Files[0];
+            var pathToFile = SaveFile(file);
+
+            ResetCurrentImage(currentUser, mediaFor);
+
+            db.ProfileMedia.Add(new ProfileMedia()
+            {
+                ProfileId = currentUser.Id,
+                Path = pathToFile,
+                Size = (int)file.Length,
+                MimeType = file.ContentType,
+                CreationDate = DateTime.Now,
+                MediaFor = mediaFor,
+                IsCurrent = true
+            });
+
+            await db.SaveChangesAsync();
+
+            return Ok();
         }
 
         // PUT api/<MediaController>/5

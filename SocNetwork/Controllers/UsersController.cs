@@ -24,32 +24,40 @@ namespace SocNetwork.Controllers
             db = context;
         }
 
-        // GET: api/<UserController>
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            List<User> users = await db.Users.ToListAsync();
+        // // GET: api/<UserController>
+        // [HttpGet("name/{name}")]
+        // public async Task<IActionResult> Get(string name)
+        // {
+        //     List<User> users = await db.Users.Where(u => u.Name == name).ToListAsync();
 
-            List<UserDTO> usersDTO = new List<UserDTO>();
+        //     List<UserDTO> usersDTO = new List<UserDTO>();
             
-            users.ForEach(u => {
-                    var userDTO = new UserDTO();
-                    u.CopyPropertiesTo<User, UserDTO>(userDTO);
-                    usersDTO.Add(userDTO);
-                }
-            );
+        //     users.ForEach(u => {
+        //             var userDTO = new UserDTO();
+        //             u.CopyPropertiesTo<User, UserDTO>(userDTO);
+        //             usersDTO.Add(userDTO);
+        //         }
+        //     );
 
-            return Ok(new UsersResponse()
-            {
-                Result = true,
-                Users = usersDTO
-            });
-        }
+        //     return Ok(new UsersResponse()
+        //     {
+        //         Result = true,
+        //         Users = usersDTO
+        //     });
+        // }
+
+        // [Authorize(Roles="User")]
+        // [HttpGet("/me")]
+        // public RedirectToAction Get() {
+        //     return new RedirectToActionResult("Get", HttpContext.Items["User"]);
+        // }
 
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
                 return NotFound(new UsersResponse()
@@ -61,6 +69,13 @@ namespace SocNetwork.Controllers
             UserDTO userDTO = new UserDTO();
 
             user.CopyPropertiesTo<User, UserDTO>(userDTO);
+
+            userDTO.PathToAvatar = user.ProfileMedia
+                .FirstOrDefault(pm => pm.IsCurrent && pm.MediaFor == MediaFor.Avatar)
+                .Path;
+            userDTO.PathToCover = user.ProfileMedia
+                .FirstOrDefault(pm => pm.IsCurrent && pm.MediaFor == MediaFor.Cover)
+                .Path;
 
             return Ok(new UsersResponse() 
             {

@@ -6,7 +6,7 @@ import { environment } from "src/environments/environment";
 import { EditProfileRequest, User, UsersResponse } from "../interfaces";
 import { AuthService } from "./auth.service";
 
-@Injectable() 
+@Injectable({ providedIn: 'root' }) 
 export class UsersService {
 
     constructor(
@@ -19,6 +19,10 @@ export class UsersService {
         .pipe(tap(console.log));
     }
 
+    getMe() {
+        return this.http.get(`${environment.apiUrl}/users`)
+    }
+
     getByUsername(username: string) {
         return this.http.get<UsersResponse>(`${environment.apiUrl}/users/${username}`)
         .pipe(
@@ -28,6 +32,8 @@ export class UsersService {
                     birthDate: new Date(response.users[0].birthDate),
                     creationDate: new Date(response.users[0].creationDate),
                     lastVisited: new Date(response.users[0].lastVisited),
+                    pathToAvatar: location.origin + "/" + response.users[0].pathToAvatar,
+                    pathToCover: location.origin + "/" + response.users[0].pathToCover,
                 }
              })
         );

@@ -11,25 +11,49 @@
     >
       <div class="photo-cover" data-container="image-box">
         <img
-          src="../../../assets/images/rick-and-morty-5.jpg"
+          [src]="user.pathToCover"
           alt="photo-cover"
           #cover_preview_img
         />
         <div class="photo-upload-wrap">
           <div class="upload-btn flex jc-c ai-c">
-            <img src="../../assets/images/add-photo.png" (click)="cover_input.click()" alt="" />
+            <img
+              src="../../assets/images/add-photo.png"
+              (click)="cover_input.click()"
+              alt=""
+            />
           </div>
-          <input type="file" name="cover-photo" (change)="uploadImage(cover_input.files, cover_preview_img)" #cover_input class="hidden" />
+          <input
+            type="file"
+            (change)="coverFiles = cover_input.files; 
+              previewImage(cover_input.files[0], cover_preview_img)"
+            #cover_input
+            class="hidden"
+          />
         </div>
       </div>
       <div class="user-avatar-back">
         <div class="user-avatar" data-container="image-box">
-          <img src="../../../assets/images/авка.jpg" #avatar_preview_img alt="avatar" />
+          <img
+            [src]="user.pathToAvatar"
+            #avatar_preview_img
+            alt="avatar"
+          />
           <div class="photo-upload-wrap">
             <div class="upload-btn flex jc-c ai-c">
-              <img src="../../../assets/images/add-photo.png" (click)="avatar_input.click()" alt="" />
+              <img
+                src="../../../assets/images/add-photo.png"
+                (click)="avatar_input.click()"
+                alt=""
+              />
             </div>
-            <input type="file" name="avatar" (change)="uploadImage(avatar_input.files, avatar_preview_img)" #avatar_input class="hidden" />
+            <input
+              type="file"
+              (change)="avatarFiles = avatar_input.files;
+                previewImage(avatar_input.files[0], avatar_preview_img)"
+              #avatar_input
+              class="hidden"
+            />
           </div>
         </div>
       </div>
@@ -41,15 +65,14 @@
           <div class="validation" *ngIf="name?.invalid && name?.touched">
             <small *ngIf="name?.errors?.minlength"
               >Name must be at least
-              {{ name?.errors?.minlength?.requiredLength }} characters
-              long. </small
-            >
+              {{ name?.errors?.minlength?.requiredLength }} characters long.
+            </small>
             <small *ngIf="name?.errors?.pattern"
-              >The name can only contain letters and a space. </small
-            >
+              >The name can only contain letters and a space.
+            </small>
             <small *ngIf="name?.errors?.maxlength">
               Name must be at least
-              {{ name?.errors?.maxlength?.requiredLength }} characters long. 
+              {{ name?.errors?.maxlength?.requiredLength }} characters long.
             </small>
           </div>
         </div>
@@ -63,15 +86,15 @@
           >
             <small *ngIf="username?.errors?.pattern"
               >The username can only contain Latin letters, numbers, and
-              underscores. </small
-            >
+              underscores.
+            </small>
             <small *ngIf="username?.errors?.minlength">
               Min length is
-              {{ username?.errors?.minlength?.requiredLength }} characters. 
+              {{ username?.errors?.minlength?.requiredLength }} characters.
             </small>
             <small *ngIf="username?.errors?.maxlength">
               Max length is
-              {{ username?.errors?.maxlength?.requiredLength }} characters. 
+              {{ username?.errors?.maxlength?.requiredLength }} characters.
             </small>
           </div>
         </div>
@@ -88,7 +111,7 @@
         <div class="date-of-birth flex fd-r jc-sb">
           <input type="number" formControlName="dayOfBirth" />
           <input type="number" formControlName="monthOfBirth" />
-          <input type="number" formControlName="yearOfBirth" min="1900"/>
+          <input type="number" formControlName="yearOfBirth" min="1900" />
           <label for="">date of birth</label>
           <div
             class="validation"
@@ -119,8 +142,8 @@
         </div>
 
         <div class="group">
-          <app-custom-select 
-            [options]="genderSelect.options" 
+          <app-custom-select
+            [options]="genderSelect.options"
             [selected]="genderSelect.selected"
             [label]="genderSelect.label"
             (changeEvent)="selectedGender = $event"
@@ -128,8 +151,8 @@
         </div>
 
         <div class="group">
-          <app-custom-select 
-            [options]="maritalStatusSelect.options" 
+          <app-custom-select
+            [options]="maritalStatusSelect.options"
             [selected]="maritalStatusSelect.selected"
             [label]="maritalStatusSelect.label"
             (changeEvent)="selectedMaritalStatus = $event"
@@ -137,8 +160,8 @@
         </div>
 
         <div class="form-actions flex jc-sb">
-            <a href="#" class="advanced-editing">Advanced editing</a>
-            <button type="submit" class="save-info-btn as-fe">Save</button>
+          <a href="#" class="advanced-editing">Advanced editing</a>
+          <button type="submit" class="save-info-btn as-fe">Save</button>
         </div>
       </div>
     </form>

@@ -1,21 +1,23 @@
 <main>
     <section class="user-info">
-        <div class="photo-cover"></div>
+        <div class="photo-cover">
+          <img [src]="user.pathToCover" alt="cover">
+        </div>
         <div class="user-avatar-back">
           <div class="user-avatar">
-            <img src="../../assets/images/авка.jpg" alt="avatar" />
+            <img [src]="user.pathToAvatar" alt="avatar" />
           </div>
         </div>
         <div class="flex fd-r jc-sb ai-c">
           <div class="flex fd-c">
-            <span class="source-name">Mr. Algernon</span>
-            <span class="nick-name">@mr.algernon</span>
+            <span class="source-name">{{ user.name }}</span>
+            <span class="nick-name">@{{ user.username }}</span>
           </div>
           <a class="edit-profile-btn" (click)="editProfileFlag = true">Edit profile</a>
         </div>
         <div class="flex fd-r jc-fe">
           <div class="wrap-info flex fd-c">
-            <div class="bio">You are weighed and found very light. 67 kg.</div>
+            <div class="bio">{{ user.bio }}</div>
             <ul class="follow-wrap flex fd-r jc-sb">
               <li class=""><span>30</span> posts</li>
               <li class=""><span>24</span> followers</li>

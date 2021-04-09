@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User, UsersResponse } from '../shared/interfaces';
+import { MediaService } from '../shared/services/media.service';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
