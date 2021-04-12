@@ -245,6 +245,7 @@ textarea {
 
 .btn-outlined {
 	padding: 8px 14px;
+	height: 35px;
 	color: #1da1f2;
 	border: 1px solid #1da1f2;
 	background: #fff;
@@ -261,4 +262,15 @@ textarea {
 body {
 	background-color: rgb(230, 236, 240);
 	font-family: 'Nunito', 'Open-sans', sans-serif;
+}
+
+.source-name {
+	font-weight: bold;
+	font-size: 16px;
+	color: #333;
+}
+
+.nick-name {
+	font-size: 14px;
+	color: #7a8b9b;
 }
