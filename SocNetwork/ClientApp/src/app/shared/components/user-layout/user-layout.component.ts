@@ -22,13 +22,8 @@ export class UserLayoutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params.pipe (
-      switchMap((params: Params) => {
-        return this.usersService.getByUsername(params['username']);
-      })
-    ).subscribe((response: User) => {
-      this.user = response;
-      console.log(this.user);
+    this.usersService.getMe().subscribe((response: any) => {
+      console.log(response);
     });
   }
 

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { NgModule, Provider } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -13,6 +13,13 @@ import { ProfileMenuPopupComponent } from './shared/components/user-layout/profi
 import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
 import { NotFoundPageComponent } from './shared/components/not-found-page/not-found-page.component';
+import { AuthInterceptor } from './shared/auth.interceptor';
+
+const INTERCEPTOR_PROVIDER: Provider = {
+  provide: HTTP_INTERCEPTORS,
+  multi: true,
+  useClass: AuthInterceptor
+}
 
 @NgModule({
   declarations: [
@@ -31,7 +38,7 @@ import { NotFoundPageComponent } from './shared/components/not-found-page/not-fo
     ReactiveFormsModule,
     FormsModule
   ],
-  providers: [AuthGuard],
+  providers: [INTERCEPTOR_PROVIDER, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

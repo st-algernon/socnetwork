@@ -4,23 +4,23 @@ import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { EditProfileRequest, User, UsersResponse } from "../interfaces";
-import { AuthService } from "./auth.service";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
 
-    constructor(
-        private http: HttpClient,
-        private authService: AuthService
-        ) {}
+    constructor(private http: HttpClient) {}
 
     getAll() {
         return this.http.get(`${environment.apiUrl}/users`)
         .pipe(tap(console.log));
     }
 
+    getFollowers(username: string) {
+        return this.http.get(`${environment.apiUrl}/users/${username}/followers`)
+    }
+
     getMe() {
-        return this.http.get(`${environment.apiUrl}/users`)
+        return this.http.get(`${environment.apiUrl}/users/me`)
     }
 
     getByUsername(username: string) {
@@ -40,9 +40,7 @@ export class UsersService {
     }
 
     editProfile(editProfileRequest: EditProfileRequest) {
-        const token = new HttpHeaders().set('Authorization', 'Bearer ' + this.authService.token);
-
-        return this.http.put(`${environment.apiUrl}/users`, editProfileRequest, { headers: token })
+        return this.http.put(`${environment.apiUrl}/users`, editProfileRequest)
         .pipe(
             map(() => { return true })
         );

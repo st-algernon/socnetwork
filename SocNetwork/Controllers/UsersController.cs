@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using SocNetwork.DTO;
 using SocNetwork.DTO.Response;
 using SocNetwork.Extensions;
+using SocNetwork.Helpers;
 using SocNetwork.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace SocNetwork.Controllers
@@ -31,7 +31,7 @@ namespace SocNetwork.Controllers
         //     List<User> users = await db.Users.Where(u => u.Name == name).ToListAsync();
 
         //     List<UserDTO> usersDTO = new List<UserDTO>();
-            
+
         //     users.ForEach(u => {
         //             var userDTO = new UserDTO();
         //             u.CopyPropertiesTo<User, UserDTO>(userDTO);
@@ -46,11 +46,13 @@ namespace SocNetwork.Controllers
         //     });
         // }
 
-        // [Authorize(Roles="User")]
-        // [HttpGet("/me")]
-        // public RedirectToAction Get() {
-        //     return new RedirectToActionResult("Get", HttpContext.Items["User"]);
-        // }
+        [HttpGet("me")]
+        public RedirectToActionResult Get()
+        {
+            var currentUser = HttpContext.Items["User"] as User;
+
+            return RedirectToAction("Get", new { username = currentUser.Username });
+        }
 
         [HttpGet("{username}")]
         public async Task<IActionResult> Get(string username)
@@ -60,7 +62,7 @@ namespace SocNetwork.Controllers
                 .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
-                return NotFound(new UsersResponse()
+                return BadRequest(new UsersResponse()
                 {
                     Result = false,
                     Errors = new List<string>() { "User not found" }
@@ -89,13 +91,25 @@ namespace SocNetwork.Controllers
         {
             var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
-            if (user == null)
-                return BadRequest();
+            if (user == null) {
+                return BadRequest(new UsersResponse()
+                {
+                    Result = false,
+                    Errors = new List<string> { "User doesn't exist" }
+                });
+            }
 
-            var followers = await db.UserRelationships.Where(u => u.ToUserId == user.Id 
-                && u.UserRelationshipType == UserRelationshipType.Followed).ToListAsync();
+            var followers = await db.UserRelationships
+                .Include(u => u.FromUser)
+                .Where(u => u.ToUserId == user.Id && u.UserRelationshipType == UserRelationshipType.Followed)
+                .Select(u => new { u.FromUser })
+                .ToListAsync();
 
-            return Ok(followers);
+            return Ok(new
+            { 
+                Result = true,
+                Users = followers
+            });
         }
 
         [HttpGet("{username}/following")]
@@ -110,27 +124,46 @@ namespace SocNetwork.Controllers
                     Errors = new List<string> { "Username doesn't exist" }
                 });
 
-            var followers = await db.UserRelationships.Include(u => u.ToUser)
+            var following = await db.UserRelationships
+                .Include(u => u.ToUser)
                 .Where(u => u.FromUserId == user.Id && u.UserRelationshipType == UserRelationshipType.Followed)
-                .Select(u => new { u.ToUser }).ToListAsync();
+                .Select(u => new { u.ToUser })
+                .ToListAsync();
+
+
 
             return Ok(new UsersResponse()
             { 
                 Result = true,
-                //Users = followers
+                //Users = following
             });
         }
 
-        [HttpGet("{username}/blocked")]
-        public string Blocked(string username)
+        [HttpGet("blocked")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Blocked()
         {
-            return "blocked";
-        }
+            User currentUser = HttpContext.Items["User"] as User;
 
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
+            var blockedUsers = await db.UserRelationships
+                .Include(u => u.ToUser)
+                .Where(u => u.FromUserId == currentUser.Id && u.UserRelationshipType == UserRelationshipType.Blocked)
+                .Select(u => new { u.ToUser })
+                .ToListAsync();
+
+            //foreach(var u in blockedUsers)
+            //{
+            //    User user = u as User;
+            //}
+
+            //blocked.ForEach(u => {
+            //    var userDTO = new UserDTO();
+            //    u.CopyPropertiesTo<User, UserDTO>(userDTO);
+            //    usersDTO.Add(userDTO);
+            //}
+            //);
+
+            return Ok(blockedUsers);
         }
 
         [HttpPut]
@@ -159,10 +192,64 @@ namespace SocNetwork.Controllers
             }
         }
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+        [HttpPut("follow")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Follow(string toUserId) {
+
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == toUserId);
+
+            if (toUser == null) {
+                return BadRequest();
+            }
+
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var relationshipHelper = new RelationshipHelper(db);
+
+            var ur = relationshipHelper.CreateOrExist(currentUser, toUser);
+            relationshipHelper.Update(ur, UserRelationshipType.Followed);
+
+            return Ok();
+        }
+
+        [HttpPut("block")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Block(string toUserId) {
+
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == toUserId);
+
+            if (toUser == null) {
+                return BadRequest();
+            }
+
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var relationshipHelper = new RelationshipHelper(db);
+
+            var ur = relationshipHelper.CreateOrExist(currentUser, toUser);
+            relationshipHelper.Update(ur, UserRelationshipType.Blocked);
+        
+            return Ok();
+        }
+        
+        [HttpDelete("unfollow")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Unfollow(string toUserId) {
+
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == toUserId);
+
+            if (toUser == null) {
+                return BadRequest();
+            }
+
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var relationshipHelper = new RelationshipHelper(db);
+
+            var ur = relationshipHelper.Get(currentUser, toUser);
+            relationshipHelper.Remove(ur);
+
+            return NoContent();
         }
     }
 }
