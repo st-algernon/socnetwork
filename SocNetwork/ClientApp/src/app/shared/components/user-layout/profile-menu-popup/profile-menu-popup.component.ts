@@ -8,7 +8,7 @@ import { User } from 'src/app/shared/interfaces';
 })
 export class ProfileMenuPopupComponent implements OnInit {
 
-  @Input() user: User;
+  @Input() me: User;
   
   constructor() { }
 

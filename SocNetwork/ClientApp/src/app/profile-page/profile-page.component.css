@@ -90,10 +90,25 @@ main .user-info {
         margin-left: 170px;
     }
 
+	.user-info .empty-source-name {
+		margin-left: 170px;
+		background: #eee;
+		width: 220px;
+		height: 24px;
+	}
+
 .user-info .nick-name {
 	font-size: 16px;
 	color: #676767;
 	margin-left: 170px;
+}
+
+.user-info .empty-nick-name {
+	margin-left: 170px;
+	background: #eee;
+	width: 100px;
+	height: 18px;
+	margin-top: 4px;
 }
 
 .user-info .edit-profile-btn {
@@ -118,6 +133,13 @@ main .user-info {
 	color: #333;
 }
 
+.user-info .empty-bio {
+	margin-top: 15px;
+	background: #eee;
+	width: 100%;
+	height: 21px;
+}
+
 .user-info .follow-wrap {
 	font-size: 17px;
 	width: 100%;
@@ -136,6 +158,14 @@ main .user-info {
 
 .user-info .follow-wrap > li:hover span {
 	color: #1da1f2;
+}
+
+.user-info .follow-wrap > li > .empty-count {
+	background: #eee;
+	width: 24px;
+	height: 20px;
+	display: inline-block;
+	vertical-align: middle;
 }
 
 .user-info .short-info {
@@ -168,6 +198,21 @@ main .user-info {
 .user-info .short-info .more-details {
 	background-image: url(../../assets/images/more-horizont.png);
 	margin: 0px 0px 0px 10px;
+}
+
+.user-info .empty-short-info > li {
+	background: #eee;
+	width: 25%;
+	height: 20px;
+	margin-right: 15px;
+}
+
+.user-info .empty-short-info > .more-details {
+	background-image: url(../../assets/images/more-horizont.png);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: 17px;
 }
 
 main .user-wall {

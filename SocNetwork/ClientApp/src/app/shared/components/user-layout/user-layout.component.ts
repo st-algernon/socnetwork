@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { User } from '../../interfaces';
+import { User, UsersResponse } from '../../interfaces';
 import { AuthService } from '../../services/auth.service';
 import { UsersService } from '../../services/users.service';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,9 @@ import { switchMap } from 'rxjs/operators';
 })
 export class UserLayoutComponent implements OnInit {
 
-  user: User;
+  me: User;
+
+  profileMenuIsOpened = false;
 
   constructor(
     private auth: AuthService,
@@ -22,9 +24,15 @@ export class UserLayoutComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.usersService.getMe().subscribe((response: any) => {
-      console.log(response);
-    });
+    this.me = this.usersService.getMeFromStorage();
+  }
+
+  toogleProfileMenu() {
+    if (this.profileMenuIsOpened) {
+      this.profileMenuIsOpened = false;
+    } else {
+      this.profileMenuIsOpened = true;
+    }
   }
 
 }

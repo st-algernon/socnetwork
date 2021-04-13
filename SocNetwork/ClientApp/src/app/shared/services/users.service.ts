@@ -21,6 +21,19 @@ export class UsersService {
 
     getMe() {
         return this.http.get(`${environment.apiUrl}/users/me`)
+        .pipe(
+            map((response: UsersResponse) => { 
+                return { 
+                    ...response.users[0],
+                    birthDate: new Date(response.users[0].birthDate),
+                    creationDate: new Date(response.users[0].creationDate),
+                    lastVisited: new Date(response.users[0].lastVisited),
+                    pathToAvatar: location.origin + "/" + response.users[0].pathToAvatar,
+                    pathToCover: location.origin + "/" + response.users[0].pathToCover,
+                }
+            }),
+            tap(this.setMeToStorage)
+        );
     }
 
     getByUsername(username: string) {
@@ -42,7 +55,23 @@ export class UsersService {
     editProfile(editProfileRequest: EditProfileRequest) {
         return this.http.put(`${environment.apiUrl}/users`, editProfileRequest)
         .pipe(
-            map(() => { return true })
+            tap(() => { this.getMe().subscribe() })
         );
+    }
+
+    getMeFromStorage(): User {
+        if (localStorage.me == null) {
+            this.getMe().subscribe();
+        }
+
+        return JSON.parse(localStorage.me);
+    }
+
+    private setMeToStorage(me: User) {
+        if (me) {
+          localStorage.me = JSON.stringify(me);
+        } else {
+          localStorage.clear();
+        }
     }
 }

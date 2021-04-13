@@ -1,7 +1,4 @@
-export interface Options {
-    key: string,
-    value: string
-}
+import { Options } from "./interfaces"
 
 export const GenderOptions: Options[] = [
     { key: '0', value: 'Unspecified' },

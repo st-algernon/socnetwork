@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { UsersService } from '../shared/services/users.service';
 export class ProfilePageComponent implements OnInit {
 
   user: User;
+  me: User;  
 
   editProfileFlag: boolean = false;
   uSub: Subscription;
@@ -24,6 +25,9 @@ export class ProfilePageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+
+    this.me = this.usersService.getMeFromStorage();
+    
     // this.uSub = this.route.params.pipe (
     //   switchMap((params: Params) => {
     //     return this.usersService.getUser(params['username'])

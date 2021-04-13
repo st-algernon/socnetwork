@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { EditProfileRequest, User } from 'src/app/shared/interfaces';
-import { GenderOptions, MaritalStatusOptions, Options } from 'src/app/shared/enums-options';
+import { EditProfileRequest, Options, SelectConfig, User } from 'src/app/shared/interfaces';
+import { GenderOptions, MaritalStatusOptions } from 'src/app/shared/enums-options';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { MediaService } from 'src/app/shared/services/media.service';
 import { Gender, MediaFor } from 'src/app/shared/enums';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile-popup',
@@ -20,17 +21,9 @@ export class EditProfilePopupComponent implements OnInit {
 
   @Output() onClose = new EventEmitter<boolean>();
 
-  genderSelect = { 
-    label: 'gender',
-    options: GenderOptions,
-    selected: null //GenderOptions.find(o => o.key == this.user.gender.toString())
-  };
+  genderSelect: SelectConfig;
 
-  maritalStatusSelect = {
-    label: 'marital status',
-    options: MaritalStatusOptions,
-    selected: null //MaritalStatusOptions.find(o => o.key == this.user.maritalStatus.toString())
-  };
+  maritalStatusSelect: SelectConfig;
 
   selectedGender: Options;
 
@@ -66,29 +59,39 @@ export class EditProfilePopupComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
-    private mediaService: MediaService
+    private mediaService: MediaService,
+    private router: Router
     ) { }
 
   ngOnInit() {
 
-    let day: number;
-    let month: number;
-    let year: number;
-
-    if (this.user.birthDate.getUTCFullYear() > 1900) {
-      day = this.user.birthDate.getUTCDate();
-      month = this.user.birthDate.getUTCMonth();
-      year = this.user.birthDate.getUTCFullYear()
-    }
-
     this.form = new FormGroup({
       name: new FormControl(this.user.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
       username: new FormControl(this.user.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
-      dayOfBirth: new FormControl(day, [Validators.min(1), Validators.max(31)]),
-      monthOfBirth: new FormControl(month, [Validators.min(1), Validators.max(12)]),
-      yearOfBirth: new FormControl(year, [Validators.min(1900), Validators.max(new Date().getFullYear())]),
+      dayOfBirth: new FormControl(null, [Validators.min(1), Validators.max(31)]),
+      monthOfBirth: new FormControl(null, [Validators.min(1), Validators.max(12)]),
+      yearOfBirth: new FormControl(null, [Validators.min(1900), Validators.max(new Date().getFullYear())]),
       bio: new FormControl(this.user.bio, [Validators.maxLength(50)]),
     });
+
+    if (this.user.birthDate.getUTCFullYear() > 1900) 
+    {
+      this.dayOfBirth.setValue(this.user.birthDate.getUTCDate());
+      this.monthOfBirth.setValue(this.user.birthDate.getUTCMonth());
+      this.yearOfBirth.setValue(this.user.birthDate.getUTCFullYear())
+    }
+
+    this.genderSelect = { 
+      label: 'gender',
+      options: GenderOptions,
+      selected: GenderOptions.find(o => o.key == this.user.gender.toString())
+    };
+
+    this.maritalStatusSelect = {
+      label: 'marital status',
+      options: MaritalStatusOptions,
+      selected: MaritalStatusOptions.find(o => o.key == this.user.maritalStatus.toString())
+    }
   }
 
   close() {
@@ -121,6 +124,7 @@ export class EditProfilePopupComponent implements OnInit {
     this.uploadImage(this.coverFiles, MediaFor.Cover);
     this.uploadImage(this.avatarFiles, MediaFor.Avatar);
     this.usersService.editProfile(request).subscribe();
+    this.reloadCurrentRoute();
   }
 
   previewImage(file: File, previewImageBox: HTMLImageElement) {
@@ -139,10 +143,10 @@ export class EditProfilePopupComponent implements OnInit {
 
   uploadImage(files: FileList, mediaFor: MediaFor) {
 
-    if (files.length === 0) {
+    if (files == null) {
       return;
     }
-
+    console.log("i'm here");
     let fileToUpload = <File>files[0];
 
     const formData = new FormData();
@@ -150,5 +154,12 @@ export class EditProfilePopupComponent implements OnInit {
     formData.set('file', fileToUpload, fileToUpload.name);
 
     this.mediaService.uploadProfileMedia(formData, mediaFor).subscribe();
+  }
+
+  reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([currentUrl]);
   }
 }

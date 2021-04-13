@@ -54,3 +54,14 @@ export interface User {
     pathToAvatar: string,
     pathToCover: string
 }
+
+export interface Options {
+    key: string,
+    value: string
+}
+
+export interface SelectConfig {
+    label: string,
+    options: Options[],
+    selected: Options
+}

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocNetwork.DTO;
@@ -47,11 +47,11 @@ namespace SocNetwork.Controllers
         // }
 
         [HttpGet("me")]
-        public RedirectToActionResult Get()
+        public RedirectResult Get()
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            return RedirectToAction("Get", new { username = currentUser.Username });
+            return Redirect(currentUser.Username);
         }
 
         [HttpGet("{username}")]

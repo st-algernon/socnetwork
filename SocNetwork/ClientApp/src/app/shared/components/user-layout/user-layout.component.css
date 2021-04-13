@@ -67,6 +67,10 @@ header {
 	position: relative;
 }
 
+.top-profile-menu > .avatar-box {
+	background: #eee;
+}
+
 .top-profile-menu > .avatar-box:hover {
 	opacity: 0.8;
 	cursor: pointer;
