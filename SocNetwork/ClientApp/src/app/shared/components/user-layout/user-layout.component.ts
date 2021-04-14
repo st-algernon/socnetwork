@@ -1,30 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { User, UsersResponse } from '../../interfaces';
 import { AuthService } from '../../services/auth.service';
-import { UsersService } from '../../services/users.service';
-import { Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { MeStorage } from '../../services/me-storage.service';
 
 @Component({
   selector: 'app-user-layout',
   templateUrl: './user-layout.component.html',
   styleUrls: ['./user-layout.component.css']
 })
-export class UserLayoutComponent implements OnInit {
+export class UserLayoutComponent implements OnInit, AfterContentChecked {
 
   me: User;
 
   profileMenuIsOpened = false;
 
   constructor(
-    private auth: AuthService,
-    private route: ActivatedRoute,
-    private usersService: UsersService
+    private meStorage: MeStorage,
+    private changeDetector: ChangeDetectorRef
   ) { }
 
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
+  }
+
   ngOnInit() {
-    this.me = this.usersService.getMeFromStorage();
+    this.meStorage.me$.subscribe((response: User) => { this.me = response});
   }
 
   toogleProfileMenu() {

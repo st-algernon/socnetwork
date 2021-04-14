@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MeStorage } from 'src/app/shared/services/me-storage.service';
 import { AccountLoginRequest } from '../../shared/interfaces';
 import { AuthService } from '../../shared/services/auth.service';
 
@@ -24,7 +25,8 @@ export class LoginPageComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private meStorage: MeStorage
   ) {}
 
   ngOnInit() {
@@ -48,11 +50,11 @@ export class LoginPageComponent implements OnInit {
 
     this.auth.login(loginRequest).subscribe(() => {
       this.form.reset();
+      //this.meStorage.refresh();
       this.router.navigate(['/news']);
       this.submitted = false;
     }, () => {
       this.submitted = false;
     });
   }
-
 }

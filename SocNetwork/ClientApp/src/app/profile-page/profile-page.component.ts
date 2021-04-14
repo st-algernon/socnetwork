@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User, UsersResponse } from '../shared/interfaces';
-import { MediaService } from '../shared/services/media.service';
+import { MeStorage } from '../shared/services/me-storage.service';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
@@ -14,33 +14,20 @@ import { UsersService } from '../shared/services/users.service';
 export class ProfilePageComponent implements OnInit {
 
   user: User;
-  me: User;  
+  me: any;  
 
   editProfileFlag: boolean = false;
-  uSub: Subscription;
+  sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private meStorage: MeStorage,
+    private changeDetector: ChangeDetectorRef
     ) { }
 
   ngOnInit(): void {
-
-    this.me = this.usersService.getMeFromStorage();
-    
-    // this.uSub = this.route.params.pipe (
-    //   switchMap((params: Params) => {
-    //     return this.usersService.getUser(params['username'])
-    //   })
-    // ).subscribe((response: UsersResponse) => {
-    //   this.post = post;
-    //   this.form = new FormGroup({
-    //     title: new FormControl(post.title, Validators.required),
-    //     author: new FormControl(post.author, Validators.required)
-    //   })
-    // })
-
-    this.route.params.pipe (
+    this.sub = this.route.params.pipe (
       switchMap((params: Params) => {
         return this.usersService.getByUsername(params['username']);
       })
@@ -48,5 +35,12 @@ export class ProfilePageComponent implements OnInit {
       this.user = response;
       console.log(this.user);
     });
+
+    this.meStorage.me$.subscribe((response: User) => { this.me = response });
+    console.log(this.me);
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 }

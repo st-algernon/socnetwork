@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EditProfileRequest, Options, SelectConfig, User } from 'src/app/shared/interfaces';
 import { GenderOptions, MaritalStatusOptions } from 'src/app/shared/enums-options';
@@ -7,13 +7,15 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 import { MediaService } from 'src/app/shared/services/media.service';
 import { Gender, MediaFor } from 'src/app/shared/enums';
 import { Router, RouterModule } from '@angular/router';
+import { MeStorage } from 'src/app/shared/services/me-storage.service';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-profile-popup',
   templateUrl: './edit-profile-popup.component.html',
   styleUrls: ['./edit-profile-popup.component.css']
 })
-export class EditProfilePopupComponent implements OnInit {
+export class EditProfilePopupComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
 
@@ -29,9 +31,15 @@ export class EditProfilePopupComponent implements OnInit {
 
   selectedMaritalStatus: Options;
 
-  coverFiles: FileList;
+  coverFile: File;
 
-  avatarFiles: FileList;
+  avatarFile: File;
+
+  editAvatarSub: Subscription;
+
+  editCoverSub: Subscription;
+
+  editInfoSub: Subscription;
 
   get name() {
     return this.form.get('name');
@@ -60,8 +68,13 @@ export class EditProfilePopupComponent implements OnInit {
   constructor(
     private usersService: UsersService,
     private mediaService: MediaService,
-    private router: Router
+    private router: Router,
+    private meStorage: MeStorage
     ) { }
+
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
 
   ngOnInit() {
 
@@ -121,10 +134,13 @@ export class EditProfilePopupComponent implements OnInit {
       maritalStatus: this.selectedMaritalStatus.key
     }
 
-    this.uploadImage(this.coverFiles, MediaFor.Cover);
-    this.uploadImage(this.avatarFiles, MediaFor.Avatar);
-    this.usersService.editProfile(request).subscribe();
-    this.reloadCurrentRoute();
+    forkJoin({
+      cover: this.uploadImage(this.coverFile, MediaFor.Cover),
+      avatar: this.uploadImage(this.avatarFile, MediaFor.Avatar),
+      info: this.usersService.editProfile(request)
+    }).subscribe(() => {
+      this.reloadCurrentRoute();
+    });
   }
 
   previewImage(file: File, previewImageBox: HTMLImageElement) {
@@ -141,19 +157,17 @@ export class EditProfilePopupComponent implements OnInit {
     }
   }
 
-  uploadImage(files: FileList, mediaFor: MediaFor) {
+  uploadImage(file: File, mediaFor: MediaFor) {
 
-    if (files == null) {
-      return;
+    if (file == null) {
+      return null;
     }
-    console.log("i'm here");
-    let fileToUpload = <File>files[0];
 
     const formData = new FormData();
 
-    formData.set('file', fileToUpload, fileToUpload.name);
+    formData.set('file', file, file.name);
 
-    this.mediaService.uploadProfileMedia(formData, mediaFor).subscribe();
+    return this.mediaService.uploadProfileMedia(formData, mediaFor);
   }
 
   reloadCurrentRoute() {

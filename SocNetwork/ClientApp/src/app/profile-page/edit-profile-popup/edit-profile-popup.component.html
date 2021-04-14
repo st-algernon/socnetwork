@@ -25,7 +25,7 @@
           </div>
           <input
             type="file"
-            (change)="coverFiles = cover_input.files; 
+            (change)="coverFiles = cover_input.files[0]; 
               previewImage(cover_input.files[0], cover_preview_img)"
             #cover_input
             class="hidden"
@@ -49,7 +49,7 @@
             </div>
             <input
               type="file"
-              (change)="avatarFiles = avatar_input.files;
+              (change)="avatarFiles = avatar_input.files[0];
                 previewImage(avatar_input.files[0], avatar_preview_img)"
               #avatar_input
               class="hidden"
