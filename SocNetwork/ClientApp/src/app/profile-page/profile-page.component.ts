@@ -27,20 +27,14 @@ export class ProfilePageComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.meStorage.me$.subscribe((response: User) => { this.me = response });
+
     this.sub = this.route.params.pipe (
       switchMap((params: Params) => {
         return this.usersService.getByUsername(params['username']);
       })
     ).subscribe((response: User) => {
       this.user = response;
-      console.log(this.user);
     });
-
-    this.meStorage.me$.subscribe((response: User) => { this.me = response });
-    console.log(this.me);
-  }
-
-  ngAfterContentChecked(): void {
-    this.changeDetector.detectChanges();
   }
 }

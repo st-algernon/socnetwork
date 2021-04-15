@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, Subject, Subscription } from "rxjs";
+import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject, Subject, Subscription } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User, UsersResponse } from "../interfaces";
@@ -10,18 +10,19 @@ export class MeStorage {
 
     sub: Subscription;
 
-    private _me$ = new Subject<User>();
+    private _me$ = new ReplaySubject<User>();
 
     constructor(private http: HttpClient) {}
+    
+    get me$(): ReplaySubject<User> {
 
-    get me$(): Subject<User> {
         if (localStorage.me == null) {
             this.getMeFromServer().subscribe(
                 (response: User) => {
                     localStorage.me = JSON.stringify(response);
                 },
                 (error) => {
-                    console.log()
+                    console.log(error);
                 },
                 () => { 
                     this._me$.next(JSON.parse(localStorage.me));
@@ -35,8 +36,6 @@ export class MeStorage {
     }
 
     private getMeFromServer() {
-        console.log('start get me from server');
-
         return this.http.get(`${environment.apiUrl}/users/me`)
         .pipe(
             map((response: UsersResponse) => { 

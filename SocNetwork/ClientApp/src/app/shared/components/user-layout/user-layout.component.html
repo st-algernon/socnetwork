@@ -6,7 +6,7 @@
       <app-search-result-popup *ngIf="false"></app-search-result-popup>
     </form>
     <div class="top-profile-menu flex fd-c ai-fe">
-      <div class="avatar-box square-32" (click)="toogleProfileMenu()">
+      <div class="avatar-box square-32" (click)="profileMenuIsOpened != profileMenuIsOpened">
         <img *ngIf="me" [src]="me.pathToAvatar" alt="photo" />
       </div>
       <app-profile-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-profile-menu-popup>
