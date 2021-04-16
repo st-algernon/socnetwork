@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User, UsersResponse } from '../../interfaces';
 import { AuthService } from '../../services/auth.service';
-import { MeStorage } from '../../services/me-storage.service';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-user-layout',
@@ -14,14 +14,14 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
 
   me: User;
   meSub: Subscription;
-  profileMenuIsOpened = true;
+  profileMenuIsOpened = false;
 
   constructor(
-    private meStorage: MeStorage,
+    private usersService: UsersService,
   ) { }
 
   ngOnInit(): void {
-    this.meSub = this.meStorage.me$.subscribe((response: User) => { this.me = response });
+    this.meSub = this.usersService.me$.subscribe((response: User) => { this.me = response });
   }
 
   ngOnDestroy(): void {

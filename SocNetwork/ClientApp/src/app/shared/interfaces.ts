@@ -1,4 +1,4 @@
-import { AccountStatus, Gender, MaritalStatus } from "./enums";
+import { AccountStatus, Gender, MaritalStatus, MediaFor } from "./enums";
 
 export interface AccountLoginRequest {
     email: string
@@ -38,6 +38,23 @@ export interface UsersResponse
     errors: string[]
 }
 
+export interface MediaResponse {
+    result: string,
+    media: ProfileMedia[],
+    errors: string[]
+}
+
+export interface ProfileMedia {
+    id: string,
+    mimeType: string,
+    path: string,
+    size: number,
+    creationDate: Date,
+    profileId: string,
+    mediaFor: MediaFor,
+    isCurrent: boolean
+}
+
 export interface User {
     id: string,
     email: string,
@@ -51,8 +68,7 @@ export interface User {
     location: string,
     gender: Gender,
     maritalStatus: MaritalStatus,
-    pathToAvatar: string,
-    pathToCover: string
+    media: ProfileMedia[]
 }
 
 export interface Options {

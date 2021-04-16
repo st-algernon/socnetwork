@@ -111,21 +111,8 @@ main .user-info {
 	margin-top: 4px;
 }
 
-.user-info .edit-profile-btn {
+.profile-action-btn {
 	margin-right: 25px;
-	border-radius: 20px;
-	font-weight: bold;
-	padding: 8px 14px;
-	color: #1da1f2;
-	border: 1px solid #1da1f2;
-	background: #fff;
-	cursor: pointer;
-}
-
-.user-info .edit-profile-btn:hover {
-	color: #fff;
-	border: 1px solid #1da1f2;
-	background: #1da1f2;
 }
 
 .user-info .bio {

@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User, UsersResponse } from '../shared/interfaces';
-import { MeStorage } from '../shared/services/me-storage.service';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
@@ -11,23 +10,22 @@ import { UsersService } from '../shared/services/users.service';
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css']
 })
-export class ProfilePageComponent implements OnInit {
+export class ProfilePageComponent implements OnInit, AfterContentChecked {
 
   user: User;
-  me: any;  
+  me: User;  
 
   editProfileFlag: boolean = false;
+  itIsMe: boolean = false;
   sub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
-    private usersService: UsersService,
-    private meStorage: MeStorage,
-    private changeDetector: ChangeDetectorRef
+    private usersService: UsersService
     ) { }
 
   ngOnInit(): void {
-    this.meStorage.me$.subscribe((response: User) => { this.me = response });
+    this.usersService.me$.subscribe((response: User) => this.me = response);
 
     this.sub = this.route.params.pipe (
       switchMap((params: Params) => {
@@ -36,5 +34,14 @@ export class ProfilePageComponent implements OnInit {
     ).subscribe((response: User) => {
       this.user = response;
     });
+  }
+
+  ngAfterContentChecked(): void {
+
+    if (this.me != null && this.user != null) {
+      if (this.me.id == this.user.id) {
+        this.itIsMe = true;
+      }
+    }
   }
 }

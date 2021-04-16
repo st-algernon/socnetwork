@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountRegistrationRequest } from 'src/app/shared/interfaces';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { MeStorage } from 'src/app/shared/services/me-storage.service';
 import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
@@ -35,7 +34,6 @@ export class RegistrationPageComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private router: Router,
-    private meStorage: MeStorage
     ) { }
 
   ngOnInit() {
@@ -68,7 +66,6 @@ export class RegistrationPageComponent implements OnInit {
 
     this.auth.register(registrationRequest).subscribe(() => {
       this.form.reset();
-      //this.meStorage.refresh();
       this.router.navigate(['/news']);
       this.submitted = false;
     }, () => {

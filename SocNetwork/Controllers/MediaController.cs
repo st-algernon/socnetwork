@@ -10,8 +10,8 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using SocNetwork.DTO.Response;
+using Microsoft.EntityFrameworkCore;
 
 namespace SocNetwork.Controllers
 {
@@ -26,18 +26,76 @@ namespace SocNetwork.Controllers
             db = context;
         }
 
-        // GET: api/<MediaController>
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<MediaController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("profile/{username}")]
+        public async Task<IActionResult> Get(string username)
         {
-            return "value";
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null) {
+                return BadRequest(new ProfileMediaResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "User not found" }
+                });
+            }
+
+            var media = user.ProfileMedia.ToList();
+
+            return Ok(new ProfileMediaResponse
+            {
+                Result = true,
+                Media = media
+            });
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost("profile"), DisableRequestSizeLimit]
+        public async Task<IActionResult> ProfileMedia()
+        {
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var formCollection = await Request.ReadFormAsync();
+            var mediaForStr = Request.Headers["Media-For"][0];
+            var mediaFor = (MediaFor) Enum.Parse(typeof(MediaFor), mediaForStr);
+            var file = formCollection.Files[0];
+            var pathToFile = SaveFile(file);
+
+            ResetCurrentImage(currentUser, mediaFor);
+
+            db.ProfileMedia.Add(new ProfileMedia()
+            {
+                ProfileId = currentUser.Id,
+                Path = pathToFile,
+                Size = (int)file.Length,
+                MimeType = file.ContentType,
+                CreationDate = DateTime.Now,
+                MediaFor = mediaFor,
+                IsCurrent = true
+            });
+
+            await db.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        // PUT api/<MediaController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/<MediaController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
         }
 
         private string SaveFile(IFormFile file)
@@ -94,48 +152,6 @@ namespace SocNetwork.Controllers
             }
 
             db.SaveChanges();
-        }
-
-        [Authorize(Roles = "User")]
-        [HttpPost("profile"), DisableRequestSizeLimit]
-        public async Task<IActionResult> ProfileMedia()
-        {
-            var currentUser = HttpContext.Items["User"] as User;
-
-            var formCollection = await Request.ReadFormAsync();
-            var mediaForStr = Request.Headers["Media-For"][0];
-            var mediaFor = (MediaFor) Enum.Parse(typeof(MediaFor), mediaForStr);
-            var file = formCollection.Files[0];
-            var pathToFile = SaveFile(file);
-
-            ResetCurrentImage(currentUser, mediaFor);
-
-            db.ProfileMedia.Add(new ProfileMedia()
-            {
-                ProfileId = currentUser.Id,
-                Path = pathToFile,
-                Size = (int)file.Length,
-                MimeType = file.ContentType,
-                CreationDate = DateTime.Now,
-                MediaFor = mediaFor,
-                IsCurrent = true
-            });
-
-            await db.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        // PUT api/<MediaController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MediaController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

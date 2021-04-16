@@ -19,7 +19,8 @@
               <span class="empty-nick-name"></span>
             </ng-template>
           </div>
-          <a class="edit-profile-btn" (click)="editProfileFlag = true">Edit profile</a>
+          <button *ngIf="!itIsMe" class="btn btn-outlined profile-action-btn">Follow</button>
+          <button *ngIf="itIsMe" class="btn btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
         </div>
         <div class="flex fd-r jc-fe">
           <div class="wrap-info flex fd-c">
@@ -61,7 +62,7 @@
     </section>
 
     <app-edit-profile-popup
-        *ngIf="editProfileFlag"
+        *ngIf="editProfileFlag && itIsMe"
         (onClose)="editProfileFlag = false"
         [user] = "user"
     ></app-edit-profile-popup>    

@@ -72,13 +72,6 @@ namespace SocNetwork.Controllers
 
             user.CopyPropertiesTo<User, UserDTO>(userDTO);
 
-            userDTO.PathToAvatar = user.ProfileMedia
-                .FirstOrDefault(pm => pm.IsCurrent && pm.MediaFor == MediaFor.Avatar)
-                .Path;
-            userDTO.PathToCover = user.ProfileMedia
-                .FirstOrDefault(pm => pm.IsCurrent && pm.MediaFor == MediaFor.Cover)
-                .Path;
-
             return Ok(new UsersResponse() 
             {
                 Result = true,

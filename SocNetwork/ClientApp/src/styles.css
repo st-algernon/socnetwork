@@ -243,20 +243,56 @@ textarea {
 	text-decoration: none;
 }
 
-.btn-outlined {
+.btn {
 	padding: 8px 14px;
-	height: 35px;
+	border-radius: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 16px;
+	font-family: inherit;
+}
+
+.btn.btn-outlined {
 	color: #1da1f2;
 	border: 1px solid #1da1f2;
 	background: #fff;
-	border-radius: 20px;
-	font-weight: bold;
 }
 
-.btn-outlined:hover {
+.btn.btn-outlined:hover {
 	color: #fff;
 	border: 1px solid #1da1f2;
 	background: #1da1f2;
+}
+
+.btn.btn-filled {
+	color: #fff;
+	border: 1px solid #1da1f2;
+	background-color: #1da1f2;
+}
+
+.btn.btn-filled:hover {
+	color: #fff;
+	border: 1px solid rgb(202, 32, 85);
+	background-color: rgb(202, 32, 85);
+}
+
+.btn.btn-danger {
+	color: #fff;
+	border: 1px solid rgb(202, 32, 85);
+	background-color: rgb(202, 32, 85);
+}
+
+.btn:focus {
+	outline: none;
+}
+
+.btn.btn-outlined:focus,
+.btn.btn-filled:focus {
+	box-shadow: 0 0 2px 3px #81c7f3;
+}
+
+.btn.btn-danger:focus {
+	box-shadow: 0 0 2px 3px rgb(207, 85, 123);
 }
 
 body {

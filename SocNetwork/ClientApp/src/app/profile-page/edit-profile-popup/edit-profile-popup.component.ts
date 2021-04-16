@@ -7,7 +7,6 @@ import { HttpClient, HttpEventType } from '@angular/common/http';
 import { MediaService } from 'src/app/shared/services/media.service';
 import { Gender, MediaFor } from 'src/app/shared/enums';
 import { Router, RouterModule } from '@angular/router';
-import { MeStorage } from 'src/app/shared/services/me-storage.service';
 import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
@@ -69,7 +68,6 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     private usersService: UsersService,
     private mediaService: MediaService,
     private router: Router,
-    private meStorage: MeStorage
     ) { }
 
   ngOnDestroy(): void {
