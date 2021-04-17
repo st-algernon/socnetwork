@@ -7,7 +7,7 @@ using SocNetwork.Models;
 
 namespace SocNetwork.DTO
 {
-    public class EditProfileRequest
+    public class EditProfileInfoRequest
     {
         public string Id { get; set; }
         public string Email { get; set; }

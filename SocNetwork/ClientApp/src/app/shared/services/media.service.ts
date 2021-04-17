@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { MediaResponse } from "../interfaces";
+import { UserMediaResponse } from "../interfaces";
 
 @Injectable({ providedIn: "root" })
 export class MediaService {
@@ -22,9 +22,9 @@ export class MediaService {
   }
 
   getProfileMedia(username: string) {
-    return this.http.get<MediaResponse>(`${environment.apiUrl}/media/profile/${username}`)
-      .pipe(
-        tap(console.log)
-      )
+    return this.http.get<UserMediaResponse>(`${environment.apiUrl}/media/profile/${username}`)
+    .pipe(
+      map((response: UserMediaResponse) => { return response.userMedia })
+    )
   }
 }

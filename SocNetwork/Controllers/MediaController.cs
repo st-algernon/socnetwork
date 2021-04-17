@@ -12,6 +12,8 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
 using SocNetwork.DTO.Response;
 using Microsoft.EntityFrameworkCore;
+using SocNetwork.Extensions;
+using SocNetwork.DTO;
 
 namespace SocNetwork.Controllers
 {
@@ -40,7 +42,7 @@ namespace SocNetwork.Controllers
                 .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null) {
-                return BadRequest(new ProfileMediaResponse()
+                return BadRequest(new UserMediaResponse()
                 {
                     Result = false,
                     Errors = new List<string>() { "User not found" }
@@ -49,10 +51,19 @@ namespace SocNetwork.Controllers
 
             var media = user.ProfileMedia.ToList();
 
-            return Ok(new ProfileMediaResponse
+            var mediaDTO = new List<UserMediaDTO>();
+
+            media.ForEach(m =>
+            {
+                var mDTO = new UserMediaDTO();
+                m.CopyPropertiesTo<ProfileMedia, UserMediaDTO>(mDTO);
+                mediaDTO.Add(mDTO);
+            });
+
+            return Ok(new UserMediaResponse
             {
                 Result = true,
-                Media = media
+                Media = mediaDTO
             });
         }
 

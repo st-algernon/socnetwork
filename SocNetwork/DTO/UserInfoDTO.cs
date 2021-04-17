@@ -7,7 +7,7 @@ using SocNetwork.Models;
 
 namespace SocNetwork.DTO
 {
-    public class UserDTO
+    public class UserInfoDTO
     {
         public Guid Id { get; set; }
         public string Email { get; set; }

@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, ReplaySubject } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { forkJoin, ReplaySubject } from "rxjs";
+import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { EditProfileRequest, User, UsersResponse } from "../interfaces";
+import { EditProfileRequest, User, UserInfoResponse } from "../interfaces";
+import { MediaService } from "./media.service";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
@@ -13,9 +14,15 @@ export class UsersService {
     get me$(): ReplaySubject<User> {
 
         if (localStorage.me == null) {
-            this.getMe().subscribe(
-                (response: User) => {
-                    localStorage.me = JSON.stringify(response);
+            this.getMyUsername()
+            .pipe(
+                switchMap((response: { username: string }) => {
+                    console.log('switchMap', response)
+                    return this.getUser(response.username)
+                })
+            ).subscribe(
+                ({ profileInfo, profileMedia }) => {
+                    localStorage.me = JSON.stringify({ profileInfo, profileMedia });
                 },
                 (error) => {
                     console.log(error);
@@ -31,7 +38,10 @@ export class UsersService {
         return this._me$;
     }
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private mediaService: MediaService
+    ) {}
 
     getAll() {
         return this.http.get(`${environment.apiUrl}/users`)
@@ -42,39 +52,32 @@ export class UsersService {
         return this.http.get(`${environment.apiUrl}/users/${username}/followers`)
     }
 
-    getByUsername(username: string) {
-        return this.http.get<UsersResponse>(`${environment.apiUrl}/users/${username}`)
+    getProfileInfo(username: string) {
+        return this.http.get<UserInfoResponse>(`${environment.apiUrl}/users/${username}`)
         .pipe(
-            map((response: UsersResponse) => { 
+            map((response: UserInfoResponse) => { 
                 return { 
-                    ...response.users[0],
-                    birthDate: new Date(response.users[0].birthDate),
-                    creationDate: new Date(response.users[0].creationDate),
-                    lastVisited: new Date(response.users[0].lastVisited),
-                    // pathToAvatar: location.origin + "/" + response.users[0].pathToAvatar,
-                    // pathToCover: location.origin + "/" + response.users[0].pathToCover,
+                    ...response.userInfo,
+                    birthDate: new Date(response.userInfo.birthDate),
+                    creationDate: new Date(response.userInfo.creationDate),
+                    lastVisited: new Date(response.userInfo.lastVisited)
                 }
-             })
-        );
+            })
+        )
+    }
+
+    getUser(username: string) {
+        return forkJoin({
+            profileInfo: this.getProfileInfo(username),
+            profileMedia: this.mediaService.getProfileMedia(username)
+        });
     }
 
     editProfile(editProfileRequest: EditProfileRequest) {
         return this.http.put(`${environment.apiUrl}/users`, editProfileRequest);
     }
 
-    private getMe() {
-        return this.http.get(`${environment.apiUrl}/users/me`)
-        .pipe(
-            map((response: UsersResponse) => { 
-                return { 
-                    ...response.users[0],
-                    birthDate: new Date(response.users[0].birthDate),
-                    creationDate: new Date(response.users[0].creationDate),
-                    lastVisited: new Date(response.users[0].lastVisited),
-                    // pathToAvatar: location.origin + "/" + response.users[0].pathToAvatar,
-                    // pathToCover: location.origin + "/" + response.users[0].pathToCover,
-                }
-            })
-        );
+    getMyUsername() {
+        return this.http.get(`${environment.apiUrl}/users/me`).pipe(tap(console.log))
     }
 }

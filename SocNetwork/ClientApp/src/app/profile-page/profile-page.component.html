@@ -1,20 +1,20 @@
 <main>
     <section class="user-info">
         <div class="photo-cover">
-          <img *ngIf="user" [src]="user.pathToCover" alt="cover">
+          <img *ngIf="user.media" [src]="getPathToCurrentCover()" alt="cover">
         </div>
         <div class="user-avatar-back">
           <div class="user-avatar">
-            <img *ngIf="user" [src]="user.pathToAvatar" alt="avatar" />
+            <img *ngIf="user.media" [src]="getPathToCurrentAvatar()" alt="avatar" />
           </div>
         </div>
         <div class="flex fd-r jc-sb ai-c">
           <div class="flex fd-c">
-            <span *ngIf="user; else empty_name" class="source-name">{{ user.name }}</span>
+            <span *ngIf="user.profileInfo; else empty_name" class="source-name">{{ user.profileInfo.name }}</span>
             <ng-template #empty_name>
               <span class="empty-source-name"></span>
             </ng-template>
-            <span *ngIf="user; else empty_username" class="nick-name">@{{ user.username }}</span>
+            <span *ngIf="user.profileInfo; else empty_username" class="nick-name">@{{ user.profileInfo.username }}</span>
             <ng-template #empty_username>
               <span class="empty-nick-name"></span>
             </ng-template>
@@ -24,26 +24,26 @@
         </div>
         <div class="flex fd-r jc-fe">
           <div class="wrap-info flex fd-c">
-            <div *ngIf="user; else empty_bio" class="bio">{{ user.bio }}</div>
+            <div *ngIf="user.profileInfo; else empty_bio" class="bio">{{ user.profileInfo.bio }}</div>
             <ng-template #empty_bio>
               <div class="empty-bio"></div>
             </ng-template>
             <ul class="follow-wrap flex fd-r jc-sb">
-              <li class=""><span *ngIf="user; else empty_count_posts">30</span>
+              <li class=""><span *ngIf="user.profileInfo; else empty_count_posts">30</span>
                 <ng-template #empty_count_posts>
                   <span class="empty-count"></span>
                 </ng-template> posts
               </li>
-              <li class=""><span *ngIf="user; else empty_count_followers">24</span>
+              <li class=""><span *ngIf="user.profileInfo; else empty_count_followers">24</span>
                 <ng-template #empty_count_followers>
                   <span class="empty-count"></span>
                 </ng-template> followers</li>
-              <li class=""><span *ngIf="user; else empty_count_following">10</span>
+              <li class=""><span *ngIf="user.profileInfo; else empty_count_following">10</span>
                 <ng-template #empty_count_following>
                   <span class="empty-count"></span>
                 </ng-template> following</li>
             </ul>
-            <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
+            <ul *ngIf="user.profileInfo; else empty_short_info" class="short-info flex fd-r">
               <li class="residence">Zhytomyr</li>
               <li class="birthday">Born June 26, 1998</li>
               <li class="relationship">Married</li>

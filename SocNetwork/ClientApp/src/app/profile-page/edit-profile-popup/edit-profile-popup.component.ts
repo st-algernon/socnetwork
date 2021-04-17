@@ -77,31 +77,31 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.form = new FormGroup({
-      name: new FormControl(this.user.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
-      username: new FormControl(this.user.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
+      name: new FormControl(this.user.profileInfo.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
+      username: new FormControl(this.user.profileInfo.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
       dayOfBirth: new FormControl(null, [Validators.min(1), Validators.max(31)]),
       monthOfBirth: new FormControl(null, [Validators.min(1), Validators.max(12)]),
       yearOfBirth: new FormControl(null, [Validators.min(1900), Validators.max(new Date().getFullYear())]),
-      bio: new FormControl(this.user.bio, [Validators.maxLength(50)]),
+      bio: new FormControl(this.user.profileInfo.bio, [Validators.maxLength(50)]),
     });
 
-    if (this.user.birthDate.getUTCFullYear() > 1900) 
+    if (this.user.profileInfo.birthDate.getUTCFullYear() > 1900) 
     {
-      this.dayOfBirth.setValue(this.user.birthDate.getUTCDate());
-      this.monthOfBirth.setValue(this.user.birthDate.getUTCMonth());
-      this.yearOfBirth.setValue(this.user.birthDate.getUTCFullYear())
+      this.dayOfBirth.setValue(this.user.profileInfo.birthDate.getUTCDate());
+      this.monthOfBirth.setValue(this.user.profileInfo.birthDate.getUTCMonth());
+      this.yearOfBirth.setValue(this.user.profileInfo.birthDate.getUTCFullYear())
     }
 
     this.genderSelect = { 
       label: 'gender',
       options: GenderOptions,
-      selected: GenderOptions.find(o => o.key == this.user.gender.toString())
+      selected: GenderOptions.find(o => o.key == this.user.profileInfo.gender.toString())
     };
 
     this.maritalStatusSelect = {
       label: 'marital status',
       options: MaritalStatusOptions,
-      selected: MaritalStatusOptions.find(o => o.key == this.user.maritalStatus.toString())
+      selected: MaritalStatusOptions.find(o => o.key == this.user.profileInfo.maritalStatus.toString())
     }
   }
 
@@ -121,13 +121,13 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     );
 
     const request: EditProfileRequest = {
-      id: this.user.id,
-      email: this.user.email,
+      id: this.user.profileInfo.id,
+      email: this.user.profileInfo.email,
       name: this.form.value.name,
       username: this.form.value.username,
       bio: this.form.value.bio,
       birthDate: birthDate.toJSON(),
-      location: this.user.location,
+      location: this.user.profileInfo.location,
       gender: this.selectedGender.key,
       maritalStatus: this.selectedMaritalStatus.key
     }

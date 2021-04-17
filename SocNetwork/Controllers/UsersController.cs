@@ -47,11 +47,12 @@ namespace SocNetwork.Controllers
         // }
 
         [HttpGet("me")]
-        public RedirectResult Get()
+        [Authorize(Roles = "User")]
+        public IActionResult Get()
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            return Redirect(currentUser.Username);
+            return Ok(new { username = currentUser.Username });
         }
 
         [HttpGet("{username}")]
@@ -62,20 +63,20 @@ namespace SocNetwork.Controllers
                 .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
-                return BadRequest(new UsersResponse()
+                return BadRequest(new UserInfoResponse()
                 {
                     Result = false,
                     Errors = new List<string>() { "User not found" }
                 }); 
 
-            UserDTO userDTO = new UserDTO();
+            UserInfoDTO userInfoDTO = new UserInfoDTO();
 
-            user.CopyPropertiesTo<User, UserDTO>(userDTO);
+            user.CopyPropertiesTo<User, UserInfoDTO>(userInfoDTO);
 
-            return Ok(new UsersResponse() 
+            return Ok(new UserInfoResponse() 
             {
                 Result = true,
-                Users = new List<UserDTO>() { userDTO }
+                UserInfo = userInfoDTO
             });
         }
 
@@ -85,7 +86,7 @@ namespace SocNetwork.Controllers
             var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null) {
-                return BadRequest(new UsersResponse()
+                return BadRequest(new UserInfoResponse()
                 {
                     Result = false,
                     Errors = new List<string> { "User doesn't exist" }
@@ -111,7 +112,7 @@ namespace SocNetwork.Controllers
             var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
-                return BadRequest(new UsersResponse()
+                return BadRequest(new UserInfoResponse()
                 {
                     Result = false,
                     Errors = new List<string> { "Username doesn't exist" }
@@ -125,7 +126,7 @@ namespace SocNetwork.Controllers
 
 
 
-            return Ok(new UsersResponse()
+            return Ok(new UserInfoResponse()
             { 
                 Result = true,
                 //Users = following
@@ -161,7 +162,7 @@ namespace SocNetwork.Controllers
 
         [HttpPut]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Put([FromBody] EditProfileRequest request)
+        public async Task<IActionResult> Put([FromBody] EditProfileInfoRequest request)
         {
             User currentUser = HttpContext.Items["User"] as User;
 
@@ -171,7 +172,7 @@ namespace SocNetwork.Controllers
             }
             else if (currentUser.Id.ToString() == request.Id)
             {
-                request.CopyPropertiesTo<EditProfileRequest, User>(currentUser);
+                request.CopyPropertiesTo<EditProfileInfoRequest, User>(currentUser);
 
                 db.Users.Update(currentUser);
 

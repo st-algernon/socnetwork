@@ -31,20 +31,20 @@ export interface AuthResponse {
     errors: string[]
 }
 
-export interface UsersResponse
+export interface UserInfoResponse
 {
     result: string,
-    users: User[],
+    userInfo: UserInfo,
     errors: string[]
 }
 
-export interface MediaResponse {
+export interface UserMediaResponse {
     result: string,
-    media: ProfileMedia[],
+    userMedia: UserMedia[],
     errors: string[]
 }
 
-export interface ProfileMedia {
+export interface UserMedia {
     id: string,
     mimeType: string,
     path: string,
@@ -55,7 +55,7 @@ export interface ProfileMedia {
     isCurrent: boolean
 }
 
-export interface User {
+export interface UserInfo {
     id: string,
     email: string,
     creationDate: Date,
@@ -68,7 +68,11 @@ export interface User {
     location: string,
     gender: Gender,
     maritalStatus: MaritalStatus,
-    media: ProfileMedia[]
+}
+
+export interface User {
+    UserInfo: UserInfo,
+    UserMedia: UserMedia[]
 }
 
 export interface Options {
