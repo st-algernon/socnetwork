@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User } from 'src/app/shared/interfaces';
+import { Profile } from 'src/app/shared/interfaces';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class ProfileMenuPopupComponent implements OnInit {
 
-  @Input() me: User;
+  @Input() me: Profile;
   
   constructor(private auth: AuthService) { }
 

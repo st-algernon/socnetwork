@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SocNetwork.Models;
 
-namespace SocNetwork.DTO
+namespace SocNetwork.DTO.Request
 {
     public class EditProfileInfoRequest
     {

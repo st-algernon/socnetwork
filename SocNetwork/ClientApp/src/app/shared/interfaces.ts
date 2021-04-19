@@ -12,7 +12,7 @@ export interface AccountRegistrationRequest {
     password: string
 }
 
-export interface EditProfileRequest {
+export interface EditProfileInfoRequest {
     id: string,
     email: string,
     name: string,
@@ -31,20 +31,27 @@ export interface AuthResponse {
     errors: string[]
 }
 
-export interface UserInfoResponse
+export interface ProfileResponse
 {
     result: string,
-    userInfo: UserInfo,
+    profile: Profile,
     errors: string[]
 }
 
-export interface UserMediaResponse {
+export interface ProfilesResponse
+{
     result: string,
-    userMedia: UserMedia[],
+    profiles: Profile[],
     errors: string[]
 }
 
-export interface UserMedia {
+export interface ProfileMediaResponse {
+    result: string,
+    media: ProfileMedia[],
+    errors: string[]
+}
+
+export interface ProfileMedia {
     id: string,
     mimeType: string,
     path: string,
@@ -55,7 +62,7 @@ export interface UserMedia {
     isCurrent: boolean
 }
 
-export interface UserInfo {
+export interface Profile {
     id: string,
     email: string,
     creationDate: Date,
@@ -68,11 +75,9 @@ export interface UserInfo {
     location: string,
     gender: Gender,
     maritalStatus: MaritalStatus,
-}
-
-export interface User {
-    UserInfo: UserInfo,
-    UserMedia: UserMedia[]
+    media: ProfileMedia[],
+    pathToCurrentAvatar: string
+    pathToCurrentCover: string
 }
 
 export interface Options {

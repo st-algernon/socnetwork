@@ -3,26 +3,25 @@ import { Injectable } from "@angular/core";
 import { forkJoin, ReplaySubject } from "rxjs";
 import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { EditProfileRequest, User, UserInfoResponse } from "../interfaces";
-import { MediaService } from "./media.service";
+import { MediaFor } from "../enums";
+import { EditProfileInfoRequest, Profile, ProfileMediaResponse, ProfileResponse } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
 
-    private _me$ = new ReplaySubject<User>();
+    private _me$ = new ReplaySubject<Profile>();
     
-    get me$(): ReplaySubject<User> {
+    get me$(): ReplaySubject<Profile> {
 
         if (localStorage.me == null) {
             this.getMyUsername()
             .pipe(
                 switchMap((response: { username: string }) => {
-                    console.log('switchMap', response)
-                    return this.getUser(response.username)
+                    return this.getProfile(response.username)
                 })
             ).subscribe(
-                ({ profileInfo, profileMedia }) => {
-                    localStorage.me = JSON.stringify({ profileInfo, profileMedia });
+                (response: Profile) => {
+                    localStorage.me = JSON.stringify(response);
                 },
                 (error) => {
                     console.log(error);
@@ -39,8 +38,7 @@ export class UsersService {
     }
 
     constructor(
-        private http: HttpClient,
-        private mediaService: MediaService
+        private http: HttpClient
     ) {}
 
     getAll() {
@@ -52,32 +50,36 @@ export class UsersService {
         return this.http.get(`${environment.apiUrl}/users/${username}/followers`)
     }
 
-    getProfileInfo(username: string) {
-        return this.http.get<UserInfoResponse>(`${environment.apiUrl}/users/${username}`)
+    getProfile(username: string) {
+        return this.http.get<ProfileResponse>(`${environment.apiUrl}/users/${username}`)
         .pipe(
-            map((response: UserInfoResponse) => { 
+            map((response: ProfileResponse) => { 
                 return { 
-                    ...response.userInfo,
-                    birthDate: new Date(response.userInfo.birthDate),
-                    creationDate: new Date(response.userInfo.creationDate),
-                    lastVisited: new Date(response.userInfo.lastVisited)
+                    ...response.profile,
+                    //media: response.profile.media || [],
+                    birthDate: new Date(response.profile.birthDate),
+                    creationDate: new Date(response.profile.creationDate),
+                    lastVisited: new Date(response.profile.lastVisited),
+                    pathToCurrentAvatar: response.profile.media.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,
+                    pathToCurrentCover: response.profile.media.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path
                 }
             })
         )
     }
 
-    getUser(username: string) {
-        return forkJoin({
-            profileInfo: this.getProfileInfo(username),
-            profileMedia: this.mediaService.getProfileMedia(username)
-        });
-    }
-
-    editProfile(editProfileRequest: EditProfileRequest) {
-        return this.http.put(`${environment.apiUrl}/users`, editProfileRequest);
+    editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
+        console.log('editProfile')
+        return this.http.put(`${environment.apiUrl}/users`, editProfileInfoRequest).pipe(tap(console.log));
     }
 
     getMyUsername() {
-        return this.http.get(`${environment.apiUrl}/users/me`).pipe(tap(console.log))
+        return this.http.get(`${environment.apiUrl}/users/me`);
     }
+
+    getProfileMedia(username: string) {
+        return this.http.get<ProfileMediaResponse>(`${environment.apiUrl}/media/profile/${username}`)
+        .pipe(
+          map((response: ProfileMediaResponse) => { return response.media })
+        )
+      }
 }

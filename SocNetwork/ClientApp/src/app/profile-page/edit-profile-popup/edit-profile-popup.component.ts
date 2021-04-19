@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { EditProfileRequest, Options, SelectConfig, User } from 'src/app/shared/interfaces';
+import { EditProfileInfoRequest, Options, Profile, SelectConfig } from 'src/app/shared/interfaces';
 import { GenderOptions, MaritalStatusOptions } from 'src/app/shared/enums-options';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { MediaService } from 'src/app/shared/services/media.service';
 import { Gender, MediaFor } from 'src/app/shared/enums';
 import { Router, RouterModule } from '@angular/router';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-profile-popup',
@@ -18,7 +18,7 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
 
-  @Input() user: User;
+  @Input() user: Profile;
 
   @Output() onClose = new EventEmitter<boolean>();
 
@@ -34,11 +34,7 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
 
   avatarFile: File;
 
-  editAvatarSub: Subscription;
-
-  editCoverSub: Subscription;
-
-  editInfoSub: Subscription;
+  editProfileSub: Subscription;
 
   get name() {
     return this.form.get('name');
@@ -71,37 +67,37 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
+    this.editProfileSub.unsubscribe();
   }
 
   ngOnInit() {
 
     this.form = new FormGroup({
-      name: new FormControl(this.user.profileInfo.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
-      username: new FormControl(this.user.profileInfo.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
+      name: new FormControl(this.user.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
+      username: new FormControl(this.user.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
       dayOfBirth: new FormControl(null, [Validators.min(1), Validators.max(31)]),
       monthOfBirth: new FormControl(null, [Validators.min(1), Validators.max(12)]),
       yearOfBirth: new FormControl(null, [Validators.min(1900), Validators.max(new Date().getFullYear())]),
-      bio: new FormControl(this.user.profileInfo.bio, [Validators.maxLength(50)]),
+      bio: new FormControl(this.user.bio, [Validators.maxLength(50)]),
     });
 
-    if (this.user.profileInfo.birthDate.getUTCFullYear() > 1900) 
+    if (this.user.birthDate.getFullYear() > 1900) 
     {
-      this.dayOfBirth.setValue(this.user.profileInfo.birthDate.getUTCDate());
-      this.monthOfBirth.setValue(this.user.profileInfo.birthDate.getUTCMonth());
-      this.yearOfBirth.setValue(this.user.profileInfo.birthDate.getUTCFullYear())
+      this.dayOfBirth.setValue(this.user.birthDate.getDate());
+      this.monthOfBirth.setValue(this.user.birthDate.getMonth());
+      this.yearOfBirth.setValue(this.user.birthDate.getFullYear())
     }
 
     this.genderSelect = { 
       label: 'gender',
       options: GenderOptions,
-      selected: GenderOptions.find(o => o.key == this.user.profileInfo.gender.toString())
+      selected: GenderOptions.find(o => o.key == this.user.gender.toString())
     };
 
     this.maritalStatusSelect = {
       label: 'marital status',
       options: MaritalStatusOptions,
-      selected: MaritalStatusOptions.find(o => o.key == this.user.profileInfo.maritalStatus.toString())
+      selected: MaritalStatusOptions.find(o => o.key == this.user.maritalStatus.toString())
     }
   }
 
@@ -120,23 +116,31 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
       this.form.value.dayOfBirth
     );
 
-    const request: EditProfileRequest = {
-      id: this.user.profileInfo.id,
-      email: this.user.profileInfo.email,
+    const request: EditProfileInfoRequest = {
+      id: this.user.id,
+      email: this.user.email,
       name: this.form.value.name,
       username: this.form.value.username,
       bio: this.form.value.bio,
       birthDate: birthDate.toJSON(),
-      location: this.user.profileInfo.location,
+      location: this.user.location,
       gender: this.selectedGender.key,
       maritalStatus: this.selectedMaritalStatus.key
     }
 
-    forkJoin({
-      cover: this.uploadImage(this.coverFile, MediaFor.Cover),
-      avatar: this.uploadImage(this.avatarFile, MediaFor.Avatar),
-      info: this.usersService.editProfile(request)
-    }).subscribe(() => {
+    let profileObservables: Observable<any>[] = [];
+
+    if (this.coverFile) {
+      profileObservables.push(this.uploadImage(this.coverFile, MediaFor.Cover))
+    }
+
+    if (this.avatarFile) {
+      profileObservables.push(this.uploadImage(this.avatarFile, MediaFor.Avatar))
+    }
+
+    profileObservables.push(this.usersService.editProfile(request))
+
+    this.editProfileSub = forkJoin({...profileObservables}).subscribe(() => {
       this.reloadCurrentRoute();
     });
   }
@@ -158,7 +162,13 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
   uploadImage(file: File, mediaFor: MediaFor) {
 
     if (file == null) {
-      return null;
+      console.log('start uploadImage', mediaFor)
+      const subject$ = new Subject();
+      subject$.next();
+  
+      console.log('end uploadImage', mediaFor)
+
+      return subject$;
     }
 
     const formData = new FormData();

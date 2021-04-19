@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MediaFor } from '../shared/enums';
-import { User } from '../shared/interfaces';
+import { Profile } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
 import { UsersService } from '../shared/services/users.service';
 
@@ -14,8 +14,8 @@ import { UsersService } from '../shared/services/users.service';
 })
 export class ProfilePageComponent implements OnInit, AfterContentChecked{
 
-  user: User = { userInfo: null, media: null};
-  me: User = { userInfo: null, media: null};  
+  user: Profile;
+  me: Profile;  
 
   editProfileFlag: boolean = false;
   itIsMe: boolean = false;
@@ -27,32 +27,24 @@ export class ProfilePageComponent implements OnInit, AfterContentChecked{
     ) { }
 
   ngOnInit(): void {
-    this.usersService.me$.subscribe((response: User) => this.me = response);
+    this.usersService.me$.subscribe((response: Profile) => this.me = response);
 
     this.sub = this.route.params.pipe(
       switchMap((params: Params) => {
-        return this.usersService.getUser(params['username']);
+        return this.usersService.getProfile(params['username']);
       })
-    ).subscribe(({ profileInfo, profileMedia}) => { 
-      this.user.profileInfo = profileInfo;
-      this.user.media = profileMedia;
+    ).subscribe((response: Profile) => { 
+      console.log(response);
+      this.user = response;
     });
   }
 
   ngAfterContentChecked(): void {
 
-    if (this.me.profileInfo != null && this.user.profileInfo != null) {
-      if (this.me.profileInfo.id == this.user.profileInfo.id) {
+    if (this.me != null && this.user != null) {
+      if (this.me.id == this.user.id) {
         this.itIsMe = true;
       }
     }
-  }
-
-  getPathToCurrentAvatar() {
-    return this.user.media.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar).path;
-  }
-
-  getPathToCurrentCover() {
-    return this.user.media.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover).path;
   }
 }

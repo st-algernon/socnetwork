@@ -11,7 +11,7 @@
     >
       <div class="photo-cover" data-container="image-box">
         <img
-          [src]="user.pathToCover"
+          [src]="user.pathToCurrentCover"
           alt="photo-cover"
           #cover_preview_img
         />
@@ -25,7 +25,7 @@
           </div>
           <input
             type="file"
-            (change)="coverFiles = cover_input.files[0]; 
+            (change)="coverFile = cover_input.files[0]; 
               previewImage(cover_input.files[0], cover_preview_img)"
             #cover_input
             class="hidden"
@@ -35,7 +35,7 @@
       <div class="user-avatar-back">
         <div class="user-avatar" data-container="image-box">
           <img
-            [src]="user.pathToAvatar"
+            [src]="user.pathToCurrentAvatar"
             #avatar_preview_img
             alt="avatar"
           />
@@ -49,7 +49,7 @@
             </div>
             <input
               type="file"
-              (change)="avatarFiles = avatar_input.files[0];
+              (change)="avatarFile = avatar_input.files[0];
                 previewImage(avatar_input.files[0], avatar_preview_img)"
               #avatar_input
               class="hidden"

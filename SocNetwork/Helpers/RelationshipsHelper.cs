@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace SocNetwork.Helpers
 {
-    public class RelationshipHelper
+    public class RelationshipsHelper
     {
         private readonly SocNetworkContext db;
 
-        public RelationshipHelper(SocNetworkContext context) {
+        public RelationshipsHelper(SocNetworkContext context) {
             db = context;
         }       
         

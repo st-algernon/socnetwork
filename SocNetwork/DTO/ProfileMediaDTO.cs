@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO
 {
-    public class UserMediaDTO
+    public class ProfileMediaDTO
     {
         public Guid Id { get; set; }
         public string MimeType { get; set; }

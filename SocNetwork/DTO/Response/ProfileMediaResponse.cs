@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO.Response
 {
-    public class UserInfoResponse
+    public class ProfileMediaResponse
     {
         public bool Result { get; set; }
-        public UserInfoDTO UserInfo { get; set; }
+        public List<ProfileMediaDTO> Media { get; set; }
         public List<string> Errors { get; set; }
     }
 }

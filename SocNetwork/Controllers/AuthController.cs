@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SocNetwork.Configuration;
-using SocNetwork.DTO;
+using SocNetwork.DTO.Request;
 using SocNetwork.DTO.Response;
 using SocNetwork.Models;
 using SocNetwork.Helpers;
