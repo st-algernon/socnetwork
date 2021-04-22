@@ -250,6 +250,7 @@ textarea {
 	cursor: pointer;
 	font-size: 16px;
 	font-family: inherit;
+	box-sizing: border-box;
 }
 
 .btn.btn-outlined {
@@ -309,4 +310,44 @@ body {
 .nick-name {
 	font-size: 14px;
 	color: #7a8b9b;
+}
+
+.cdk-virtual-scroll-content-wrapper {
+	display: contents;
+}
+
+.cssload-container{
+	width: 40px;
+}
+
+.cssload-loading i{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	background: rgba(127,127,127,0.97);
+	border-radius: 50%;
+}
+.cssload-loading i:nth-child(1){
+	animation:cssload-loading-ani1 1.15s ease-in-out infinite;
+		-ms-animation:cssload-loading-ani1 1.15s ease-in-out infinite;
+
+}
+.cssload-loading i:nth-child(2){
+	background: rgb(29,161,242);
+	margin-left: -5px;
+	animation:cssload-loading-ani1 1.15s ease-in-out 0.58s infinite;
+		-ms-animation:cssload-loading-ani1 1.15s ease-in-out 0.58s infinite;
+}
+
+
+@keyframes cssload-loading-ani1{
+	70%{
+		transform:scale(0.5);
+	}
+}
+
+@-ms-keyframes cssload-loading-ani1{
+	70%{
+		-ms-transform:scale(0.5);
+	}
 }

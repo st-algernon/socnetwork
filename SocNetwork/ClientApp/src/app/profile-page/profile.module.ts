@@ -8,6 +8,7 @@ import { EditProfilePopupComponent } from './edit-profile-popup/edit-profile-pop
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UsersService } from "../shared/services/users.service";
 import { CustomSelectComponent } from "../shared/components/custom-select/custom-select.component";
+import { FollowingFollowersPageComponent } from './following-followers-page/following-followers-page.component';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import { CustomSelectComponent } from "../shared/components/custom-select/custom
         PostComponent,
         EditProfilePopupComponent,
         CustomSelectComponent,
+        FollowingFollowersPageComponent,
     ],
     imports: [
         ProfileRoutingModule,

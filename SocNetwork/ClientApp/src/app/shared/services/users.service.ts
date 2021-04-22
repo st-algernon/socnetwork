@@ -1,10 +1,10 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { forkJoin, ReplaySubject } from "rxjs";
 import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { EditProfileInfoRequest, Profile, ProfileMediaResponse, ProfileResponse } from "../interfaces";
+import { EditProfileInfoRequest, Profile, ProfileMediaResponse, ProfileResponse, UserRelationship, UsersPageParams } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
@@ -50,13 +50,18 @@ export class UsersService {
         return this.http.get(`${environment.apiUrl}/users/${username}/followers`)
     }
 
+    getFollowing(username: string, usersPageParams?: UsersPageParams) {
+        const params = new HttpParams().set('Number', usersPageParams?.number.toString()).set('Size', usersPageParams?.size.toString());
+
+        return this.http.get(`${environment.apiUrl}/users/${username}/following`, { params })
+    }
+
     getProfile(username: string) {
         return this.http.get<ProfileResponse>(`${environment.apiUrl}/users/${username}`)
         .pipe(
             map((response: ProfileResponse) => { 
                 return { 
                     ...response.profile,
-                    //media: response.profile.media || [],
                     birthDate: new Date(response.profile.birthDate),
                     creationDate: new Date(response.profile.creationDate),
                     lastVisited: new Date(response.profile.lastVisited),
@@ -65,11 +70,6 @@ export class UsersService {
                 }
             })
         )
-    }
-
-    editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
-        console.log('editProfile')
-        return this.http.put(`${environment.apiUrl}/users`, editProfileInfoRequest).pipe(tap(console.log));
     }
 
     getMyUsername() {
@@ -81,5 +81,21 @@ export class UsersService {
         .pipe(
           map((response: ProfileMediaResponse) => { return response.media })
         )
-      }
+    }
+
+    getRelationshipWith(username: string) {
+        return this.http.get<UserRelationship>(`${environment.apiUrl}/users/relationship-with/${username}`);
+    }
+
+    editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
+        return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
+    }
+
+    follow(username: string) {        
+        return this.http.put(`${environment.apiUrl}/users/follow/${username}`, null);
+    }
+
+    unfollow(username: string) {        
+        return this.http.delete(`${environment.apiUrl}/users/unfollow/${username}`);
+    }
 }

@@ -67,7 +67,7 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnDestroy(): void {
-    this.editProfileSub.unsubscribe();
+    this.editProfileSub?.unsubscribe();
   }
 
   ngOnInit() {
@@ -162,13 +162,7 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
   uploadImage(file: File, mediaFor: MediaFor) {
 
     if (file == null) {
-      console.log('start uploadImage', mediaFor)
-      const subject$ = new Subject();
-      subject$.next();
-  
-      console.log('end uploadImage', mediaFor)
-
-      return subject$;
+      return null;
     }
 
     const formData = new FormData();

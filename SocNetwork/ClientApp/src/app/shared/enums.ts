@@ -5,6 +5,13 @@ export enum AccountStatus
     IsDeleted
 }
 
+export enum UserRelationshipType
+{
+    UnFollowed,
+    Followed,
+    Blocked
+}
+
 export enum Gender
 {
     Unspecified,

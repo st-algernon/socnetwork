@@ -2,13 +2,12 @@ import { NgModule, Provider } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
 import { AuthGuard } from './shared/services/auth.guard';
 import { UserLayoutComponent } from './shared/components/user-layout/user-layout.component';
-import { CommonModule } from '@angular/common';
 import { ProfileMenuPopupComponent } from './shared/components/user-layout/profile-menu-popup/profile-menu-popup.component';
 import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
 import { NotFoundPageComponent } from './shared/components/not-found-page/not-found-page.component';
@@ -26,7 +25,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     UserLayoutComponent,
     ProfileMenuPopupComponent,
     SearchResultPopupComponent,
-    NotFoundPageComponent,
+    NotFoundPageComponent
   ],
   imports: [
     CommonModule,

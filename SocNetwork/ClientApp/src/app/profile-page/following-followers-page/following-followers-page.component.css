@@ -76,10 +76,6 @@ main {
     margin-top: 115px;
 }
 
-.users-viewport {
-	display: contents;
-}
-
 .user-list .user {
     padding: 10px 0px 5px 0px;
 	margin: 0px 15px;

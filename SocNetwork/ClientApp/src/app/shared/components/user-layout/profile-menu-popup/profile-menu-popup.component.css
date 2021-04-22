@@ -42,6 +42,10 @@
 	list-style: none;
 }
 
+.drop-down-menu a {
+	cursor: pointer;
+}
+
 .drop-down-menu a:hover {
 	background: #E3F4FF;
 	border-radius: 17px;
@@ -53,20 +57,4 @@
 
 .drop-down-menu .avatar-box {
 	margin: 0px 20px 0px 8px;
-}
-
-.drop-down-menu .svg-icon {
-	position: absolute;
-	right: 20px;
-	top: 14px;
-	transition: transform linear 0.2s;
-}
-
-.drop-down-menu a.menu-header .svg-icon {
-	top: 24px;
-	right: 30px;
-}
-
-.drop-down-menu a:hover .svg-icon {
-	transform: translateX(5px);
 }

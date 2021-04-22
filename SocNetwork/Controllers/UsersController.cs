@@ -7,6 +7,7 @@ using SocNetwork.DTO.Response;
 using SocNetwork.Extensions;
 using SocNetwork.Helpers;
 using SocNetwork.Models;
+using SocNetwork.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,8 +82,29 @@ namespace SocNetwork.Controllers
             });
         }
 
+        
+        [HttpGet("relationship-with/{username}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetRelationshipWith(string username)
+        {
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (toUser == null)
+            {
+                return BadRequest();
+            }
+
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var relationshipsHelper = new RelationshipsHelper(db);
+
+            var ur = relationshipsHelper.GetOrDefault(currentUser, toUser);
+
+            return Ok(ur);
+        }
+
         [HttpGet("{username}/followers")]
-        public async Task<IActionResult> Followers(string username)
+        public async Task<IActionResult> GetFollowers(string username)
         {
             var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
@@ -103,9 +125,10 @@ namespace SocNetwork.Controllers
             var followersDTO = new List<ProfileDTO>();
             var usersHelper = new UsersHelper(db);
 
-            followers.ForEach(f => {
-                    var fDTO = usersHelper.GetProfileDTO(f.FromUser);
-                    followersDTO.Add(fDTO);
+            followers.ForEach(f => 
+            {
+                var fDTO = usersHelper.GetProfileDTO(f.FromUser);
+                followersDTO.Add(fDTO);
             });
 
             return Ok(new ProfilesResponse
@@ -116,8 +139,9 @@ namespace SocNetwork.Controllers
         }
 
         [HttpGet("{username}/following")]
-        public async Task<IActionResult> Following(string username)
+        public async Task<IActionResult> GetFollowing(string username, [FromQuery] UsersPageParams usersPageParams)
         {
+            var h = HttpContext;
             var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
@@ -128,9 +152,12 @@ namespace SocNetwork.Controllers
                 });
 
             var following = await db.UserRelationships
-                .Where(u => u.FromUserId == user.Id && u.UserRelationshipType == UserRelationshipType.Followed)
-                .Include(u => u.ToUser)
-                .Select(u => new { u.ToUser })
+                .Where(ur => ur.FromUserId == user.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
+                .OrderBy(ur => ur.CreationDate)
+                .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
+                .Take(usersPageParams.Size)
+                .Include(ur => ur.ToUser)
+                .Select(ur => new { ur.ToUser })
                 .ToListAsync();
 
             var followingDTO = new List<ProfileDTO>();
@@ -150,7 +177,7 @@ namespace SocNetwork.Controllers
 
         [HttpGet("blocked")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Blocked()
+        public async Task<IActionResult> GetBlocked()
         {
             User currentUser = HttpContext.Items["User"] as User;
 
@@ -175,7 +202,7 @@ namespace SocNetwork.Controllers
             });
         }
 
-        [HttpPut]
+        [HttpPut("edit")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Put([FromBody] EditProfileInfoRequest request)
         {
@@ -201,11 +228,11 @@ namespace SocNetwork.Controllers
             }
         }
 
-        [HttpPut("follow")]
+        [HttpPut("follow/{username}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Follow(string toUserId) {
+        public async Task<IActionResult> Follow(string username) {
 
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == toUserId);
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (toUser == null) {
                 return BadRequest();
@@ -221,11 +248,11 @@ namespace SocNetwork.Controllers
             return Ok();
         }
 
-        [HttpPut("block")]
+        [HttpPut("block/{username}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Block(string toUserId) {
+        public async Task<IActionResult> Block(string username) {
 
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == toUserId);
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (toUser == null) {
                 return BadRequest();
@@ -241,11 +268,11 @@ namespace SocNetwork.Controllers
             return Ok();
         }
         
-        [HttpDelete("unfollow")]
+        [HttpDelete("unfollow/{username}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Unfollow(string toUserId) {
+        public async Task<IActionResult> Unfollow(string username) {
 
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == toUserId);
+            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (toUser == null) {
                 return BadRequest();
@@ -255,7 +282,7 @@ namespace SocNetwork.Controllers
 
             var relationshipHelper = new RelationshipsHelper(db);
 
-            var ur = relationshipHelper.Get(currentUser, toUser);
+            var ur = relationshipHelper.GetOrDefault(currentUser, toUser);
             relationshipHelper.Remove(ur);
 
             return NoContent();

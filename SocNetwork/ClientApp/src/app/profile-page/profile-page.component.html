@@ -1,11 +1,14 @@
 <main>
     <section class="user-info">
         <div class="photo-cover">
-          <img *ngIf="user" [src]="user.pathToCurrentCover" alt="cover">
+          <img *ngIf="user?.media?.length > 0" [src]="user.pathToCurrentCover" alt="cover">
         </div>
         <div class="user-avatar-back">
           <div class="user-avatar">
-            <img *ngIf="user" [src]="user.pathToCurrentAvatar" alt="avatar" />
+            <img *ngIf="user?.media?.length > 0; else default_avatar" [src]="user.pathToCurrentAvatar" alt="avatar">
+            <ng-template #default_avatar>
+              <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
+            </ng-template>
           </div>
         </div>
         <div class="flex fd-r jc-sb ai-c">
@@ -19,8 +22,15 @@
               <span class="empty-nick-name"></span>
             </ng-template>
           </div>
-          <button *ngIf="!itIsMe" class="btn btn-outlined profile-action-btn">Follow</button>
-          <button *ngIf="itIsMe" class="btn btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
+          <button *ngIf="isUnFollowed && !isMe" class="btn btn-outlined profile-action-btn" (click)="follow()">Follow</button>
+          <button 
+            *ngIf="isFollowed && !isMe"
+            class="btn btn-filled profile-action-btn"
+            (mouseover)="changeTitleToUnfollow($event)"
+            (mouseout)="changeTitleToUnfollow($event)"
+            (click)="unfollow()"
+            >Following</button>
+          <button *ngIf="isMe" class="btn btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
         </div>
         <div class="flex fd-r jc-fe">
           <div class="wrap-info flex fd-c">
@@ -62,7 +72,7 @@
     </section>
 
     <app-edit-profile-popup
-        *ngIf="editProfileFlag && itIsMe"
+        *ngIf="editProfileFlag && isMe"
         (onClose)="editProfileFlag = false"
         [user] = "user"
     ></app-edit-profile-popup>    

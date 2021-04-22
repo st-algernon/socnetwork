@@ -14,6 +14,7 @@ import { AuthLayoutComponent } from './shared/auth-layout/auth-layout.component'
 const routes: Routes = [
     { path: '', component: AuthLayoutComponent, children: [
         { path: '', component: LoginPageComponent },
+        { path: 'login', component: LoginPageComponent },
         { path: 'sign-up', component: RegistrationPageComponent },
     ] }];
 

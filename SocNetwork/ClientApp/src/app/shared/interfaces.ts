@@ -1,4 +1,4 @@
-import { AccountStatus, Gender, MaritalStatus, MediaFor } from "./enums";
+import { AccountStatus, Gender, MaritalStatus, MediaFor, UserRelationshipType } from "./enums";
 
 export interface AccountLoginRequest {
     email: string
@@ -80,6 +80,14 @@ export interface Profile {
     pathToCurrentCover: string
 }
 
+export interface UserRelationship {
+    id: string,
+    fromUserId: string,
+    toUserId: string,
+    userRelationshipType: UserRelationshipType,
+    creationDate: Date,
+}
+
 export interface Options {
     key: string,
     value: string
@@ -89,4 +97,9 @@ export interface SelectConfig {
     label: string,
     options: Options[],
     selected: Options
+}
+
+export interface UsersPageParams {
+    number: number,
+    size: number
 }

@@ -16,14 +16,18 @@ namespace SocNetwork.Helpers
             db = context;
         }       
         
-        public UserRelationship Get(User fromUser, User toUser) {
+        public UserRelationship GetOrDefault(User fromUser, User toUser) {
 
             var ur = db.UserRelationships
                 .FirstOrDefault(
                     ur => ur.FromUserId == fromUser.Id && ur.ToUserId == toUser.Id
                 );
             
-            return ur;
+            return ur ?? new UserRelationship() { 
+                FromUser = fromUser,
+                ToUser = toUser,
+                UserRelationshipType = UserRelationshipType.UnFollowed
+            };
         }
 
         public UserRelationship CreateOrExist(User fromUser, User toUser) {
