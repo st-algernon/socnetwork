@@ -13,7 +13,7 @@
         </div>
     </section>
     <section class="user-list">
-        <cdk-virtual-scroll-viewport *ngIf="following; else loading" itemSize="10" class="users-viewport">
+        <cdk-virtual-scroll-viewport (scrolledIndexChange)="indexChanged($event)" *ngIf="following; else loading" itemSize="10" class="users-viewport">
             <div *cdkVirtualFor="let user of following" class="user flex fd-c">
                 <div class="flex fd-r jc-sb ai-c">
                     <div class="avatar-box square-40">
@@ -29,9 +29,16 @@
             </div>
         </cdk-virtual-scroll-viewport>
         <ng-template #loading>
-            <div class="flex jc-c ai-c cssload-container">
-                <div class="cssload-loading"><i></i><i></i></div>
-                </div>
+            <div id="floatingCirclesG">
+                <div class="f_circleG" id="frotateG_01"></div>
+                <div class="f_circleG" id="frotateG_02"></div>
+                <div class="f_circleG" id="frotateG_03"></div>
+                <div class="f_circleG" id="frotateG_04"></div>
+                <div class="f_circleG" id="frotateG_05"></div>
+                <div class="f_circleG" id="frotateG_06"></div>
+                <div class="f_circleG" id="frotateG_07"></div>
+                <div class="f_circleG" id="frotateG_08"></div>
+            </div>
         </ng-template>
     </section>
 </main>

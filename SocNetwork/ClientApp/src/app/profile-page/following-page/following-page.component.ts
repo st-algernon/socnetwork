@@ -23,17 +23,18 @@ export class FollowingPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.followingSub = 
-    this.route.params.pipe(
+    this.followingSub = this.route.params.pipe(
       switchMap((params: Params) => {
         this.username = params['username'];
         return this.usersService.getFollowing(params['username'], { number: 1, size: 15});
       })
-    )
-    // .subscribe((response: ProfilesResponse) => { 
-    //   console.log(response);
-    //   this.following = response.profiles;
-    // });
+    ).subscribe((response: ProfilesResponse) => { 
+      console.log(response);
+      this.following = response.profiles;
+    });
   }
-
+  
+  indexChanged($event: any) {
+    console.log($event);
+  }
 }
