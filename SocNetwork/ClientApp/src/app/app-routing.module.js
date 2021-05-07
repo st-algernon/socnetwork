@@ -9,29 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppRoutingModule = void 0;
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
-var auth_page_component_1 = require("./auth-page/auth-page.component");
-var registration_page_component_1 = require("./auth-page/registration-page/registration-page.component");
-var messenger_page_component_1 = require("./messenger-page/messenger-page.component");
-var news_page_component_1 = require("./news-page/news-page.component");
-var profile_page_component_1 = require("./profile-page/profile-page.component");
-var auth_layout_component_1 = require("./shared/components/auth-layout/auth-layout.component");
 var not_found_page_component_1 = require("./shared/components/not-found-page/not-found-page.component");
 var user_layout_component_1 = require("./shared/components/user-layout/user-layout.component");
+var auth_guard_1 = require("./shared/services/auth.guard");
 var routes = [
-    {
-        path: '', component: user_layout_component_1.UserLayoutComponent, children: [
-            { path: '', redirectTo: '/auth', pathMatch: 'full' },
-            { path: 'news', component: news_page_component_1.NewsPageComponent },
-            { path: 'u/:id', component: profile_page_component_1.ProfilePageComponent },
-            { path: 'messenger', component: messenger_page_component_1.MessengerPageComponent }
-        ]
-    },
-    {
-        path: 'auth', component: auth_layout_component_1.AuthLayoutComponent, children: [
-            { path: '', component: auth_page_component_1.AuthPageComponent },
-            { path: "sign-up", component: registration_page_component_1.RegistrationPageComponent }
-        ]
-    },
+    { path: 'auth', loadChildren: function () { return Promise.resolve().then(function () { return require('./auth/auth.module'); }).then(function (m) { return m.AuthModule; }); } },
+    { path: '', component: user_layout_component_1.UserLayoutComponent, children: [
+            { path: ':username', loadChildren: function () { return Promise.resolve().then(function () { return require('./profile-page/profile.module'); }).then(function (m) { return m.ProfileModule; }); }, canActivate: [auth_guard_1.AuthGuard] }
+        ] },
     { path: '**', component: not_found_page_component_1.NotFoundPageComponent }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -39,9 +24,7 @@ var AppRoutingModule = /** @class */ (function () {
     }
     AppRoutingModule = __decorate([
         core_1.NgModule({
-            imports: [router_1.RouterModule.forRoot(routes, {
-                    preloadingStrategy: router_1.PreloadAllModules
-                })],
+            imports: [router_1.RouterModule.forRoot(routes)],
             exports: [router_1.RouterModule]
         })
     ], AppRoutingModule);

@@ -3,85 +3,13 @@
   <div class="search-profile-wrap flex fd-r ai-c jc-sb">
     <form action="" method="get" class="search-form">
       <input type="search" name="search" placeholder="Search" />
+      <app-search-result-popup *ngIf="false"></app-search-result-popup>
     </form>
     <div class="top-profile-menu flex fd-c ai-fe">
-      <div class="avatar-box square-32">
-        <img src="../../../../assets/images/empty_photo.jpg" alt="photo" />
+      <div class="avatar-box square-32" (click)="profileMenuIsOpened = !profileMenuIsOpened">
+        <img *ngIf="me" [src]="me.pathToCurrentAvatar" alt="photo" />
       </div>
-      <div class="drop-down-menu">
-        <a href="#" class="menu-header">
-          <span class="flex fd-r ai-c">
-            <span class="avatar-box square-40">
-              <img src="../../../../assets/images/empty_photo.jpg" alt="photo" />
-            </span>
-            <span>First Name</span>
-            <svg
-              class="svg-icon"
-              focusable="false"
-              height="12"
-              width="12"
-              aria-hidden="true"
-            >
-              <path
-                d="M7.3 6l-4.5 4.4a.9.9 0 0 0 0 1.3.8.8 0 0 0 1.3 0l5.2-5.1	a.9.9 0 0 0 0-1.2L4.1.3a.9.9 0 0 0-1.3 0 .9.9 0 0 0 0 1.3z"
-              ></path>
-            </svg>
-          </span>
-        </a>
-        <ul class="menu-body">
-          <li>
-            <a href="#"
-              >Edit
-              <svg
-                class="svg-icon"
-                focusable="false"
-                height="12"
-                width="12"
-                aria-hidden="true"
-              >
-                <path
-                  d="M7.3 6l-4.5 4.4a.9.9 0 0 0 0 1.3.8.8 0 0 0 1.3 0l5.2-5.1a.9.9 0 0 0 0-1.2L4.1.3a.9.9 0 0 0-1.3 0 .9.9 0 0 0 0 1.3z"
-                ></path>
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a href="#"
-              >Settings
-              <svg
-                class="svg-icon"
-                focusable="false"
-                height="12"
-                width="12"
-                aria-hidden="true"
-              >
-                <path
-                  d="M7.3 6l-4.5 4.4a.9.9 0 0 0 0 1.3.8.8 0 0 0 1.3 0l5.2-5.1a.9.9 0 0 0 0-1.2L4.1.3a.9.9 0 0 0-1.3 0 .9.9 0 0 0 0 1.3z"
-                ></path>
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a href="#"
-              >Help
-              <svg
-                class="svg-icon"
-                focusable="false"
-                height="12"
-                width="12"
-                aria-hidden="true"
-              >
-                <path
-                  d="M7.3 6l-4.5 4.4a.9.9 0 0 0 0 1.3.8.8 0 0 0 1.3 0l5.2-5.1a.9.9 0 0 0 0-1.2L4.1.3a.9.9 0 0 0-1.3 0 .9.9 0 0 0 0 1.3z"
-                ></path>
-              </svg>
-            </a>
-          </li>
-          <li>
-            <a href="#">Exit</a>
-          </li>
-        </ul>
-      </div>
+      <app-profile-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-profile-menu-popup>
     </div>
   </div>
 </header>

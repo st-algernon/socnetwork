@@ -1,0 +1,74 @@
+<main>
+  <div class="sign-box">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <div class="validation" *ngIf="name?.invalid && name?.touched">
+        <small *ngIf="name?.errors?.required">Name is required. </small>
+        <small *ngIf="name?.errors?.minlength"
+          >Name must be at least
+          {{ name?.errors?.minlength?.requiredLength }} characters long.</small
+        >
+        <small *ngIf="name?.errors?.pattern">The name can only contain letters and a space.</small>
+        <small *ngIf="name?.errors?.maxlength">
+          Name must be at least
+          {{ name?.errors?.maxlength?.requiredLength }} characters long
+        </small>
+      </div>
+      <div class="validation" *ngIf="username?.invalid && username?.touched">
+        <small *ngIf="username?.errors?.required">Username is required</small>
+        <small *ngIf="username?.errors?.pattern">The username can only contain Latin letters, numbers, and underscores</small>
+      </div>
+      <div class="validation" *ngIf="email?.invalid && email?.touched">
+        <small *ngIf="email?.errors?.required">Email is required</small>
+        <small *ngIf="email?.errors?.email">Email must be like e-mail</small>
+      </div>
+      <div class="validation" *ngIf="password?.invalid && password?.touched">
+        <small *ngIf="password?.errors?.required">Password is required</small>
+        <small *ngIf="password?.errors?.minlength"
+          >Password must be at least
+          {{ password?.errors?.minlength?.requiredLength }} characters long.
+        </small>
+      </div>
+
+      <div class="controls-box">
+        <div class="form-control flex fd-r jc-sb">
+          <label>Name:</label>
+          <input type="text" formControlName="name" placeholder="Ivan Ivanov" />
+        </div>
+        <div class="form-control flex fd-r jc-sb">
+          <label>Username:</label>
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="banan4ik"
+          />
+        </div>
+        <div class="form-control flex fd-r jc-sb">
+          <label>Email:</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="example@mail.com"
+          />
+        </div>
+        <div class="form-control flex fd-r jc-sb">
+          <label>Password:</label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="*********"
+          />
+        </div>
+        <p class="sign-box-btn">
+          <button type="submit" [disabled]="form.invalid || submitted" class="sign-btn">Sign up</button>
+        </p>
+        <p class="form-footer">
+          By clicking “Sign up”, you agree to our
+          <a href="#">terms of service</a> and
+          <a href="#">privacy statement</a>.
+        </p>
+      </div>
+
+    </form>
+  </div>
+</main>

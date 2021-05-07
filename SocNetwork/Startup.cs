@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using SocNetwork.Configuration;
 using SocNetwork.Models;
+using SocNetwork.Extensions.Middleware;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace SocNetwork
 {
@@ -33,6 +38,12 @@ namespace SocNetwork
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
+            });
+
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -70,6 +81,12 @@ namespace SocNetwork
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
@@ -79,6 +96,8 @@ namespace SocNetwork
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseUserDefinition();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,1 +1,100 @@
-<p>profile-page works!</p>
+<main>
+    <section class="user-info">
+        <div class="photo-cover">
+          <img *ngIf="user?.media?.length > 0" [src]="user.pathToCurrentCover" alt="cover">
+        </div>
+        <div class="user-avatar-back">
+          <div class="user-avatar">
+            <img *ngIf="user?.media?.length > 0; else default_avatar" [src]="user.pathToCurrentAvatar" alt="avatar">
+            <ng-template #default_avatar>
+              <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
+            </ng-template>
+          </div>
+        </div>
+        <div class="flex fd-r jc-sb ai-c">
+          <div class="flex fd-c">
+            <span *ngIf="user; else empty_name" class="source-name">{{ user.name }}</span>
+            <ng-template #empty_name>
+              <span class="empty-source-name"></span>
+            </ng-template>
+            <span *ngIf="user; else empty_username" class="nick-name">@{{ user.username }}</span>
+            <ng-template #empty_username>
+              <span class="empty-nick-name"></span>
+            </ng-template>
+          </div>
+          <button *ngIf="isUnFollowed && !isMe" class="btn btn-outlined profile-action-btn" (click)="follow()">Follow</button>
+          <button 
+            *ngIf="isFollowed && !isMe"
+            class="btn btn-filled profile-action-btn"
+            (mouseover)="changeTitleToUnfollow($event)"
+            (mouseout)="changeTitleToUnfollow($event)"
+            (click)="unfollow()"
+            >Following</button>
+          <button *ngIf="isMe" class="btn btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
+        </div>
+        <div class="flex fd-r jc-fe">
+          <div class="wrap-info flex fd-c">
+            <div *ngIf="user; else empty_bio" class="bio">{{ user.bio }}</div>
+            <ng-template #empty_bio>
+              <div class="empty-bio"></div>
+            </ng-template>
+            <ul class="follow-wrap flex fd-r jc-sb">
+              <li class=""><span *ngIf="user; else empty_count_posts">30</span>
+                <ng-template #empty_count_posts>
+                  <span class="empty-count"></span>
+                </ng-template> posts
+              </li>
+              <li class=""><span *ngIf="user; else empty_count_followers">24</span>
+                <ng-template #empty_count_followers>
+                  <span class="empty-count"></span>
+                </ng-template> followers</li>
+              <li class=""><span *ngIf="user; else empty_count_following">10</span>
+                <ng-template #empty_count_following>
+                  <span class="empty-count"></span>
+                </ng-template> following</li>
+            </ul>
+            <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
+              <li class="residence">Zhytomyr</li>
+              <li class="birthday">Born June 26, 1998</li>
+              <li class="relationship">Married</li>
+              <li class="more-details"></li>
+            </ul>
+            <ng-template #empty_short_info>
+              <ul class="empty-short-info flex fd-r">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li class="more-details"></li>
+              </ul>
+            </ng-template>
+          </div>
+        </div>
+    </section>
+
+    <app-edit-profile-popup
+        *ngIf="editProfileFlag && isMe"
+        (onClose)="editProfileFlag = false"
+        [user] = "user"
+    ></app-edit-profile-popup>    
+
+    <section class="user-wall">
+        <app-post-form [me]="me"></app-post-form>
+        <section class="wall-header flex row jc-sb">
+          <div data-container="post-switches">
+            <button data-action="loadAll" data-state="active">All posts</button>
+            <button data-action="loadByMe" data-state="inactive">
+              Written by me
+            </button>
+          </div>
+          <form action="" method="get" class="search-form flex col jc-c">
+            <input
+              type="search"
+              name="search_field"
+              placeholder="Search for people and groups"
+              autocomplete="off"
+            />
+          </form>
+        </section>
+        <app-post [isOnWall]="true"></app-post>
+    </section>      
+</main>

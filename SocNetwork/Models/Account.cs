@@ -23,6 +23,7 @@ namespace SocNetwork.Models
 
     public class Account
     {
+        [Required]
         public Guid Id { get; set; }
         [Required]
         public string Email { get; set; }
