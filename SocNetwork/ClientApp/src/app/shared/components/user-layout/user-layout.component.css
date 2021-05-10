@@ -222,16 +222,40 @@ aside {
 	background-image: url(../../../../assets/images/video-hover.png);
 }
 
-.main-nav a.bookmarks {
+.main-nav a.saved {
 	background-image: url(../../../../assets/images/bookmarks.png);
 }
 
-.main-nav a.bookmarks[data-state="current"] {
+.main-nav a.saved[data-state="current"] {
 	background-image: url(../../../../assets/images/bookmarks-hover.png);
 }
 
-.main-nav a.bookmarks:hover {
+.main-nav a.saved:hover {
 	background-image: url(../../../../assets/images/bookmarks-hover.png);
+}
+
+.main-nav a.explore {
+	background-image: url(../../../../assets/images/compass.png);
+}
+
+.main-nav a.explore[data-state="current"] {
+	background-image: url(../../../../assets/images/compass-hover.png);
+}
+
+.main-nav a.explore:hover {
+	background-image: url(../../../../assets/images/compass-hover.png);
+}
+
+.main-nav a.notifications {
+	background-image: url(../../../../assets/images/bell.png);
+}
+
+.main-nav a.notifications[data-state="current"] {
+	background-image: url(../../../../assets/images/bell-hover.png);
+}
+
+.main-nav a.notifications:hover {
+	background-image: url(../../../../assets/images/bell-hover.png);
 }
 
 .right-col {

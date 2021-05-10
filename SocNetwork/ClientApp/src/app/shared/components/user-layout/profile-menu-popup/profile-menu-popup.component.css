@@ -28,6 +28,12 @@
 	padding: 10px;
 	width: 280px;
 	box-sizing: border-box;
+	cursor: pointer;
+}
+
+.drop-down-menu a:hover {
+	background-color: #E3F4FF;
+	border-radius: 17px;
 }
 
 .drop-down-menu a.menu-header {
@@ -37,24 +43,55 @@
 	font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
-.drop-down-menu ul.menu-body {
-	margin: 5px 0px;
-	list-style: none;
-}
-
-.drop-down-menu a {
-	cursor: pointer;
-}
-
-.drop-down-menu a:hover {
-	background: #E3F4FF;
-	border-radius: 17px;
-}
-
 .drop-down-menu a.menu-header:hover {
 	border-radius: 0px;
 }
 
 .drop-down-menu .avatar-box {
 	margin: 0px 20px 0px 8px;
+}
+
+.drop-down-menu ul.menu-body {
+	margin: 5px 0px;
+	list-style: none;
+}
+
+.menu-body a {
+	padding-left: 40px;
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-position: 8px center;
+	background-size: 20px;
+}
+
+.menu-body a.edit {
+	background-image: url(../../../../../assets/images/edit-user.png);
+}
+
+.menu-body a.edit:hover {
+	background-image: url(../../../../../assets/images/edit-user-hover.png);
+}
+
+.menu-body a.settings {
+	background-image: url(../../../../../assets/images/settings.png);
+}
+
+.menu-body a.settings:hover {
+	background-image: url(../../../../../assets/images/settings-hover.png);
+}
+
+.menu-body a.help {
+	background-image: url(../../../../../assets/images/help.png);
+}
+
+.menu-body a.help:hover {
+	background-image: url(../../../../../assets/images/help-hover.png);
+}
+
+.menu-body a.logout {
+	background-image: url(../../../../../assets/images/sign-out.png);
+}
+
+.menu-body a.logout:hover {
+	background-image: url(../../../../../assets/images/sign-out-hover.png);
 }
