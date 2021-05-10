@@ -10,24 +10,28 @@
         </form>
     </section>
     <section class="messages-box">
-    <p>start</p>
+        <!-- <p>start</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci, et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, quidem cumque iure rerum id sunt, quisquam ipsum, dolorum!</p>	
-        <p>end</p>
+        <p>end</p> -->
     </section>
     <section class="input-message">
-        <form action="" method="post" class="flex fd-r ai-fe">
+        <form 
+            [formGroup]="form"
+            (ngSubmit)="submit()"
+            class="flex fd-r ai-fe"
+        >
             <ul class="attach flex fd-r jc-c" data-container="attach">
                 <li class="add-picture-btn round r-20 square-28" data-attach="picture"></li>
                 <li class="add-music-btn round r-20 square-28" data-attach="music"></li>
                 <li class="add-video-btn round r-22 square-28" data-attach="video"></li>
             </ul>
             <div class="textarea-attach-wrap flex fd-r ai-fe">
-                <textarea name="post-field" placeholder="Write a message..." data-submit-btn="blink"></textarea>
+                <textarea name="post-field" formControlName="messageText" placeholder="Write a message..." data-submit-btn="blink"></textarea>
                 <ul class="attach flex fd-r jc-sb" data-container="attach">
                     <li class="add-emoji-btn round r-22 square-28" data-attach="emoji"></li>
                 </ul>

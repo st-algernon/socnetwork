@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UsersService } from "../shared/services/users.service";
 import { CustomSelectComponent } from "../shared/components/custom-select/custom-select.component";
 import { FollowingFollowersPageComponent } from './following-followers-page/following-followers-page.component';
+import { MessengerService } from "../shared/services/messenger.service";
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import { FollowingFollowersPageComponent } from './following-followers-page/foll
     ],
     exports: [],
     providers: [
-        UsersService
+        UsersService,
+        MessengerService
     ]
 })
 export class ProfileModule {}

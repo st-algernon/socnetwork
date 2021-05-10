@@ -15,6 +15,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Http.Features;
+using SocNetwork.Hubs;
 
 namespace SocNetwork
 {
@@ -32,6 +33,8 @@ namespace SocNetwork
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<SocNetworkContext>(options => options.UseSqlServer(connection));
+
+            services.AddSignalR();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -104,6 +107,7 @@ namespace SocNetwork
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<MessengerHub>("/messenger");
             });
 
             app.UseSpa(spa =>

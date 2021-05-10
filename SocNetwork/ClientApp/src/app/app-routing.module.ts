@@ -8,6 +8,9 @@ import { AuthService } from "./shared/services/auth.service";
 const routes : Routes = [
     { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path: '', component: UserLayoutComponent, children: [
+        { path: 'messenger', loadChildren: () => import('./messenger-page/messenger.module').then(m => m.MessengerModule), canActivate: [AuthGuard] }
+    ]},
+    { path: '', component: UserLayoutComponent, children: [
         { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] }
     ]},
     { path: '**', component: NotFoundPageComponent }

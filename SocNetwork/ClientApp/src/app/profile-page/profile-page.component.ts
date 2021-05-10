@@ -6,6 +6,7 @@ import { switchMap } from 'rxjs/operators';
 import { MediaFor, UserRelationshipType } from '../shared/enums';
 import { Profile, UserRelationship } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
+import { MessengerService } from '../shared/services/messenger.service';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
@@ -30,7 +31,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
 
   constructor(
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private messengerService: MessengerService
     ) { }
 
   ngOnInit(): void {
@@ -71,6 +73,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     if (this.me?.id == this.user?.id) {
       this.isMe = true;
     }
+  }
+
+  chat() {
+    this.messengerService.getChatWith(this.user.id).subscribe(console.log);
   }
 
   follow() {

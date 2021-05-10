@@ -140,12 +140,13 @@ main {
 }
 
 .input-message .submit-btn {
-	background: url(../../../assets/images/send-disable.png) no-repeat;
+	background: url(../../../assets/images/send.png) no-repeat;
 	background-size: contain;
+	cursor: pointer;
 }
 
-.input-message .submit-filled-btn {
-	background: url(../../../assets/images/send.png) no-repeat;
+.input-message .submit-btn-disable {
+	background: url(../../../assets/images/send-disable.png) no-repeat;
 	background-size: contain;
 }
 
