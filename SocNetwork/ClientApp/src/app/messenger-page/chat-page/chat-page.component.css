@@ -1,0 +1,170 @@
+:host {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+	position: fixed;
+	top: 64px;
+	bottom: 0px;
+	width: 47%;
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 15px 15px 0px 0px;
+	padding: 0px 10px;
+	overflow: hidden;
+}
+
+.main-header {
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	right: 10px;
+	background-color: #fff;
+	padding: 5px 0px;
+	border-bottom: 1px solid #eee;
+}
+
+.main-header .back-btn {
+	padding: 5px 20px;
+	color: #7f7f7f;
+	font-size: 16px;
+	background: url(../../../assets/images/back.png) left center no-repeat;
+	background-size: 15px;
+	cursor: pointer;
+}
+
+.main-header .back-btn:hover {
+	color: #1da1f2;
+	background: url(../../../assets/images/back-hover.png) left center no-repeat;	
+	background-size: 15px;
+}
+
+.main-header .source-name {
+	font-weight: bold;
+	color: #333;
+}
+
+.main-header .last-visited {
+	font-size: 14px;
+	color: #555;
+}
+
+.main-header .search-message-form input {
+	background-image: url(../../../assets/images/search.png);
+	background-position: 5px center;
+	background-repeat: no-repeat;
+	background-size: 22px 22px;
+    background-color: transparent;
+	border-radius: 20px;
+	padding: 5px 8px 5px 32px;
+	border: none;
+	outline: none;
+	width: 32px;
+	font-size: 15px;
+	transition: width ease-out 0.4s;
+	cursor: pointer;
+}
+
+.main-header .search-message-form input:hover {
+	background-image: url(../../../assets/images/search-hover.png);
+}
+
+.main-header .search-message-form input:focus {
+	width: 300px;
+	background-image: url(../../../assets/images/search-hover.png);
+}
+
+.messages-box {
+	position: absolute;
+	top: 51.8px;
+	bottom: 53px;
+	left: 10px;
+	right: 10px;
+}
+
+.messages-box .user-message {
+	max-width: 70%;
+	position: absolute;
+    right: 0px;
+    bottom: 60px;
+}
+
+.messages-box .another-user-message {
+	max-width: 70%;
+	position: absolute;
+	left: 0px;
+    bottom: 10px;
+}
+
+.messages-box .message-text {
+	display: inline-block;
+	padding: 10px 15px;
+	border-radius: 15px;
+}
+
+.messages-box .user-message .message-text {
+	margin: 4px 6px 0px 0px;
+	color: #fff;
+	background-color: #1da1f2;
+}
+
+.messages-box .another-user-message .message-text {
+	margin: 4px 0px 0px 6px;
+	color: #333;
+	background-color: #eee;
+}
+
+.input-message {
+	position: absolute;
+	bottom: 0px;
+	left: 10px;
+	right: 10px;
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	padding: 10px 0px;
+}
+
+.input-message .textarea-attach-wrap {
+	width: 100%;
+	border-radius: 15px;
+	border: 1px solid #eee;
+	margin: 0px 10px;
+}
+
+.input-message textarea {
+	padding: 4px 10px;
+	font-size: 17px;
+	height: 20px;
+}
+
+.input-message .submit-btn {
+	background: url(../../../assets/images/send-disable.png) no-repeat;
+	background-size: contain;
+}
+
+.input-message .submit-filled-btn {
+	background: url(../../../assets/images/send.png) no-repeat;
+	background-size: contain;
+}
+
+.attach {
+	list-style: none;
+}
+
+.attach .add-picture-btn {
+	background-image: url(../../../assets/images/picture.png);
+}
+
+.attach .add-music-btn {
+	background-image: url(../../../assets/images/add-music.png);
+}
+
+.attach .add-video-btn {
+	background-image: url(../../../assets/images/add-video.png);
+}
+
+.attach .add-emoji-btn {
+	background-image: url(../../../assets/images/emoji.png);
+}

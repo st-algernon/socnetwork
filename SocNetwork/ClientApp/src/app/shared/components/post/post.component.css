@@ -1,0 +1,207 @@
+.post-wrap {
+	margin-top: 10px;
+	background: #fff;
+	border-radius: 15px;
+	padding: 12px 15px;
+	color: #272727;
+}
+
+
+.without-top-b-radius:first-child {
+	border-radius: 0px 0px 15px 15px!important;
+}
+
+.post-wrap .no-posts {
+	text-align: center;
+	color: #777;
+	padding: 25px;
+}
+
+    .post-wrap .source-name {
+        font-family: 'Deezer', 'Open Sans', sans-serif;
+    }
+
+.post-wrap .nick-name {
+	font-size: 14px;
+}
+
+.post-wrap .published-date {
+	font-size: 14px;
+	color: #777;
+}
+
+.post-wrap .avatar-box {
+	margin-right: 10px;
+}
+
+.post-wrap .to-right-post {
+	margin-left: 58px;
+}
+
+.post-wrap .post-body {
+	margin: 10px 0px 8px 0px;
+}
+
+.post-wrap .post-body .media-box {
+	max-height: 420px;
+	border-radius: 15px;
+	overflow: hidden;
+	margin-top: 8px;
+}
+
+.post-wrap .post-body .media-box img {
+	object-fit: cover;
+	object-position: center;
+	width: 40%;
+	max-height: 210px;
+	flex-grow: 1;
+	margin: 0px 2px 2px 0px;
+}
+
+.post-wrap .post-body .media-box img:first-of-type {
+	max-height: 420px;
+}
+
+.post-wrap .post-footer {
+	position: relative;
+}
+
+.post-wrap .post-footer::after {
+	content: "";
+	display: block;
+	width: 100%;
+	border-top: 1px solid #F1F1F1;
+	position: absolute;
+	bottom: -5px;
+	left: 0px;
+}
+
+.post-wrap .post-footer .content-actions {
+	flex-basis: 200px;
+}
+
+.post-wrap .post-comments {
+	margin-top: 15px;
+}
+
+.post-wrap .post-comments .to-right-comment {
+	margin-left: 50px;
+}
+
+.post-wrap .post-comments .media-box {
+	width: 50%;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.post-wrap .post-comments .media-box img {
+	object-fit: cover;
+	object-position: center;
+	width: 40%;
+	max-height: 100px;
+	flex-grow: 1;
+	margin: 0px 1px 1px 0px;
+}
+
+.post-wrap .post-comments .media-box img:first-of-type {
+	max-height: 200px;
+}
+
+.post-wrap .post-comments .show-more-btn {
+	text-align: center;
+	color: #7f7f7f;
+	cursor: pointer;
+}
+
+.post-wrap .post-comments .show-more-btn:hover {
+	text-decoration: underline;
+}
+
+.post-wrap .post-comments form {
+	width: 100%;
+}
+
+.post-wrap .post-comments .textarea-attach-wrap {
+	width: 100%;
+	border-radius: 15px;
+	border: 1px solid #F0F0F0;
+}
+
+.post-wrap .post-comments .write-comment textarea {
+	font-size: 16px;
+	height: 22px;
+	padding: 0px 10px;
+}
+
+.post-wrap .post-comments .submit-btn {
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-size: contain;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	margin-left: 20px;
+}
+
+.post-wrap .post-comments .submit-btn[data-state="unable"] {
+	background-image: url(../../../../assets/images/send-disable.png);
+}
+
+.post-wrap .post-comments .submit-btn[data-state="able"] {
+	background-image: url(../../../../assets/images/send.png);
+}
+
+.content-actions {
+	list-style: none;
+}
+
+.content-actions .like-btn {
+	background-image: url(../../../../assets/images/heart.png);
+	margin-right: 5px;
+}
+
+.content-actions .like-btn:hover {
+	background-image: url(../../../../assets/images/heart-hover.png);
+	background-color: #FFDCDD;
+}
+
+.content-actions .like-btn[data-state="clicked"] {
+	background-image: url(../../../../assets/images/heart-click.png);
+}
+
+.content-actions .like-count[data-state="clicked"] {
+	color: #f44336;
+}
+
+.content-actions .forward-btn {
+	background-image: url(../../../../assets/images/forward.png);
+	margin-right: 5px;
+}
+
+.content-actions .forward-btn:hover {
+	background-image: url(../../../../assets/images/forward-hover.png);
+	background-color:#D5EFFF;
+}
+
+.content-actions .forward-btn[data-state="clicked"] {
+	background-image: url(../../../../assets/images/forward-click.png);
+}
+
+.content-actions .forward-count[data-state="clicked"] {
+	color: #1da1f2;
+}
+
+.content-actions .comment-btn {
+	background-image: url(../../../../assets/images/comment.png);
+}
+
+.content-actions .comment-btn:hover {
+	background-image: url(../../../../assets/images/comment-hover.png);
+	background-color:#D5EFFF;
+}
+
+.content-actions .like-count, .content-actions .forward-count {
+	font-size: 15px;
+	line-height: 32px;
+	color: #444;
+}

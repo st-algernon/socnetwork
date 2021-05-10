@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SocNetwork.Configuration;
-using SocNetwork.DTO;
+using SocNetwork.DTO.Request;
 using SocNetwork.DTO.Response;
 using SocNetwork.Models;
+using SocNetwork.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,10 +28,10 @@ namespace SocNetwork.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(AccountLoginRequest request)
+        public IActionResult Login(LoginRequest request)
         {
             Account account = db.Accounts.FirstOrDefault(a => a.Email == request.Email
-                 && a.Password == ComputeSha256Hash(request.Password));
+                 && a.Password == HashHelper.ComputeSha256Hash(request.Password));
 
             if (account == null)
             {
@@ -52,26 +53,27 @@ namespace SocNetwork.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register(AccountRegistrationRequest request)
+        public IActionResult Register(RegistrationRequest request)
         {
-            Account account = db.Accounts.FirstOrDefault(a => a.Email == request.Email);
+            User user = db.Users.FirstOrDefault(
+                u => u.Email == request.Email || u.Username == request.Username
+            );
             
-            if (account != null)
+            if (user != null)
             {
                 return BadRequest(new AuthResponse()
                 {
                     Result = false,
-                    Errors = new List<string>() { "A user with this email already exists" }
+                    Errors = new List<string>() { "A user with this email or username already exists" }
                 });
             }
 
-            var user = new User
+            user = new User
             {
-                Id = Guid.NewGuid(),
                 Name = request.Name,
                 Email = request.Email,
                 Username = request.Username,
-                Password = ComputeSha256Hash(request.Password),
+                Password = HashHelper.ComputeSha256Hash(request.Password),
                 CreationDate = DateTime.UtcNow
             };
 
@@ -88,23 +90,6 @@ namespace SocNetwork.Controllers
             });
         }
 
-        private string ComputeSha256Hash(string data) 
-        {
-            using (SHA256 sha256Hash = SHA256.Create())  
-            {  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(data + HashConfig.SALT));  
-  
-                StringBuilder builder = new StringBuilder();  
-
-                for (int i = 0; i < bytes.Length; i++)  
-                {  
-                    builder.Append(bytes[i].ToString("x2"));  
-                }  
-
-                return builder.ToString(); 
-            }
-        }
-
         private string GenerateJwt(Account account)
         {
             var jwtHandler = new JwtSecurityTokenHandler();
@@ -116,7 +101,7 @@ namespace SocNetwork.Controllers
                     notBefore: now,
                     claims: new List<Claim>
                     {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, account.Email),
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString()),
                         new Claim(ClaimsIdentity.DefaultRoleClaimType, account.AccountType.ToString())
                     },
                     expires: now.Add(TimeSpan.FromMinutes(JwtConfig.LIFETIME)),

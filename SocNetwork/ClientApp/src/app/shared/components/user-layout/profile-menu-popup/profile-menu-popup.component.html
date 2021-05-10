@@ -1,0 +1,24 @@
+<div class="drop-down-menu">
+  <a href="#" class="menu-header">
+    <span class="flex fd-r ai-c">
+      <span class="avatar-box square-40">
+        <img [src]="me.pathToCurrentAvatar" alt="photo" />
+      </span>
+      <span>{{ me.name }}</span>
+    </span>
+  </a>
+  <ul class="menu-body">
+    <li>
+      <a href="#" class="edit">Edit </a>
+    </li>
+    <li>
+      <a href="#" class="settings">Settings </a>
+    </li>
+    <li>
+      <a href="#" class="help">Help </a>
+    </li>
+    <li>
+      <a (click)="logout()" class="logout">Log out</a>
+    </li>
+  </ul>
+</div>

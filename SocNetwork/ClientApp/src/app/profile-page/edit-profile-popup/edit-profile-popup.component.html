@@ -1,0 +1,170 @@
+<div id="edit-profile-win">
+  <div class="win-content">
+    <div class="content-title flex fd-c jc-c ai-c">
+      <button (click)="close()" class="close-btn round r-22 square-32"></button>
+      <h3>Edit profile</h3>
+    </div>
+    <form
+      class="edit-info-form flex fd-c ai-fe"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <div class="photo-cover" data-container="image-box">
+        <img
+          [src]="user.pathToCurrentCover"
+          alt="photo-cover"
+          #cover_preview_img
+        />
+        <div class="photo-upload-wrap">
+          <div class="upload-btn flex jc-c ai-c">
+            <img
+              src="../../assets/images/add-photo.png"
+              (click)="cover_input.click()"
+              alt=""
+            />
+          </div>
+          <input
+            type="file"
+            (change)="coverFile = cover_input.files[0]; 
+              previewImage(cover_input.files[0], cover_preview_img)"
+            #cover_input
+            class="hidden"
+          />
+        </div>
+      </div>
+      <div class="user-avatar-back">
+        <div class="user-avatar" data-container="image-box">
+          <img
+            [src]="user.pathToCurrentAvatar"
+            #avatar_preview_img
+            alt="avatar"
+          />
+          <div class="photo-upload-wrap">
+            <div class="upload-btn flex jc-c ai-c">
+              <img
+                src="../../../assets/images/add-photo.png"
+                (click)="avatar_input.click()"
+                alt=""
+              />
+            </div>
+            <input
+              type="file"
+              (change)="avatarFile = avatar_input.files[0];
+                previewImage(avatar_input.files[0], avatar_preview_img)"
+              #avatar_input
+              class="hidden"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="input-fields flex fd-c ai-fe">
+        <div class="group">
+          <input type="text" formControlName="name" />
+          <label for="">name</label>
+
+          <div class="validation" *ngIf="name?.invalid && name?.touched">
+            <small *ngIf="name?.errors?.minlength"
+              >Name must be at least
+              {{ name?.errors?.minlength?.requiredLength }} characters long.
+            </small>
+            <small *ngIf="name?.errors?.pattern"
+              >The name can only contain letters and a space.
+            </small>
+            <small *ngIf="name?.errors?.maxlength">
+              Name must be at least
+              {{ name?.errors?.maxlength?.requiredLength }} characters long.
+            </small>
+          </div>
+        </div>
+        <div class="group">
+          <input type="text" formControlName="username" />
+          <label for="">username</label>
+
+          <div
+            class="validation"
+            *ngIf="username?.invalid && username?.touched"
+          >
+            <small *ngIf="username?.errors?.pattern"
+              >The username can only contain Latin letters, numbers, and
+              underscores.
+            </small>
+            <small *ngIf="username?.errors?.minlength">
+              Min length is
+              {{ username?.errors?.minlength?.requiredLength }} characters.
+            </small>
+            <small *ngIf="username?.errors?.maxlength">
+              Max length is
+              {{ username?.errors?.maxlength?.requiredLength }} characters.
+            </small>
+          </div>
+        </div>
+        <div class="group">
+          <textarea type="text" formControlName="bio"></textarea>
+          <label for="">bio</label>
+          <div class="validation" *ngIf="bio?.invalid && bio?.touched">
+            <small *ngIf="bio?.errors?.maxlength">
+              Max length is
+              {{ bio?.errors?.maxlength?.requiredLength }} characters.
+            </small>
+          </div>
+        </div>
+        <div class="date-of-birth flex fd-r jc-sb">
+          <input type="number" formControlName="dayOfBirth" />
+          <input type="number" formControlName="monthOfBirth" />
+          <input type="number" formControlName="yearOfBirth" min="1900" />
+          <label for="">date of birth</label>
+          <div
+            class="validation"
+            *ngIf="dayOfBirth?.invalid && dayOfBirth?.touched"
+          >
+            <small *ngIf="dayOfBirth?.errors?.max || dayOfBirth?.errors?.min">
+              Enter the correct day.
+            </small>
+          </div>
+          <div
+            class="validation"
+            *ngIf="monthOfBirth?.invalid && monthOfBirth?.touched"
+          >
+            <small
+              *ngIf="monthOfBirth?.errors?.max || monthOfBirth?.errors?.min"
+            >
+              Enter the correct month.
+            </small>
+          </div>
+          <div
+            class="validation"
+            *ngIf="yearOfBirth?.invalid && yearOfBirth?.touched"
+          >
+            <small *ngIf="yearOfBirth?.errors?.max || yearOfBirth?.errors?.min">
+              Enter the correct year.
+            </small>
+          </div>
+        </div>
+
+        <div class="group">
+          <app-custom-select
+            [options]="genderSelect.options"
+            [selected]="genderSelect.selected"
+            [label]="genderSelect.label"
+            (changeEvent)="selectedGender = $event"
+          ></app-custom-select>
+        </div>
+
+        <div class="group">
+          <app-custom-select
+            [options]="maritalStatusSelect.options"
+            [selected]="maritalStatusSelect.selected"
+            [label]="maritalStatusSelect.label"
+            (changeEvent)="selectedMaritalStatus = $event"
+          ></app-custom-select>
+        </div>
+
+        <div class="form-actions flex jc-sb">
+          <a href="#" class="advanced-editing">Advanced editing</a>
+          <button type="submit" class="save-info-btn as-fe">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="overflow" (click)="close()"></div>

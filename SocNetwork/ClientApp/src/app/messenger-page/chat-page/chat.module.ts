@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { ChatPageComponent } from './chat-page/chat-page.component';
+import { ChatPageComponent } from './chat-page.component';
+import { ChatRoutingModule } from './chat-routing.module';
 
 @NgModule({
   declarations: [
     ChatPageComponent
   ],
   imports: [
-    BrowserModule,
-    HttpClientModule,
+    ChatRoutingModule
   ],
   providers: [],
   bootstrap: []

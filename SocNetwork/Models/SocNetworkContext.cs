@@ -24,6 +24,7 @@ namespace SocNetwork.Models
         public DbSet<UserPost> UserPost { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<PostNotification> PostNotifications { get; set; }
+        public DbSet<UserRelationship> UserRelationships { get; set; }
 
         public SocNetworkContext(DbContextOptions<SocNetworkContext> options)
             : base(options)

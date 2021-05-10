@@ -11,7 +11,6 @@ import {
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  //public error$: Subject<string> = new Subject<string>();
 
   get token(): string | null {
     const expDate = new Date(localStorage.getItem("token-exp"));
