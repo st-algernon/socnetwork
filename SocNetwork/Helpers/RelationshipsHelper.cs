@@ -30,7 +30,7 @@ namespace SocNetwork.Helpers
             };
         }
 
-        public UserRelationship CreateOrExist(User fromUser, User toUser) {
+        public UserRelationship CreateOrExisting(User fromUser, User toUser) {
 
             var ur = db.UserRelationships
                 .FirstOrDefault(

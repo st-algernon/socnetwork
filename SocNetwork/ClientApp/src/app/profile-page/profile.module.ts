@@ -27,9 +27,6 @@ import { MessengerService } from "../shared/services/messenger.service";
         ReactiveFormsModule
     ],
     exports: [],
-    providers: [
-        UsersService,
-        MessengerService
-    ]
+    providers: []
 })
 export class ProfileModule {}

@@ -13,6 +13,7 @@ namespace SocNetwork.Models
     }
 
     public enum MessageStatus {
+        IsInitial,
         IsEdited,
         IsDeleted
     }
@@ -29,5 +30,9 @@ namespace SocNetwork.Models
         public List<MessageMedia> MessageAttachments { get; set; }
         public MessageStatus MessageStatus { get; set; }
         public MessageState MessageState { get; set; }
+        public Message()
+        {
+            MessageAttachments = new List<MessageMedia>();
+        }
     }
 }

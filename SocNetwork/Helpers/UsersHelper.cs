@@ -28,7 +28,7 @@ namespace SocNetwork.Helpers
 
             user.CopyPropertiesTo<User, ProfileDTO>(profileDTO);
 
-            profileDTO.Media = GetProfileMediaDTO(user);
+            profileDTO.MediaDTO = GetProfileMediaDTO(user);
 
             return profileDTO;
         }
@@ -39,7 +39,7 @@ namespace SocNetwork.Helpers
 
             user.CopyPropertiesTo<User, ProfileDTO>(profileDTO);
 
-            profileDTO.Media = GetProfileMediaDTO(user);
+            profileDTO.MediaDTO = GetProfileMediaDTO(user);
 
             return profileDTO;
         }

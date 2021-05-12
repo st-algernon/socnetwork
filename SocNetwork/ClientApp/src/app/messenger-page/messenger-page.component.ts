@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessengerHubService } from '../shared/services/messenger-hub.service';
+import { MessengerHub } from '../shared/hubs/messenger.hub';
 
 @Component({
   selector: 'app-messenger-page',
@@ -8,11 +8,11 @@ import { MessengerHubService } from '../shared/services/messenger-hub.service';
 })
 export class MessengerPageComponent implements OnInit {
 
-  constructor(private messengerHubService: MessengerHubService) { }
+  constructor(private messengerHub: MessengerHub) { }
 
   ngOnInit() {
-    this.messengerHubService.startConnection();
-    this.messengerHubService.addReceivedMessageListener();
+    this.messengerHub.startConnection();
+    this.messengerHub.addReceivedMessageListener();
   }
 
 }

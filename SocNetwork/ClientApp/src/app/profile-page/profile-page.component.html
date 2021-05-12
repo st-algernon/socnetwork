@@ -1,11 +1,11 @@
 <main>
     <section class="user-info">
         <div class="photo-cover">
-          <img *ngIf="user?.media?.length > 0" [src]="user.pathToCurrentCover" alt="cover">
+          <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.pathToCurrentCover" alt="cover">
         </div>
         <div class="user-avatar-back">
           <div class="user-avatar">
-            <img *ngIf="user?.media?.length > 0; else default_avatar" [src]="user.pathToCurrentAvatar" alt="avatar">
+            <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.pathToCurrentAvatar" alt="avatar">
             <ng-template #default_avatar>
               <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
             </ng-template>
@@ -23,7 +23,7 @@
             </ng-template>
           </div>
           <div class="flex ai-c fd-r">
-            <button class="square-40 create-chat" (click)="chat()"></button>
+            <button class="square-40 create-chat" (click)="openChat()"></button>
             <button *ngIf="isUnFollowed && !isMe" class="btn btn-outlined profile-action-btn" (click)="follow()">Follow</button>
             <button 
               *ngIf="isFollowed && !isMe"

@@ -23,7 +23,7 @@ namespace SocNetwork.Extensions
                 {
                     var p = destProps.First(x => x.Name == sourceProp.Name);
 
-                    if(p.CanWrite) {
+                    if (p.CanWrite) {
 
                         object parsed = null;
 

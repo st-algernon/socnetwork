@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Http.Features;
 using SocNetwork.Hubs;
+using System.Threading.Tasks;
 
 namespace SocNetwork
 {
@@ -65,6 +66,20 @@ namespace SocNetwork
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey(),
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+
+                            var path = context.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
         }
 
@@ -107,7 +122,7 @@ namespace SocNetwork
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
-                endpoints.MapHub<MessengerHub>("/messenger");
+                endpoints.MapHub<MessengerHub>("/hubs/messenger");
             });
 
             app.UseSpa(spa =>

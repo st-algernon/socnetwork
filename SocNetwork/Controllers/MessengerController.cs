@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SocNetwork.DTO;
 using SocNetwork.DTO.Response;
+using SocNetwork.Helpers;
 using SocNetwork.Models;
 using System;
 using System.Collections.Generic;
@@ -30,34 +32,21 @@ namespace SocNetwork.Controllers
 
             if (withUser == null)
             {
-                return BadRequest(new ConversationResponse {
+                return BadRequest(new ChatResponse {
                     Result = false,
                     Errors = new List<string>() { "No user with this id was found" }
                 });
             }
 
             var members = new List<User>() { currentUser, withUser };
+            var chatHelper = new ChatHelper(db);
+            var chat = chatHelper.ExistingOrEmpty(currentUser, members);
+            var chatDTO = chatHelper.ConvertToDTO(chat);
 
-            var conversation = await db.Conversations.FirstOrDefaultAsync(c => c.Members.Except(members).Any() == false);
-            
-            if (conversation == null)
-            {
-                conversation = new Conversation()
-                {
-                    Id = Guid.NewGuid(),
-                    Members = members,
-                    IsDeleted = false,
-                    CreationDate = DateTime.Now
-                };
-
-                db.Conversations.Add(conversation);
-                await db.SaveChangesAsync();
-            }
-
-            return Ok(new ConversationResponse
+            return Ok(new ChatResponse
             {
                 Result = true,
-                Conversation = conversation,
+                Chat = chatDTO,
             });
         }
 

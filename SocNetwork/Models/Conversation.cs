@@ -12,5 +12,10 @@ namespace SocNetwork.Models
         public DateTime CreationDate { get; set; }
         public List<User> Members { get; set; }
         public bool IsDeleted { get; set; }
+        public Conversation()
+        {
+            Messages = new List<Message>();
+            Members = new List<User>();
+        }
     }
 }

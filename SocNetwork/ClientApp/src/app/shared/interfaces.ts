@@ -1,4 +1,4 @@
-import { AccountStatus, Gender, MaritalStatus, MediaFor, UserRelationshipType } from "./enums";
+import { AccountStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, UserRelationshipType } from "./enums";
 
 export interface AccountLoginRequest {
     email: string
@@ -22,6 +22,20 @@ export interface EditProfileInfoRequest {
     location: string,
     gender: string,
     maritalStatus: string
+}
+
+export interface MessageRequest {
+    authorId: string,
+    text: string,
+    creationDate: string,
+    messageMediaDTO: Media[],
+    messageStatus: MessageStatus,
+    messageState: MessageState
+}
+
+export interface ChatRequest {
+    id: string,
+    membersId: string[]
 }
 
 export interface AuthResponse {
@@ -75,7 +89,7 @@ export interface Profile {
     location: string,
     gender: Gender,
     maritalStatus: MaritalStatus,
-    media: ProfileMedia[],
+    mediaDTO: ProfileMedia[],
     pathToCurrentAvatar: string
     pathToCurrentCover: string
 }
@@ -86,6 +100,38 @@ export interface UserRelationship {
     toUserId: string,
     userRelationshipType: UserRelationshipType,
     creationDate: Date,
+}
+
+export interface Media {
+    id: string,
+    mimeType: string,
+    path: string,
+    size: number,
+    creationDate: Date,
+}
+
+export interface Message {
+    id: string,
+    authorId: string,
+    text: string,
+    creationDate: Date,
+    messageMediaDTO: Media[],
+    messageStatus: MessageStatus,
+    messageState: MessageState
+}
+
+export interface Chat {
+    id: string,
+    messagesDTO: Message[],
+    creationDate: Date,
+    membersDTO: Profile[],
+    isDeleted: boolean
+}
+
+export interface ChatResponse {
+    result: string,
+    chat: Chat,
+    errors: string[]
 }
 
 export interface Options {

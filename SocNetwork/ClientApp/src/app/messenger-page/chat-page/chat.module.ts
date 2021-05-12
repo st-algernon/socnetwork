@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MessengerHubService } from 'src/app/shared/services/messenger-hub.service';
+import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
+import { MessengerService } from 'src/app/shared/services/messenger.service';
 import { ChatPageComponent } from './chat-page.component';
 import { ChatRoutingModule } from './chat-routing.module';
 
@@ -12,7 +13,9 @@ import { ChatRoutingModule } from './chat-routing.module';
     ChatRoutingModule,
     ReactiveFormsModule
   ],
-  providers: [MessengerHubService],
+  providers: [
+    MessengerService
+  ],
   bootstrap: []
 })
 export class ChatModule { }

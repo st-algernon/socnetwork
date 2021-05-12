@@ -25,7 +25,6 @@ namespace SocNetwork.Controllers
         {
             db = context;
         }
-
         // // GET: api/<UserController>
         // [HttpGet("name/{name}")]
         // public async Task<IActionResult> Get(string name)
@@ -242,7 +241,7 @@ namespace SocNetwork.Controllers
 
             var relationshipsHelper = new RelationshipsHelper(db);
 
-            var ur = relationshipsHelper.CreateOrExist(currentUser, toUser);
+            var ur = relationshipsHelper.CreateOrExisting(currentUser, toUser);
             relationshipsHelper.Update(ur, UserRelationshipType.Followed);
 
             return Ok();
@@ -262,7 +261,7 @@ namespace SocNetwork.Controllers
 
             var relationshipHelper = new RelationshipsHelper(db);
 
-            var ur = relationshipHelper.CreateOrExist(currentUser, toUser);
+            var ur = relationshipHelper.CreateOrExisting(currentUser, toUser);
             relationshipHelper.Update(ur, UserRelationshipType.Blocked);
         
             return Ok();
