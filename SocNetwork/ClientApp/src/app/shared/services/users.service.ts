@@ -65,8 +65,8 @@ export class UsersService {
                     birthDate: new Date(response.profile.birthDate),
                     creationDate: new Date(response.profile.creationDate),
                     lastVisited: new Date(response.profile.lastVisited),
-                    pathToCurrentAvatar: response.profile.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,
-                    pathToCurrentCover: response.profile.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path
+                    currentAvatarPath: response.profile.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,
+                    currentCoverPath: response.profile.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path
                 }
             })
         )

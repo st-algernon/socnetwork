@@ -11,8 +11,7 @@ export class MessengerPageComponent implements OnInit {
   constructor(private messengerHub: MessengerHub) { }
 
   ngOnInit() {
-    this.messengerHub.startConnection();
-    this.messengerHub.addReceivedMessageListener();
+
   }
 
 }

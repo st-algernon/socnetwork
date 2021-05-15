@@ -1,11 +1,11 @@
 <main>
     <section class="user-info">
         <div class="photo-cover">
-          <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.pathToCurrentCover" alt="cover">
+          <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.currentCoverPath" alt="cover">
         </div>
         <div class="user-avatar-back">
           <div class="user-avatar">
-            <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.pathToCurrentAvatar" alt="avatar">
+            <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
             <ng-template #default_avatar>
               <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
             </ng-template>
@@ -15,15 +15,15 @@
           <div class="flex fd-c">
             <span *ngIf="user; else empty_name" class="source-name">{{ user.name }}</span>
             <ng-template #empty_name>
-              <span class="empty-source-name"></span>
+              <span class="empty source-name"></span>
             </ng-template>
             <span *ngIf="user; else empty_username" class="nick-name">@{{ user.username }}</span>
             <ng-template #empty_username>
-              <span class="empty-nick-name"></span>
+              <span class="empty nick-name"></span>
             </ng-template>
           </div>
           <div class="flex ai-c fd-r">
-            <button class="square-40 create-chat" (click)="openChat()"></button>
+            <button *ngIf="user" class="square-40 create-chat" (click)="openChat()"></button>
             <button *ngIf="isUnFollowed && !isMe" class="btn btn-outlined profile-action-btn" (click)="follow()">Follow</button>
             <button 
               *ngIf="isFollowed && !isMe"
@@ -39,21 +39,21 @@
           <div class="wrap-info flex fd-c">
             <div *ngIf="user; else empty_bio" class="bio">{{ user.bio }}</div>
             <ng-template #empty_bio>
-              <div class="empty-bio"></div>
+              <div class="empty bio"></div>
             </ng-template>
             <ul class="follow-wrap flex fd-r jc-sb">
               <li class=""><span *ngIf="user; else empty_count_posts">30</span>
                 <ng-template #empty_count_posts>
-                  <span class="empty-count"></span>
+                  <span class="empty count"></span>
                 </ng-template> posts
               </li>
               <li class=""><span *ngIf="user; else empty_count_followers">24</span>
                 <ng-template #empty_count_followers>
-                  <span class="empty-count"></span>
+                  <span class="empty count"></span>
                 </ng-template> followers</li>
               <li class=""><span *ngIf="user; else empty_count_following">10</span>
                 <ng-template #empty_count_following>
-                  <span class="empty-count"></span>
+                  <span class="empty count"></span>
                 </ng-template> following</li>
             </ul>
             <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
@@ -63,11 +63,10 @@
               <li class="more-details"></li>
             </ul>
             <ng-template #empty_short_info>
-              <ul class="empty-short-info flex fd-r">
+              <ul class="empty-short-info flex jc-sb">
                 <li></li>
                 <li></li>
                 <li></li>
-                <li class="more-details"></li>
               </ul>
             </ng-template>
           </div>

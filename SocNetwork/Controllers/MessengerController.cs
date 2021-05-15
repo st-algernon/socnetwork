@@ -40,7 +40,7 @@ namespace SocNetwork.Controllers
 
             var members = new List<User>() { currentUser, withUser };
             var chatHelper = new ChatHelper(db);
-            var chat = chatHelper.ExistingOrEmpty(currentUser, members);
+            var chat = chatHelper.CreateOrExisting(currentUser, members);
             var chatDTO = chatHelper.ConvertToDTO(chat);
 
             return Ok(new ChatResponse

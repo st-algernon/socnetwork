@@ -255,13 +255,12 @@ textarea {
 
 .btn.btn-outlined {
 	color: #1da1f2;
-	border: 1px solid #1da1f2;
+	border: 2px solid #1da1f2;
 	background: #fff;
 }
 
 .btn.btn-outlined:hover {
 	color: #fff;
-	border: 1px solid #1da1f2;
 	background: #1da1f2;
 }
 
@@ -321,8 +320,8 @@ body {
 	width:51px;
 	height:51px;
 	margin: 0 auto;
-	transform:scale(0.6) translateY(40px);
-		-ms-transform:scale(0.6) translateY(60px);
+	transform:scale(0.6);
+		-ms-transform:scale(0.6);
 }
 
 .f_circleG{

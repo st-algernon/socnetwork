@@ -28,6 +28,15 @@ namespace SocNetwork.Helpers
             return messageDTO;
         }
 
+        public Message ConvertFromDTO(MessageDTO messageDTO)
+        {
+            var message = new Message();
+
+            messageDTO.CopyPropertiesTo(message);
+
+            return message;
+        }
+
         public List<MediaDTO> ConvertMediaToDTO(List<MessageMedia> media)
         {
             var mediaDTO = new List<MediaDTO>();

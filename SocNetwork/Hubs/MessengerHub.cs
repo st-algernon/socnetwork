@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using SocNetwork.DTO;
 using SocNetwork.DTO.Request;
 using SocNetwork.Extensions;
+using SocNetwork.Helpers;
 using SocNetwork.Models;
 using System;
 using System.Collections.Generic;
@@ -20,13 +23,25 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async Task Send(ChatRequest chatRequest, MessageRequest messageRequest)
+        public async Task Send(MessageDTO messageDTO)
         {
-            var message = new Message();
-            messageRequest.CopyPropertiesTo(message);
-            message.ConversationId = Guid.Parse(chatRequest.Id.ToString());
-            await db.Messages.AddAsync(message);
-            await Clients.Users(chatRequest.MembersId).SendAsync("Receive", chatRequest, messageRequest);
+            var chat = await db.Conversations
+                .Include(c => c.Members)
+                .FirstOrDefaultAsync(c => c.Id == messageDTO.ConversationId);
+            var memberIds = chat.Members.Select(m => m.Id.ToString());
+            var caller = Context.User.Identity.Name;
+
+            if (memberIds.Contains(caller))
+            {
+                var messagesHelper = new MessagesHelper(db);
+                var message = messagesHelper.ConvertFromDTO(messageDTO);
+
+                await db.Messages.AddAsync(message);
+                await db.SaveChangesAsync();
+
+                messageDTO = messagesHelper.ConvertToDTO(message);
+                await Clients.Users(memberIds).SendAsync("Receive", messageDTO);
+            }
         }
     }
 }

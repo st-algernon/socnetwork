@@ -11,7 +11,7 @@
     >
       <div class="photo-cover" data-container="image-box">
         <img
-          [src]="user.pathToCurrentCover"
+          [src]="user.currentCoverPath"
           alt="photo-cover"
           #cover_preview_img
         />
@@ -35,7 +35,7 @@
       <div class="user-avatar-back">
         <div class="user-avatar" data-container="image-box">
           <img
-            [src]="user.pathToCurrentAvatar"
+            [src]="user.currentAvatarPath"
             #avatar_preview_img
             alt="avatar"
           />

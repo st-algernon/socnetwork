@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { Chat, ChatRequest, Message, MessageRequest } from '../interfaces';
+import { Subject } from 'rxjs';
+import { Chat, Message } from '../interfaces';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' }) 
 export class MessengerHub {
-    private hubConnection: signalR.HubConnection
+
+    private hubConnection: signalR.HubConnection;
+    public message$ = new Subject<Message>();
+    public me: string;
 
     constructor (
         private auth: AuthService
     ) {}
+    
     startConnection () {
       this.hubConnection = new signalR.HubConnectionBuilder()
                               .withUrl('/hubs/messenger', { accessTokenFactory: () => this.auth.token })
@@ -21,13 +26,13 @@ export class MessengerHub {
     }
 
     addReceivedMessageListener() {
-        this.hubConnection.on("Receive", function (chat, message) {
-            console.log('Chat', chat);
+        this.hubConnection.on("Receive", (message: Message) => {
             console.log('Message', message);
+            this.message$.next(message);
         });
     }
 
-    sendMessage(chat: ChatRequest, message: MessageRequest) {
-        this.hubConnection.invoke('Send', chat, message);
+    sendMessage(message: Message) {
+        this.hubConnection.invoke('Send', message);
     }
 }

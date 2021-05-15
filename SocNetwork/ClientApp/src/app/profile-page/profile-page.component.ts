@@ -61,8 +61,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
       }
     });
 
-    this.messengerHub.startConnection();
-    this.messengerHub.addReceivedMessageListener();
+    // this.messengerHub.startConnection();
+    // this.messengerHub.addReceivedMessageListener();
   }
 
   ngOnDestroy(): void {

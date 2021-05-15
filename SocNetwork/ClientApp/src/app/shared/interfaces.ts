@@ -24,20 +24,6 @@ export interface EditProfileInfoRequest {
     maritalStatus: string
 }
 
-export interface MessageRequest {
-    authorId: string,
-    text: string,
-    creationDate: string,
-    messageMediaDTO: Media[],
-    messageStatus: MessageStatus,
-    messageState: MessageState
-}
-
-export interface ChatRequest {
-    id: string,
-    membersId: string[]
-}
-
 export interface AuthResponse {
     token: string,
     expiresIn: string
@@ -90,8 +76,8 @@ export interface Profile {
     gender: Gender,
     maritalStatus: MaritalStatus,
     mediaDTO: ProfileMedia[],
-    pathToCurrentAvatar: string
-    pathToCurrentCover: string
+    currentAvatarPath?: string
+    currentCoverPath?: string
 }
 
 export interface UserRelationship {
@@ -111,10 +97,12 @@ export interface Media {
 }
 
 export interface Message {
-    id: string,
+    id?: string,
     authorId: string,
+    author?: Profile,
+    conversationId: string,
     text: string,
-    creationDate: Date,
+    creationDate: string,
     messageMediaDTO: Media[],
     messageStatus: MessageStatus,
     messageState: MessageState
@@ -123,7 +111,7 @@ export interface Message {
 export interface Chat {
     id: string,
     messagesDTO: Message[],
-    creationDate: Date,
+    creationDate: string,
     membersDTO: Profile[],
     isDeleted: boolean
 }

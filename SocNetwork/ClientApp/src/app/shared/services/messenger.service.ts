@@ -16,10 +16,7 @@ export class MessengerService {
         .pipe(
             map((response: ChatResponse) => { 
                 console.log(response);
-                return { 
-                    ...response.chat,
-                    creationDate: new Date(response.chat.creationDate)
-                }
+                return response.chat;
             })
         );
     }

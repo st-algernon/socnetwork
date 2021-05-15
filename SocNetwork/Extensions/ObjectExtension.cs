@@ -29,7 +29,10 @@ namespace SocNetwork.Extensions
 
                         if (p.PropertyType == typeof(DateTime))
                         {
-                            parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                            if (sourceProp.PropertyType != typeof(DateTime))
+                            {
+                                parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                            }
                         }
 
                         if (p.PropertyType.BaseType == typeof(Enum))

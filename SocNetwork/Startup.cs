@@ -17,6 +17,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http.Features;
 using SocNetwork.Hubs;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 
 namespace SocNetwork
 {
@@ -36,6 +37,7 @@ namespace SocNetwork
             services.AddDbContext<SocNetworkContext>(options => options.UseSqlServer(connection));
 
             services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
@@ -71,12 +73,13 @@ namespace SocNetwork
                         OnMessageReceived = context =>
                         {
                             var accessToken = context.Request.Query["access_token"];
-
                             var path = context.HttpContext.Request.Path;
+
                             if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
                             {
                                 context.Token = accessToken;
                             }
+
                             return Task.CompletedTask;
                         }
                     };
