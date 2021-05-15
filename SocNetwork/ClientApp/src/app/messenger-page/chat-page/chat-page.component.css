@@ -132,17 +132,25 @@ main {
 
 .message-author .avatar-box {
 	background: #eee;
-	margin-right: 5px;
 }
 
 .message-item .message-body {
 	max-width: 70%;
-	background-color: #36a7ee;
 	border-radius: 15px;
 	color: #fff;
 	padding: 10px;
 	padding-bottom: 0px;
 	position: relative;
+}
+
+.message-item .other.message-body {
+	background-color: #999;
+	margin-left: 5px;
+}
+
+.message-item .me.message-body {
+	background-color: #36a7ee;
+	margin-right: 5px;
 }
 
 .message-footer .message-date {

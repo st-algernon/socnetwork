@@ -52,6 +52,8 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       for (let m of this.chat.messagesDTO) {
         m.author = this.includeAuthor(m.authorId);
+        this.hideSameAuthors(m);
+        this.renderMessageTemplate(m);
       }
     });
 
@@ -75,9 +77,9 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    if (this.isFocused === false && this.chat) {
-      this.setFocusOnLast();
-    }
+    // if (this.isFocused === false && this.chat) {
+    //   this.setFocusOnLast();
+    // }
   }
 
   submit() {
@@ -97,6 +99,7 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   private includeAuthor(authorId: string) {
     let author = this.chat.membersDTO.find(m => m.id == authorId);
     author.currentAvatarPath = author.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path;
+    author.currentCoverPath = author.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path;
 
     return author;
   }
@@ -119,7 +122,8 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   private renderMessageTemplate(messageDTO: Message) {
     const messageItem = this.renderer.createElement('div');
-    (messageItem as HTMLElement).classList.add('message-item', 'flex', 'ai-fe');
+    const messageItemClasses = messageDTO.authorId === this.me.id ? ['fd-rr'] : ['fd-r'];
+    (messageItem as HTMLElement).classList.add('message-item', 'flex', 'ai-fe', ...messageItemClasses);
 
     const messageAuthor = this.renderer.createElement('div');
     (messageAuthor as HTMLElement).classList.add('message-author');
@@ -129,9 +133,11 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
     const avatarBox = this.renderer.createElement('div');
     (avatarBox as HTMLElement).classList.add('avatar-box', 'square-32')
     const avatarBoxImg = this.renderer.createElement('img');
+    (avatarBoxImg as HTMLImageElement).src = messageDTO.author?.currentAvatarPath;
 
     const messageBody = this.renderer.createElement('div');
-    (messageBody as HTMLElement).classList.add('message-body');
+    const messageBodyClasses = messageDTO.authorId === this.me.id ? ['me'] : ['other'];
+    (messageBody as HTMLElement).classList.add('message-body', ...messageBodyClasses);
     const messageText = this.renderer.createText(messageDTO.text);
     const messageFooter = this.renderer.createElement('div');
     (messageFooter as HTMLElement).classList.add('message-footer', 'flex', 'jc-fe');
@@ -154,7 +160,7 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     this.renderer.appendChild(this.messageList.nativeElement, messageItem);
 
-    const messageItemRoot = this.renderer.selectRootElement(messageItem);
-    (messageItemRoot as HTMLElement).focus();
+    // const messageItemRoot = this.renderer.selectRootElement(messageItem);
+    // (messageItemRoot as HTMLElement).focus();
   }
 }

@@ -27,7 +27,7 @@ namespace SocNetwork.Helpers
             {
                 db.Entry(item).Collection(c => c.Members).Load();
 
-                if (item.Members.Except(members).Any() == false)
+                if (item.Members.ListEqualsExt(members))
                 {
                     chat = item;
                 }

@@ -2,7 +2,7 @@
     <section class="main-header">
         <div class="header-content flex fd-r jc-sb">
             <div></div>
-            <div class="flex fd-c ai-c">
+            <div *ngIf="chat" class="flex fd-c ai-c">
                 <div class="source-name">{{ other?.name }}</div>
                 <div class="last-visited">14 October 2019 at 09:23 am</div>
             </div>
@@ -12,41 +12,20 @@
         </div>
     </section>
     <section
-        class="messages-box flex fd-c jc-fe"
+        class="messages-box flex fd-c"
+        [ngClass]="chat ? 'jc-fe' : 'jc-c'"
         #messageList
     >
-        <ng-container *ngIf="chat; else loading">
-            <div 
-                *ngFor="let message of chat.messagesDTO; let i = index"
-                class="message-item flex ai-fe"
-                [tabindex]="i"
-            >
-                <div class="message-author">
-                    <div class="avatar-box square-32">
-                        <img [src]="message.author.currentAvatarPath" alt="photo" />
-                    </div>
-                    <div class="author-id hidden">{{ message.authorId }}</div>
-                </div>
-                <div class="message-body">
-                    {{ message.text }}
-                    <div class="message-footer flex jc-fe">
-                        <div class="message-date">{{ message.creationDate | date:'h:mm':'':'uk'}}</div>
-                    </div>
-                </div>
-            </div>
-        </ng-container>
-        <ng-template #loading>
-            <div id="floatingCirclesG">
-                <div class="f_circleG" id="frotateG_01"></div>
-                <div class="f_circleG" id="frotateG_02"></div>
-                <div class="f_circleG" id="frotateG_03"></div>
-                <div class="f_circleG" id="frotateG_04"></div>
-                <div class="f_circleG" id="frotateG_05"></div>
-                <div class="f_circleG" id="frotateG_06"></div>
-                <div class="f_circleG" id="frotateG_07"></div>
-                <div class="f_circleG" id="frotateG_08"></div>
-            </div>
-        </ng-template>
+        <div *ngIf="!chat" id="floatingCirclesG">
+            <div class="f_circleG" id="frotateG_01"></div>
+            <div class="f_circleG" id="frotateG_02"></div>
+            <div class="f_circleG" id="frotateG_03"></div>
+            <div class="f_circleG" id="frotateG_04"></div>
+            <div class="f_circleG" id="frotateG_05"></div>
+            <div class="f_circleG" id="frotateG_06"></div>
+            <div class="f_circleG" id="frotateG_07"></div>
+            <div class="f_circleG" id="frotateG_08"></div>
+        </div>
     </section>
     <section class="input-message">
         <form 
