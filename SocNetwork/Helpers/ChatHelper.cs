@@ -1,4 +1,5 @@
-﻿using SocNetwork.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using SocNetwork.DTO;
 using SocNetwork.Extensions;
 using SocNetwork.Models;
 using System;
@@ -11,53 +12,69 @@ namespace SocNetwork.Helpers
     public class ChatHelper
     {
         private readonly SocNetworkContext db;
-        private const int DEFAULT_MESSAGES_NUM = 25;
+        private const int DEFAULT_LAST_MESSAGES_NUM = 25;
 
         public ChatHelper(SocNetworkContext context)
         {
             db = context;
         }
-        public Conversation CreateOrExisting(User currentUser, List<User> members)
+
+        public async Task<List<Conversation>> GetUserChatsAsync(User user)
         {
-            db.Entry(currentUser).Collection(c => c.Conversations).Load();
+            await db.Entry(user).Collection(c => c.Conversations).LoadAsync();
 
-            Conversation chat = null;
-
-            foreach (var item in currentUser.Conversations)
+            //var mychats = db.Conversations
+            //    .Where(c => c.Members.Contains(user))
+            //    .Include(c => c.Members)
+            //    .ThenInclude(m => m.ProfileMedia)
+            //    .Include(c => c.Messages)
+            //    .Select(c => new Conversation { c.Messages.Take(DEFAULT_MESSAGES_NUM).ToList() })
+            //    .ToList();
+            //var mychats2 = db.Users..FirstOrDefault(u => u.Id == user.Id);
+            //var chats = db.Conversations.Include(c => c.Members)
+            //    .ThenInclude(m => m.ProfileMedia).Include(c => c.Messages).Select(c => {  }).ToList();
+       
+            foreach (var chat in user.Conversations)
             {
-                db.Entry(item).Collection(c => c.Members).Load();
+                await LoadChatUserMediaAsync(chat);
+                await LoadLastChatMessagesAsync(chat, DEFAULT_LAST_MESSAGES_NUM);
+            }
 
-                if (item.Members.ListEqualsExt(members))
+            return user.Conversations;
+        }
+
+        public async Task<Conversation> GetChatByMembersAsync(List<User> members)
+        {
+            List<Conversation> chats = db.Conversations
+                .Include(c => c.Members)
+                .ToList();
+
+            Conversation wantedChat = null;
+
+            foreach (var chat in chats)
+            {
+                if (!chat.Members.Except(members).Any() && !members.Except(chat.Members).Any())
                 {
-                    chat = item;
+                    wantedChat = chat;
+                    await LoadChatUserMediaAsync(wantedChat);
+                    await LoadLastChatMessagesAsync(wantedChat, DEFAULT_LAST_MESSAGES_NUM);
                 }
             }
 
-            if (chat == null)
+            return wantedChat;
+        }
+
+        public async Task<Conversation> CreateChatAsync(List<User> members)
+        {
+            var chat = new Conversation()
             {
-                chat = new Conversation()
-                {
-                    Members = members,
-                    Messages = new List<Message>(),
-                    CreationDate = DateTime.Now
-                };
+                Members = members,
+                Messages = new List<Message>(),
+                CreationDate = DateTime.Now
+            };
 
-                db.Conversations.Add(chat);
-                db.SaveChanges();
-            } else {
-
-                foreach (var member in chat.Members) {
-                    db.Entry(member).Collection(c => c.ProfileMedia).Load();
-                }
-
-                db.Entry(chat)
-                    .Collection(c => c.Messages)
-                    .Query()
-                    .Where(m => m.MessageStatus != MessageStatus.IsDeleted)
-                    .OrderByDescending(m => m.CreationDate)
-                    .Take(DEFAULT_MESSAGES_NUM)
-                    .ToList();
-            }
+            await db.Conversations.AddAsync(chat);
+            await db.SaveChangesAsync();
 
             return chat;
         }
@@ -87,6 +104,27 @@ namespace SocNetwork.Helpers
             });
 
             return chatDTO;
+        }
+
+        public async Task LoadChatUserMediaAsync(Conversation chat)
+        {
+            await db.Entry(chat).Collection(c => c.Members).LoadAsync();
+
+            foreach (var member in chat.Members)
+            {
+                await db.Entry(member).Collection(m => m.ProfileMedia).LoadAsync();
+            }
+        }
+
+        public async Task LoadLastChatMessagesAsync(Conversation chat, int number)
+        {
+            await db.Entry(chat)
+                .Collection(c => c.Messages)
+                .Query()
+                .Where(m => m.MessageStatus != MessageStatus.IsDeleted)
+                .OrderByDescending(m => m.CreationDate)
+                .Take(number)
+                .ToListAsync();
         }
     }
 }

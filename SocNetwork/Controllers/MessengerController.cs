@@ -24,15 +24,34 @@ namespace SocNetwork.Controllers
         }
 
         [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var currentUser = HttpContext.Items["User"] as User;
+            var chatHelper = new ChatHelper(db);
+            var chats = await chatHelper.GetUserChatsAsync(currentUser);
+            var chatsDTO = new List<ChatDTO>();
+
+            chats.ForEach(c => {
+                chatsDTO.Add(chatHelper.ConvertToDTO(c));
+            });
+
+            return Ok(new ChatsResponse {
+                Result = true,
+                Chats = chatsDTO
+            });
+        }
+
+        [Authorize(Roles = "User")]
         [HttpGet("chat/{userId}")]
-        public async Task<IActionResult> Get(string userId)
+        public async Task<IActionResult> GetChatByUserId(string userId)
         {
             var currentUser = HttpContext.Items["User"] as User;
             var withUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
             if (withUser == null)
             {
-                return BadRequest(new ChatResponse {
+                return BadRequest(new ChatsResponse {
                     Result = false,
                     Errors = new List<string>() { "No user with this id was found" }
                 });
@@ -40,13 +59,13 @@ namespace SocNetwork.Controllers
 
             var members = new List<User>() { currentUser, withUser };
             var chatHelper = new ChatHelper(db);
-            var chat = chatHelper.CreateOrExisting(currentUser, members);
+            var chat = await chatHelper.GetChatByMembersAsync(members) ?? await chatHelper.CreateChatAsync(members);
             var chatDTO = chatHelper.ConvertToDTO(chat);
 
-            return Ok(new ChatResponse
+            return Ok(new ChatsResponse
             {
                 Result = true,
-                Chat = chatDTO,
+                Chats = new List<ChatDTO> { chatDTO }
             });
         }
 

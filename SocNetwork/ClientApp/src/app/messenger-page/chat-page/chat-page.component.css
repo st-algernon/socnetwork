@@ -1,22 +1,23 @@
 :host {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 main {
-    width: 47%;
-	min-height: calc(100% - 64px);
 	position: absolute;
 	top: 64px;
+	width: 64%;
+	min-height: calc(100% - 64px);
 	box-sizing: border-box;
 	border-radius: 15px 15px 0px 0px;
+	z-index: 1;
 }
 
 .main-header {
 	position: fixed;
 	top: 54px;
-	width: 47%;
+	width: 47.1%;
 	border-bottom: 1px solid #eee;
 	z-index: 4;
 	background-color: rgb(230, 236, 240);
@@ -81,12 +82,13 @@ main {
 }
 
 .messages-box {
-	padding: 0px 2% 63px 2%;
+	padding: 0px 2%;
 	min-height: 100%;
 	position: absolute;
 	width: 100%;
 	box-sizing: border-box;
 	background: #fff;
+	padding-bottom: 63px;
 }
 
 .messages-box .user-message {
@@ -127,7 +129,7 @@ main {
 }
 
 .message-item:focus {
-	/* outline: none; */
+	outline: none;
 }
 
 .message-author .avatar-box {

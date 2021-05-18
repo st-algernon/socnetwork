@@ -7,7 +7,12 @@
     </form>
     <div class="top-profile-menu flex fd-c ai-fe">
       <div class="avatar-box square-32" (click)="profileMenuIsOpened = !profileMenuIsOpened">
-        <img *ngIf="me" [src]="me.currentAvatarPath" alt="photo" />
+        <img 
+          *ngIf="me"
+          [src]="me.currentAvatarPath"
+          class="square-32"
+          alt="photo" 
+        />
       </div>
       <app-profile-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-profile-menu-popup>
     </div>
@@ -18,22 +23,17 @@
 	<aside>
 		<nav class="main-nav">
 			<ul>
-				<li><a href="#" class="profile" data-state="0">Profile</a></li>
-				<li><a href="#" class="news" data-state="0">News</a></li>
-				<li><a href="#" class="explore" data-state="0">Explore</a></li>
-		  	<li><a href="#" class="messages" data-state="current">Messages</a></li>
-		  	<li><a href="#" class="notifications" data-state="0">Notifications</a></li>
-		  	<li><a href="#" class="photos" data-state="0">Photos</a></li>
-		  	<li><a href="#" class="music" data-state="0">Music</a></li>
-		  	<li><a href="#" class="video" data-state="0">Videos</a></li>
-				<li><a href="#" class="saved" data-state="0">Saved</a></li>
+				<li><a [routerLink]="[me?.username]" routerLinkActive="is-active" class="profile">Profile</a></li>
+				<li><a routerLink="/news" routerLinkActive="is-active" class="news">News</a></li>
+				<li><a routerLink="/explore" routerLinkActive="is-active" class="explore">Explore</a></li>
+		  	<li><a routerLink="/messenger" routerLinkActive="is-active" class="messages">Messenger</a></li>
+		  	<li><a routerLink="/notifications" routerLinkActive="is-active" class="notifications">Notifications</a></li>
+		  	<li><a routerLink="/photos" routerLinkActive="is-active" class="photos">Photos</a></li>
+		  	<li><a routerLink="/music" routerLinkActive="is-active" class="music">Music</a></li>
+		  	<li><a routerLink="/videos" routerLinkActive="is-active" class="video">Videos</a></li>
+				<li><a routerLink="/saved" routerLinkActive="is-active" class="saved">Saved</a></li>
 			</ul>
         </nav>
     </aside>
-        <router-outlet></router-outlet>
-    <section class="right-col"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam 
-      iure pariatur enim inventore expedita velit delectus aspernatur nam reprehenderit adipisci,
-      et earum consequuntur amet blanditiis optio! Rem reprehenderit facere, quam expedita, 
-      quidem cumque iure rerum id sunt, quisquam ipsum, dolorum! 
-    </section>
+    <router-outlet></router-outlet>
 </div>

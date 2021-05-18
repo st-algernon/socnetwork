@@ -113,12 +113,13 @@ export interface Chat {
     messagesDTO: Message[],
     creationDate: string,
     membersDTO: Profile[],
+    withUser?: Profile,
     isDeleted: boolean
 }
 
-export interface ChatResponse {
+export interface ChatsResponse {
     result: string,
-    chat: Chat,
+    chats: Chat[],
     errors: string[]
 }
 

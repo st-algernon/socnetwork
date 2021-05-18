@@ -5,18 +5,13 @@ import { RegistrationPageComponent } from './registration-page/registration-page
 
 import { AuthLayoutComponent } from './shared/auth-layout/auth-layout.component';
 
-// const routes: Routes = [
-//     { path: '', component: AuthLayoutComponent, children: [
-//         { path: '', loadChildren: () => import('./login-page/login.module').then(m => m.LoginModule) },
-//         { path: 'sign-up', loadChildren: () => import('./registration-page/registration.module').then(m => m.RegistrationModule) },
-//     ] }];
-
 const routes: Routes = [
-    { path: '', component: AuthLayoutComponent, children: [
-        { path: '', component: LoginPageComponent },
-        { path: 'login', component: LoginPageComponent },
-        { path: 'sign-up', component: RegistrationPageComponent },
-    ] }];
+  { path: '', component: AuthLayoutComponent, children: [
+    { path: '', component: LoginPageComponent },
+    { path: 'login', component: LoginPageComponent },
+    { path: 'sign-up', component: RegistrationPageComponent },
+  ]}
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

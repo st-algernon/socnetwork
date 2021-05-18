@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { forkJoin, ReplaySubject } from "rxjs";
+import { forkJoin, Observable, ReplaySubject } from "rxjs";
 import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { EditProfileInfoRequest, Profile, ProfileMediaResponse, ProfileResponse, UserRelationship, UsersPageParams } from "../interfaces";
+import { EditProfileInfoRequest, Media, Profile, ProfileMedia, ProfileMediaResponse, ProfileResponse, UserRelationship, UsersPageParams } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
@@ -56,7 +56,7 @@ export class UsersService {
         return this.http.get(`${environment.apiUrl}/users/${username}/following`, { params })
     }
 
-    getProfile(username: string) {
+    getProfile(username: string): Observable<Profile> {
         return this.http.get<ProfileResponse>(`${environment.apiUrl}/users/${username}`)
         .pipe(
             map((response: ProfileResponse) => { 
@@ -64,11 +64,10 @@ export class UsersService {
                     ...response.profile,
                     birthDate: new Date(response.profile.birthDate),
                     creationDate: new Date(response.profile.creationDate),
-                    lastVisited: new Date(response.profile.lastVisited),
-                    currentAvatarPath: response.profile.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,
-                    currentCoverPath: response.profile.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path
+                    lastVisited: new Date(response.profile.lastVisited)
                 }
-            })
+            }),
+            map((response: Profile) => this.completeProfile(response))
         )
     }
 
@@ -76,7 +75,7 @@ export class UsersService {
         return this.http.get(`${environment.apiUrl}/users/me`);
     }
 
-    getProfileMedia(username: string) {
+    getProfileMedia(username: string): Observable<ProfileMedia[]> {
         return this.http.get<ProfileMediaResponse>(`${environment.apiUrl}/media/profile/${username}`)
         .pipe(
           map((response: ProfileMediaResponse) => { return response.media })
@@ -97,5 +96,13 @@ export class UsersService {
 
     unfollow(username: string) {        
         return this.http.delete(`${environment.apiUrl}/users/unfollow/${username}`);
+    }
+
+    completeProfile(user: Profile): Profile {
+        return {
+            ...user,
+            currentAvatarPath: user.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,
+            currentCoverPath: user.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path
+        }
     }
 }

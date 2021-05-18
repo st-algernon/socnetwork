@@ -122,7 +122,7 @@ aside {
 	color: #1da1f2;
 }
 
-.main-nav a[data-state="current"] {
+.main-nav a.is-active {
 	color: #1da1f2;
 }
 
@@ -130,7 +130,7 @@ aside {
 	background-image: url(../../../../assets/images/home.png);
 }
 
-.main-nav a.profile[data-state="current"] {
+.main-nav a.profile.is-active {
 	background-image: url(../../../../assets/images/home-hover.png);
 }
 
@@ -142,7 +142,7 @@ aside {
 	background-image: url(../../../../assets/images/news.png);
 }
 
-.main-nav a.news[data-state="current"] {
+.main-nav a.news.is-active {
 	background-image: url(../../../../assets/images/news-hover.png);
 }
 
@@ -154,7 +154,7 @@ aside {
 	background-image: url(../../../../assets/images/chat.png);
 }
 
-.main-nav a.messages[data-state="current"] {
+.main-nav a.messages.is-active {
 	background-image: url(../../../../assets/images/chat-hover.png);
 }
 
@@ -166,7 +166,7 @@ aside {
 	background-image: url(../../../../assets/images/friends.png);
 }
 
-.main-nav a.friends[data-state="current"] {
+.main-nav a.friends.is-active {
 	background-image: url(../../../../assets/images/friends-hover.png);
 }
 
@@ -178,7 +178,7 @@ aside {
 	background-image: url(../../../../assets/images/photos.png);
 }
 
-.main-nav a.photos[data-state="current"] {
+.main-nav a.photos.is-active {
 	background-image: url(../../../../assets/images/photos-hover.png);
 }
 
@@ -186,7 +186,7 @@ aside {
 	background-image: url(../../../../assets/images/photos-hover.png);
 }
 
-.main-nav a.communities[data-state="current"] {
+.main-nav a.communities.is-active {
 	background-image: url(../../../../assets/images/communities-hover.png);
 }
 
@@ -202,7 +202,7 @@ aside {
 	background-image: url(../../../../assets/images/music.png);
 }
 
-.main-nav a.music[data-state="current"] {
+.main-nav a.music.is-active {
 	background-image: url(../../../../assets/images/music-hover.png);
 }
 
@@ -214,7 +214,7 @@ aside {
 	background-image: url(../../../../assets/images/video.png);
 }
 
-.main-nav a.video[data-state="current"] {
+.main-nav a.video.is-active {
 	background-image: url(../../../../assets/images/video-hover.png);
 }
 
@@ -226,7 +226,7 @@ aside {
 	background-image: url(../../../../assets/images/bookmarks.png);
 }
 
-.main-nav a.saved[data-state="current"] {
+.main-nav a.saved.is-active {
 	background-image: url(../../../../assets/images/bookmarks-hover.png);
 }
 
@@ -238,7 +238,7 @@ aside {
 	background-image: url(../../../../assets/images/compass.png);
 }
 
-.main-nav a.explore[data-state="current"] {
+.main-nav a.explore.is-active {
 	background-image: url(../../../../assets/images/compass-hover.png);
 }
 
@@ -250,7 +250,7 @@ aside {
 	background-image: url(../../../../assets/images/bell.png);
 }
 
-.main-nav a.notifications[data-state="current"] {
+.main-nav a.notifications.is-active {
 	background-image: url(../../../../assets/images/bell-hover.png);
 }
 

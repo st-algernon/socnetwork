@@ -270,3 +270,17 @@ main .user-wall {
 	width: 350px;
 	background-image: url(../../assets/images/search-hover.png);
 }
+
+.right-col {
+	position: fixed;
+	background: #fff;
+	border-radius: 15px 0px 0px 15px;
+	width: 25.7%;
+	min-width: 270px;
+	height: 100%;
+	padding: 10px 10px 10px 30px;
+	right: 0px;
+	top: 64px;
+	z-index: 9;
+	box-sizing: border-box;
+}

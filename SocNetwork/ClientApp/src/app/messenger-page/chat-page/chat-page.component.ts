@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, ModuleWithComponentFactories, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, HostListener, ModuleWithComponentFactories, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
@@ -8,18 +8,17 @@ import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
 import { MessengerService } from 'src/app/shared/services/messenger.service';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { formatDate } from '@angular/common';
+import { clear } from 'console';
 
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.css']
 })
-export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class ChatPageComponent implements OnInit, OnDestroy {
   me: Profile;
-  other: Profile;
   form: FormGroup;
   chat: Chat;
-  isFocused: boolean = false;
 
   @ViewChild('messageList', { static: true }) messageList: ElementRef;
 
@@ -47,23 +46,23 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
       })
     ).subscribe((response: Chat) => { 
       this.chat = response;
-      this.other = this.chat.membersDTO.find(m => m.id != this.me.id);
+      this.chat = this.messengerService.includeWithUser(this.chat, this.me);
       this.chat.messagesDTO.reverse();
+      this.clearMessageList();
 
       for (let m of this.chat.messagesDTO) {
-        m.author = this.includeAuthor(m.authorId);
-        this.hideSameAuthors(m);
         this.renderMessageTemplate(m);
+        this.scrollToBottom();
       }
+      console.log(this.chat.id);
     });
 
     this.messengerHub.message$.subscribe((messageDTO: Message) => {
 
       if (messageDTO.conversationId === this.chat.id) {
-        messageDTO.author = this.includeAuthor(messageDTO.authorId);
-        this.hideSameAuthors(messageDTO);
+        messageDTO = this.messengerService.includeAuthor(this.chat, messageDTO);
         this.renderMessageTemplate(messageDTO);
-        this.setFocusOnLast();
+        this.scrollToBottom();
       }
     });
     const now = new Date().toJSON();
@@ -73,16 +72,15 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngOnDestroy() {
-
-  }
-
-  ngAfterViewChecked() {
-    // if (this.isFocused === false && this.chat) {
-    //   this.setFocusOnLast();
-    // }
+    console.log('destroy');
   }
 
   submit() {
+
+    if (!this.form.get('messageText')) {
+      return
+    }
+
     const message: Message = {
       authorId: this.me.id,
       conversationId: this.chat.id,
@@ -92,22 +90,9 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
       messageStatus: MessageStatus.IsInitial,
       messageState: MessageState.IsSent
     };
-    
+
     this.messengerHub.sendMessage(message);
-  }
-
-  private includeAuthor(authorId: string) {
-    let author = this.chat.membersDTO.find(m => m.id == authorId);
-    author.currentAvatarPath = author.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path;
-    author.currentCoverPath = author.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path;
-
-    return author;
-  }
-
-  private setFocusOnLast() {
-    const lastMessage = (this.messageList.nativeElement as HTMLElement).lastElementChild;
-    (lastMessage as HTMLElement).focus();
-    this.isFocused = true;
+    this.form.reset();
   }
 
   private hideSameAuthors(messageDTO: Message) {
@@ -121,6 +106,9 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   private renderMessageTemplate(messageDTO: Message) {
+    
+    this.hideSameAuthors(messageDTO);
+
     const messageItem = this.renderer.createElement('div');
     const messageItemClasses = messageDTO.authorId === this.me.id ? ['fd-rr'] : ['fd-r'];
     (messageItem as HTMLElement).classList.add('message-item', 'flex', 'ai-fe', ...messageItemClasses);
@@ -131,8 +119,9 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
     (authorId as HTMLElement).classList.add('author-id', 'hidden');
     const authorIdText = this.renderer.createText(messageDTO.authorId);
     const avatarBox = this.renderer.createElement('div');
-    (avatarBox as HTMLElement).classList.add('avatar-box', 'square-32')
+    (avatarBox as HTMLElement).classList.add('avatar-box', 'square-32');
     const avatarBoxImg = this.renderer.createElement('img');
+    (avatarBoxImg as HTMLImageElement).classList.add('square-32');
     (avatarBoxImg as HTMLImageElement).src = messageDTO.author?.currentAvatarPath;
 
     const messageBody = this.renderer.createElement('div');
@@ -157,10 +146,18 @@ export class ChatPageComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.renderer.appendChild(messageBody, messageText);
     this.renderer.appendChild(messageBody, messageFooter);
     this.renderer.appendChild(messageItem, messageBody);
-
     this.renderer.appendChild(this.messageList.nativeElement, messageItem);
+  }
 
-    // const messageItemRoot = this.renderer.selectRootElement(messageItem);
-    // (messageItemRoot as HTMLElement).focus();
+  private scrollToBottom() {
+    window.scrollTo({ 
+      left: 0, 
+      top: this.messageList.nativeElement.offsetHeight,
+      behavior: 'smooth'
+    });
+  }
+
+  private clearMessageList() {
+    (this.messageList.nativeElement as HTMLElement).innerHTML = "";
   }
 }

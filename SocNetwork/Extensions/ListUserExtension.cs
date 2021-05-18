@@ -9,22 +9,22 @@ namespace SocNetwork.Extensions
 {
     public static class ListUserExtension
     {
-        public static bool ListEqualsExt(this List<User> userList, List<User> otherList)
-        {
-            if (userList == otherList)
-                return true;
+        //public static bool ListEqualsExt(this List<User> userList, List<User> otherList)
+        //{
+        //    if (userList == otherList)
+        //        return true;
 
-            if (userList.Count != otherList.Count)
-                return false;
+        //    if (userList.Count != otherList.Count)
+        //        return false;
 
-            bool isEquals = true;
+        //    bool isEquals = true;
 
-            for (int i = 0; i < userList.Count; i++)
-            {
-                isEquals = userList[i].EqualsExt(otherList[i]);
-            }
+        //    for (int i = 0; i < userList.Count; i++)
+        //    {
+        //        isEquals = userList[i].EqualsExt(otherList[i]);
+        //    }
 
-            return isEquals;
-        }
+        //    return isEquals;
+        //}
     }
 }

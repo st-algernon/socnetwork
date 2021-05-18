@@ -3,8 +3,9 @@ import { RouterModule, Routes } from "@angular/router";
 import { MessengerPageComponent } from "./messenger-page.component";
 
 const routes: Routes = [
-    { path: '', component: MessengerPageComponent },
-    { path: 'chat/:id', loadChildren: () => import('./chat-page/chat.module').then(m => m.ChatModule) }
+    { path: '', component: MessengerPageComponent, children: [
+        { path: 'chat/:id', loadChildren: () => import('./chat-page/chat.module').then(m => m.ChatModule) }
+    ]}
 ];
 
 @NgModule({
