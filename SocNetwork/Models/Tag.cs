@@ -12,5 +12,9 @@ namespace SocNetwork.Models
         [Required]
         public string Content { get; set; }
         public List<Post> Posts { get; set; }
+        public Tag()
+        {
+            Posts = new List<Post>();
+        }
     }
 }

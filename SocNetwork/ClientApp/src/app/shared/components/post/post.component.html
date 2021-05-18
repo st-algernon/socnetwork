@@ -1,7 +1,11 @@
 <section [ngClass]="{'without-top-b-radius':isOnWall}" class="post-wrap flex fd-c">
     <div class="post-header flex fd-r ai-c">
         <div class="avatar-box square-48">
-            <img src="../../../../assets/images/empty_photo.jpg" alt="">
+            <img 
+                src="../../../../assets/images/empty_photo.jpg"
+                class="square-48"
+                alt=""
+            >
         </div>
         <div class="flex fd-c">
             <span class="source-name">Rick and Morty</span>
@@ -35,9 +39,13 @@
         <div class="post-comments">
             <div class="best-comment">
                 <div class="comment-header flex fd-r ai-c">
-                    <span class="avatar-box square-40">
-                        <img src="../../../../assets/images/empty_photo.jpg" alt="">
-                    </span>
+                    <div class="avatar-box square-48">
+                        <img 
+                            src="../../../../assets/images/empty_photo.jpg"
+                            class="square-48"
+                            alt=""
+                        >
+                    </div>
                     <div class="flex fd-c">
                         <span class="source-name">Mr. Algernon</span>
                         <span class="nick-name">@AwakE</span>
@@ -63,9 +71,13 @@
             </div>
             <div class="show-more-btn">show more comments</div>
             <div class="write-comment flex fd-r">
-                <span class="avatar-box square-40">
-                    <img src="../../../../assets/images/empty_photo.jpg" alt="photo" >
-                </span>
+                <div class="avatar-box square-48">
+                    <img 
+                        src="../../../../assets/images/empty_photo.jpg"
+                        class="square-48"
+                        alt=""
+                    >
+                </div>
                 <form action="" method="post" class="flex fd-r ai-c">
                     <div class="textarea-attach-wrap flex fd-r ai-c">
                         <textarea name="comment-field" placeholder="Leave a comment..." data-submit-btn="blink"></textarea>

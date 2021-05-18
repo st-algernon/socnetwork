@@ -1,6 +1,11 @@
 <section class="make-post-box flex fd-r jc-sb ai-fs">
     <span class="avatar-box square-48">
-        <img *ngIf="me" [src]="me.pathToCurrentAvatar" alt="photo" >
+        <img
+            *ngIf="me" 
+            [src]="me.currentAvatarPath" 
+            class="square-48"
+            alt="photo"
+        >
     </span>
     <form action="user/create-new-post" method="post" id="new-post-form" enctype="multipart/form-data">
         <textarea name="post-text" placeholder="What's new?" data-action="switch-submit-btn"></textarea>

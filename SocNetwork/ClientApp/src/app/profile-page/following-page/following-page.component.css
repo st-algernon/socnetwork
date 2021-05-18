@@ -6,9 +6,9 @@
 
 main {
     width: 47%;
-	min-height: calc(100% - 54px);
+	min-height: calc(100% - 64px);
 	position: absolute;
-	top: 54px;
+	top: 64px;
 	box-sizing: border-box;
 	background: #fff;
 	border-radius: 15px 15px 0px 0px;

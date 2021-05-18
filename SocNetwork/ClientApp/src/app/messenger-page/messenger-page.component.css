@@ -1,0 +1,118 @@
+:host {
+    width: 100%;
+}
+
+main {
+	position: absolute;
+	top: 64px;
+	right: 0px;
+	width: 73.5%;
+	min-height: calc(100% - 64px);
+	display: flex;
+	justify-content: flex-start;
+}
+
+.chat {
+	position: absolute;
+	width: 64%;
+	height: 100%;
+	border-radius: 15px 15px 0px 0px;
+	background-color: #fff;
+	z-index: 0;
+}
+
+.chat .select-chat-label {
+	padding: 8px 12px;
+	background-color: #f0f4f7;
+	color: #1da1f2;
+	border-radius: 20px;
+}
+
+.messenger {
+	position: fixed;
+	right: 0px;
+	width: 25.7%;
+	min-width: 270px;
+	height: 100%;
+	background: #fff;
+	border-radius: 15px 0px 0px 15px;
+	padding: 10px;
+	padding-left: 20px;
+	z-index: 9;
+	box-sizing: border-box;
+}
+
+.messenger .messenger-header {
+	margin-bottom: 10px;
+}
+
+.messenger .messenger-header .search-box {
+	width: 100%;
+}
+
+.messenger .messenger-header .search-box input {
+	background: url(../../assets/images/search.png) 10px center no-repeat;
+	border-radius: 20px;
+	padding: 10px 30px 10px 40px;
+	border: none;
+	background-size: 22px 22px;
+	width: 100%;
+	font-size: 15px;
+	outline: none;
+}
+
+.messenger .messenger-header .search-box input:focus {
+	background: url(../../assets/images/search-hover.png) 10px center no-repeat;
+	background-size: 22px 22px;
+}
+
+.messenger .messenger-header .new-chat-btn {
+	background-image: url(../../assets/images/plus.png);	
+}
+
+.messenger .messenger-header .new-chat-btn:hover {
+	background-image: url(../../assets/images/plus-hover.png);
+}
+
+.messenger .chat-item {
+	padding: 7px 0px;
+	border-bottom: 1px solid #F8F8F8;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.messenger .chat-item:hover {
+	background-color: #f5f8fa;
+}
+
+.messenger .chat-item:last-of-type {
+	border-bottom: none;
+}
+
+.messenger .chat-item.is-active {
+	background-color: hsl(204, 70%, 90%)
+}
+
+.messenger .chat-item > .avatar-box {
+	margin: 0px 12px;
+}
+
+.messenger .chat-item .message-wrap {
+	flex-grow: 1;
+}
+
+.messenger .chat-item .message-wrap .source-name {
+	font-weight: bold;
+	color: #333;
+	margin-bottom: 5px;
+}
+
+.messenger .chat-item .message-wrap .last-message > .avatar-box {
+	margin-right: 8px;
+}
+
+.messenger .chat-item .message-wrap .last-message > .message-text {
+	flex-grow: 1;
+	color: #555;
+	font-size: 14px;
+}

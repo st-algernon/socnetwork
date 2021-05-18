@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SocNetwork.DTO.Request
+namespace SocNetwork.DTO
 {
-    public class RelationshipRequest
+    public class UserDTO
     {
+        public ProfileDTO Profile;
+        // ...
     }
 }

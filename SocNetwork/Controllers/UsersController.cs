@@ -25,7 +25,6 @@ namespace SocNetwork.Controllers
         {
             db = context;
         }
-
         // // GET: api/<UserController>
         // [HttpGet("name/{name}")]
         // public async Task<IActionResult> Get(string name)
@@ -122,14 +121,10 @@ namespace SocNetwork.Controllers
                 .Select(u => new { u.FromUser })
                 .ToListAsync();
 
-            var followersDTO = new List<ProfileDTO>();
             var usersHelper = new UsersHelper(db);
+            var followersDTO = new List<ProfileDTO>();
 
-            followers.ForEach(f => 
-            {
-                var fDTO = usersHelper.GetProfileDTO(f.FromUser);
-                followersDTO.Add(fDTO);
-            });
+            followers.ForEach(f => followersDTO.Add(usersHelper.GetProfileDTO(f.FromUser)));
 
             return Ok(new ProfilesResponse
             { 
@@ -160,13 +155,10 @@ namespace SocNetwork.Controllers
                 .Select(ur => new { ur.ToUser })
                 .ToListAsync();
 
-            var followingDTO = new List<ProfileDTO>();
             var usersHelper = new UsersHelper(db);
+            var followingDTO = new List<ProfileDTO>();
 
-            following.ForEach(f => {
-                var fDTO = usersHelper.GetProfileDTO(f.ToUser);
-                followingDTO.Add(fDTO);
-            });
+            following.ForEach(f => followingDTO.Add(usersHelper.GetProfileDTO(f.ToUser)));
 
             return Ok(new ProfilesResponse
             {
@@ -187,13 +179,10 @@ namespace SocNetwork.Controllers
                 .Include(u => u.ToUser)
                 .ToListAsync();
 
-            var blockedDTO = new List<ProfileDTO>();
             var usersHelper = new UsersHelper(db);
+            var blockedDTO = new List<ProfileDTO>();
 
-            blocked.ForEach(f => {
-                var fDTO = usersHelper.GetProfileDTO(f.ToUser);
-                blockedDTO.Add(fDTO);
-            });
+            blocked.ForEach(f => blockedDTO.Add(usersHelper.GetProfileDTO(f.ToUser)));
 
             return Ok(new ProfilesResponse
             {
@@ -242,7 +231,7 @@ namespace SocNetwork.Controllers
 
             var relationshipsHelper = new RelationshipsHelper(db);
 
-            var ur = relationshipsHelper.CreateOrExist(currentUser, toUser);
+            var ur = relationshipsHelper.CreateOrExisting(currentUser, toUser);
             relationshipsHelper.Update(ur, UserRelationshipType.Followed);
 
             return Ok();
@@ -262,7 +251,7 @@ namespace SocNetwork.Controllers
 
             var relationshipHelper = new RelationshipsHelper(db);
 
-            var ur = relationshipHelper.CreateOrExist(currentUser, toUser);
+            var ur = relationshipHelper.CreateOrExisting(currentUser, toUser);
             relationshipHelper.Update(ur, UserRelationshipType.Blocked);
         
             return Ok();

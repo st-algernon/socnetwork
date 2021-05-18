@@ -9,6 +9,7 @@ const routes : Routes = [
     { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path: '', component: UserLayoutComponent, children: [
         { path: 'news', loadChildren: () => import('./news-page/news.module').then(m => m.NewsModule), canActivate: [AuthGuard] },
+        { path: 'messenger', loadChildren: () => import('./messenger-page/messenger.module').then(m => m.MessengerModule), canActivate: [AuthGuard] }
         { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] }
     ]},
     { path: '**', component: NotFoundPageComponent }

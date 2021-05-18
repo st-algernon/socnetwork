@@ -23,13 +23,16 @@ namespace SocNetwork.Extensions
                 {
                     var p = destProps.First(x => x.Name == sourceProp.Name);
 
-                    if(p.CanWrite) {
+                    if (p.CanWrite) {
 
                         object parsed = null;
 
                         if (p.PropertyType == typeof(DateTime))
                         {
-                            parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                            if (sourceProp.PropertyType != typeof(DateTime))
+                            {
+                                parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                            }
                         }
 
                         if (p.PropertyType.BaseType == typeof(Enum))

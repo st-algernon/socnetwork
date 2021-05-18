@@ -36,3 +36,15 @@ export enum MediaFor {
     Avatar,
     Cover
 }
+
+export enum MessageState
+{
+    IsSent,
+    IsRead
+}
+
+export enum MessageStatus {
+    IsInitial,
+    IsEdited,
+    IsDeleted
+}

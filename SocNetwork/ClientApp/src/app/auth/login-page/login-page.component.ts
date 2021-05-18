@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccountLoginRequest } from '../../shared/interfaces';
@@ -9,7 +9,7 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
 })
-export class LoginPageComponent implements OnInit {
+export class LoginPageComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   submitted = false;
@@ -53,5 +53,9 @@ export class LoginPageComponent implements OnInit {
     }, () => {
       this.submitted = false;
     });
+  }
+
+  ngOnDestroy() {
+    console.log('destroy');
   }
 }

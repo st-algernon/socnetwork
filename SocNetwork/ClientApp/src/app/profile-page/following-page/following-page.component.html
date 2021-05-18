@@ -17,7 +17,7 @@
             <div *cdkVirtualFor="let user of following" class="user flex fd-c">
                 <div class="flex fd-r jc-sb ai-c">
                     <div class="avatar-box square-40">
-                        <img [src]="user.pathToCurrentAvatar" alt="avatar">
+                        <img [src]="user.currentAvatarPath" alt="avatar">
                     </div>
                     <div class="flex fd-c fg-1">
                         <div class="source-name">{{ user.name }}</div>

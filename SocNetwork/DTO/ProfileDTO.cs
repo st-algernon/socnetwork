@@ -21,12 +21,11 @@ namespace SocNetwork.DTO
         public string Location { get; set; }
         public Gender Gender { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
-        public List<ProfileMediaDTO> Media { get; set; }
+        public List<ProfileMediaDTO> MediaDTO { get; set; }
 
         public ProfileDTO()
         {
-            Media = new List<ProfileMediaDTO>();
+            MediaDTO = new List<ProfileMediaDTO>();
         }
-
     }
 }

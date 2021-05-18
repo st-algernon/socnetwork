@@ -1,0 +1,216 @@
+:host {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+main {
+	position: absolute;
+	top: 64px;
+	width: 64%;
+	min-height: calc(100% - 64px);
+	box-sizing: border-box;
+	border-radius: 15px 15px 0px 0px;
+	z-index: 1;
+}
+
+.main-header {
+	position: fixed;
+	top: 54px;
+	width: 47.1%;
+	border-bottom: 1px solid #eee;
+	z-index: 4;
+	background-color: rgb(230, 236, 240);
+}
+
+.main-header .header-content {
+	margin-top: 10px;
+	min-height: 40px;
+	padding: 5px 0px;
+	border-radius: 15px 15px 0px 0px;
+	background-color: #fff;
+}
+
+.header-content .back-btn {
+	padding: 5px 20px;
+	color: #7f7f7f;
+	font-size: 16px;
+	background: url(../../../assets/images/back.png) left center no-repeat;
+	background-size: 15px;
+	cursor: pointer;
+}
+
+.header-content .back-btn:hover {
+	color: #1da1f2;
+	background: url(../../../assets/images/back-hover.png) left center no-repeat;	
+	background-size: 15px;
+}
+
+.header-content .source-name {
+	font-weight: bold;
+	color: #333;
+}
+
+.header-content .last-visited {
+	font-size: 14px;
+	color: #555;
+}
+
+.header-content .search-message-form input {
+	background-image: url(../../../assets/images/search.png);
+	background-position: 5px center;
+	background-repeat: no-repeat;
+	background-size: 22px 22px;
+    background-color: transparent;
+	border-radius: 20px;
+	padding: 5px 8px 5px 32px;
+	border: none;
+	outline: none;
+	width: 32px;
+	font-size: 15px;
+	transition: width ease-out 0.4s;
+	cursor: pointer;
+}
+
+.header-content .search-message-form input:hover {
+	background-image: url(../../../assets/images/search-hover.png);
+}
+
+.header-content .search-message-form input:focus {
+	width: 300px;
+	background-image: url(../../../assets/images/search-hover.png);
+}
+
+.messages-box {
+	padding: 0px 2%;
+	min-height: 100%;
+	position: absolute;
+	width: 100%;
+	box-sizing: border-box;
+	background: #fff;
+	padding-bottom: 63px;
+}
+
+.messages-box .user-message {
+	max-width: 70%;
+	position: absolute;
+    right: 0px;
+    bottom: 60px;
+}
+
+.messages-box .another-user-message {
+	max-width: 70%;
+	position: absolute;
+	left: 0px;
+    bottom: 10px;
+}
+
+.messages-box .message-text {
+	display: inline-block;
+	padding: 10px 15px;
+	border-radius: 15px;
+}
+
+.messages-box .user-message .message-text {
+	margin: 4px 6px 0px 0px;
+	color: #fff;
+	background-color: #1da1f2;
+}
+
+.messages-box .another-user-message .message-text {
+	margin: 4px 0px 0px 6px;
+	color: #333;
+	background-color: #eee;
+}
+
+.message-item {
+	padding-top: 2px;
+	z-index: 2;
+}
+
+.message-item:focus {
+	outline: none;
+}
+
+.message-author .avatar-box {
+	background: #eee;
+}
+
+.message-item .message-body {
+	max-width: 70%;
+	border-radius: 15px;
+	color: #fff;
+	padding: 10px;
+	padding-bottom: 0px;
+	position: relative;
+}
+
+.message-item .other.message-body {
+	background-color: #999;
+	margin-left: 5px;
+}
+
+.message-item .me.message-body {
+	background-color: #36a7ee;
+	margin-right: 5px;
+}
+
+.message-footer .message-date {
+	font-size: 12px;
+	color: #d9ecf8;
+}
+
+.input-message {
+	position: fixed;
+	bottom: 0px;
+	left: 27%;
+	right: 27%;
+	background-color: #fff;
+	border-top: 1px solid #eee;
+	padding: 10px 0px;
+	z-index: 3;
+}
+
+.input-message .textarea-attach-wrap {
+	width: 100%;
+	border-radius: 15px;
+	border: 1px solid #eee;
+	margin: 0px 10px;
+}
+
+.input-message textarea {
+	padding: 4px 10px;
+	font-size: 17px;
+	height: 20px;
+}
+
+.input-message .submit-btn {
+	background: url(../../../assets/images/send.png) no-repeat;
+	background-size: contain;
+	cursor: pointer;
+}
+
+.input-message .submit-btn-disable {
+	background: url(../../../assets/images/send-disable.png) no-repeat;
+	background-size: contain;
+}
+
+.attach {
+	list-style: none;
+}
+
+.attach .add-picture-btn {
+	background-image: url(../../../assets/images/picture.png);
+}
+
+.attach .add-music-btn {
+	background-image: url(../../../assets/images/add-music.png);
+}
+
+.attach .add-video-btn {
+	background-image: url(../../../assets/images/add-video.png);
+}
+
+.attach .add-emoji-btn {
+	background-image: url(../../../assets/images/emoji.png);
+}

@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MediaFor, UserRelationshipType } from '../shared/enums';
 import { Profile, UserRelationship } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
+import { MessengerHub } from '../shared/hubs/messenger.hub';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
@@ -30,7 +31,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
 
   constructor(
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private router: Router,
+    private usersService: UsersService,
+    private messengerHub: MessengerHub
     ) { }
 
   ngOnInit(): void {
@@ -57,13 +60,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
         this.isUnFollowed = true;
       }
     });
+
+    // this.messengerHub.startConnection();
+    // this.messengerHub.addReceivedMessageListener();
   }
 
   ngOnDestroy(): void {
-    this.userSub.unsubscribe();
-    this.meSub.unsubscribe();
-    this.urSub.unsubscribe();
-    this.followSub.unsubscribe();
+    this.userSub?.unsubscribe();
+    this.meSub?.unsubscribe();
+    this.urSub?.unsubscribe();
+    this.followSub?.unsubscribe();
   }
 
   ngAfterContentChecked(): void {
@@ -71,6 +77,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     if (this.me?.id == this.user?.id) {
       this.isMe = true;
     }
+  }
+
+  openChat() {
+    this.router.navigate(['messenger', 'chat', this.user.id]);
   }
 
   follow() {
