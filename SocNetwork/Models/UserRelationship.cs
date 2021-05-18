@@ -8,8 +8,8 @@ namespace SocNetwork.Models
 {
     public enum UserRelationshipType
     {
-        Followed,
         UnFollowed,
+        Followed,
         Blocked
     }
 

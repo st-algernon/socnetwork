@@ -10,22 +10,22 @@ namespace SocNetwork.Models
 {
     public enum Gender
     {
+        Unspecified,
         Male,
         Female,
         NonBinary,
         Transgender,
-        Intersex,
-        Unspecified
+        Intersex
     }
 
     public enum MaritalStatus
     {
+        Unspecified,
         Engaged,
         InARelationship,
         InSingle,
         ItsComplicated,
-        Married,
-        Unspecified
+        Married
     }
 
     [Table("Users")]
@@ -41,9 +41,15 @@ namespace SocNetwork.Models
         public string Location { get; set; }
         public Gender Gender { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
-        public string AvatarPath { get; set; }
-        public string CoverPath { get; set; }
         public List<Conversation> Conversations { get; set; }
         public List<UserPost> UserPosts { get; set; }
+        public List<ProfileMedia> ProfileMedia { get; set; }
+
+        public User()
+        {
+            Conversations = new List<Conversation>();
+            UserPosts = new List<UserPost>();
+            ProfileMedia = new List<ProfileMedia>();
+        }
     }
 }

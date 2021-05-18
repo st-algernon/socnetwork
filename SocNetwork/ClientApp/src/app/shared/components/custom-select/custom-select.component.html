@@ -1,0 +1,16 @@
+    <div class="dropdown" (click)="toggleFor(dropdown_menu)">
+        <input
+          type="text"
+          [attr.disabled]="true"
+          [value]="selected.value"
+        />
+        <label for="">{{ label }}</label>
+        <div class="mark down"></div>
+      </div>
+      <div
+        #dropdown_menu
+        class="dropdown-menu collapse"
+        (click)="choose($event)"
+      >
+        <div *ngFor="let option of options" [attr.data-key]="option.key">{{ option.value }}</div>
+      </div>
