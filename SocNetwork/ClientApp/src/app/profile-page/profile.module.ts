@@ -9,12 +9,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UsersService } from "../shared/services/users.service";
 import { CustomSelectComponent } from "../shared/components/custom-select/custom-select.component";
 import { FollowingFollowersPageComponent } from './following-followers-page/following-followers-page.component';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
     declarations: [
         ProfilePageComponent,
-        PostFormComponent,
-        PostComponent,
         EditProfilePopupComponent,
         CustomSelectComponent,
         FollowingFollowersPageComponent,
@@ -23,7 +22,8 @@ import { FollowingFollowersPageComponent } from './following-followers-page/foll
         ProfileRoutingModule,
         CommonModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        SharedModule
     ],
     exports: [],
     providers: [

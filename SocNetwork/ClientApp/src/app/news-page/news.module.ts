@@ -4,16 +4,16 @@ import { PostComponent } from "../shared/components/post/post.component";
 import { CommonModule } from "@angular/common";
 import { NewsPageComponent } from "./news-page.component";
 import { NewsRoutingModule } from "./news-routing.module";
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
     declarations: [
-        NewsPageComponent,
-        PostFormComponent,
-        PostComponent,
+        NewsPageComponent
     ],
     imports: [
         NewsRoutingModule,
         CommonModule,
+        SharedModule
     ],
     exports: [],
     providers: []
