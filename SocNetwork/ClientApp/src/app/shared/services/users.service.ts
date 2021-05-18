@@ -4,7 +4,7 @@ import { forkJoin, Observable, ReplaySubject } from "rxjs";
 import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { EditProfileInfoRequest, Media, Profile, ProfileMedia, ProfileMediaResponse, ProfileResponse, UserRelationship, UsersPageParams } from "../interfaces";
+import { EditProfileInfoRequest, Media, Profile, ProfileMedia, ProfileMediaResponse, ProfileResponse, ProfilesResponse, UserRelationship, UsersPageParams } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
@@ -50,10 +50,18 @@ export class UsersService {
         return this.http.get(`${environment.apiUrl}/users/${username}/followers`)
     }
 
-    getFollowing(username: string, usersPageParams?: UsersPageParams) {
-        const params = new HttpParams().set('Number', usersPageParams?.number.toString()).set('Size', usersPageParams?.size.toString());
+    getFollowing(username: string, usersPageParams?: UsersPageParams): Observable<Profile[]> {
+        const params = new HttpParams()
+        .set('Number', usersPageParams?.number.toString())
+        .set('Size', usersPageParams?.size.toString());
 
-        return this.http.get(`${environment.apiUrl}/users/${username}/following`, { params })
+        return this.http.get<ProfilesResponse>(`${environment.apiUrl}/users/${username}/following`, { params })
+        .pipe(
+            map((response: ProfilesResponse) => response.profiles ),
+            tap((profiles: Profile[]) => {
+                return profiles.map(u => this.completeProfile(u));
+            })
+        )
     }
 
     getProfile(username: string): Observable<Profile> {

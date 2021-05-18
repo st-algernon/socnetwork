@@ -6,9 +6,9 @@
 
 main {
     width: 47%;
-	min-height: calc(100% - 64px);
+	min-height: calc(100% - 54px);
 	position: absolute;
-	top: 64px;
+	top: 54px;
 	box-sizing: border-box;
 	background: #fff;
 	border-radius: 15px 15px 0px 0px;
@@ -51,6 +51,7 @@ main {
 	padding: 10px;
 	outline: none;
 	font-size: 15px;
+	cursor: pointer;
 }
 
 .users-header button[data-state="active"] {
@@ -100,4 +101,18 @@ main {
 	overflow: hidden;
 	color: #333;
 	padding: 5px 5px 0px 52px;
+}
+
+.right-col {
+	position: fixed;
+	background: #fff;
+	border-top-left-radius: 15px;
+	width: 25.7%;
+	min-width: 270px;
+	height: 100%;
+	padding: 20px 15px 10px 30px;
+	right: 0px;
+	top: 64px;
+	z-index: 9;
+	box-sizing: border-box;
 }

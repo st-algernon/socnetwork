@@ -30,6 +30,7 @@ export class FollowersPageComponent implements OnInit {
       })
     ).subscribe((response: ProfilesResponse) => { 
       this.followers = response.profiles;
+      console.log(this.followers);
     });
   }
 

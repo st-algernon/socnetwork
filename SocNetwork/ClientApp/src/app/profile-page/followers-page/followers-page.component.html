@@ -1,7 +1,6 @@
 <main>
     <section class="users-header">
         <div class="header-content flex fd-c ai-s jc-sb">
-            <button class="back-btn">Back</button>
             <div class="flex fd-c ai-c">
                 <div class="source-name">st. Algernon</div>
                 <div class="nick-name">@st.algernon</div>
@@ -13,31 +12,34 @@
         </div>
     </section>
     <section class="user-list">
-        <div class="user flex fd-c">
-            <div class="flex fd-r jc-sb ai-c">
-                <div class="avatar-box square-40">
-                    <img src="../../../assets/images/empty_photo.jpg" alt="avatar">
+            <div *ngFor="let user of followers" class="user flex fd-c">
+                <div class="flex fd-r jc-sb ai-c">
+                    <div class="avatar-box square-40">
+                        <img [src]="user.currentAvatarPath" alt="avatar">
+                    </div>
+                    <div class="flex fd-c fg-1">
+                        <div class="source-name">{{ user.name }}</div>
+                        <div class="nick-name">@{{ user.username }}</div>
+                    </div>
+                    <button class="btn btn-outlined">Follow</button>
                 </div>
-                <div class="flex fd-c fg-1">
-                    <div class="source-name">st. Algernon</div>
-                    <div class="nick-name">@st.algernon</div>
-                </div>
-                <button class="btn-outlined">Follow</button>
+                <div class="bio">{{ user.bio }}</div>
             </div>
-            <div class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit?</div>
-        </div>
-        <div class="user flex fd-c">
-            <div class="flex fd-r jc-sb ai-c">
-                <div class="avatar-box square-40">
-                    <img src="../../../assets/images/empty_photo.jpg" alt="avatar">
-                </div>
-                <div class="flex fd-c fg-1">
-                    <div class="source-name">st. Algernon</div>
-                    <div class="nick-name">@st.algernon</div>
-                </div>
-                <button class="btn btn-outlined">Follow</button>
+        <ng-template #loading>
+            <div id="floatingCirclesG">
+                <div class="f_circleG" id="frotateG_01"></div>
+                <div class="f_circleG" id="frotateG_02"></div>
+                <div class="f_circleG" id="frotateG_03"></div>
+                <div class="f_circleG" id="frotateG_04"></div>
+                <div class="f_circleG" id="frotateG_05"></div>
+                <div class="f_circleG" id="frotateG_06"></div>
+                <div class="f_circleG" id="frotateG_07"></div>
+                <div class="f_circleG" id="frotateG_08"></div>
             </div>
-            <div class="bio">Lorem ipsum dolor sit amet, consectetur adipisicing elit?</div>
-        </div>
+        </ng-template>
     </section>
 </main>
+<div class="right-col">
+    <app-trends></app-trends>
+    <app-follow-offers></app-follow-offers>
+</div>

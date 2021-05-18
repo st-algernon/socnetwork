@@ -28,29 +28,13 @@ main {
 	background: #fff;
 }
 
-.users-header .back-btn {
-	position: absolute;
-	left: 10px;
-	top: 18px;
-	padding: 5px 20px;
-	color: #7f7f7f;
-	font-size: 16px;
-	background: url(../../../assets/images/back.png) left center no-repeat;
-	background-size: 15px;
-}
-
-.users-header .back-btn:hover {
-	color: #1da1f2;
-	background: url(../../../assets/images/back-hover.png) left center no-repeat;	
-	background-size: 15px;
-}
-
 .users-header .user-switches button {
 	box-sizing: border-box;
 	width: 50%;
 	padding: 10px;
 	outline: none;
 	font-size: 15px;
+	cursor: pointer;
 }
 
 .users-header button[data-state="active"] {
@@ -76,6 +60,10 @@ main {
     margin-top: 115px;
 }
 
+.users-viewport {
+	display: contents;
+}
+
 .user-list .user {
     padding: 10px 0px 5px 0px;
 	margin: 0px 15px;
@@ -96,4 +84,18 @@ main {
 	overflow: hidden;
 	color: #333;
 	padding: 5px 5px 0px 52px;
+}
+
+.right-col {
+	position: fixed;
+	background: #fff;
+	border-top-left-radius: 15px;
+	width: 25.7%;
+	min-width: 270px;
+	height: 100%;
+	padding: 20px 15px 10px 30px;
+	right: 0px;
+	top: 64px;
+	z-index: 9;
+	box-sizing: border-box;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -10,12 +10,11 @@ import { UsersService } from 'src/app/shared/services/users.service';
   templateUrl: './following-page.component.html',
   styleUrls: ['./following-page.component.css']
 })
-export class FollowingPageComponent implements OnInit {
+export class FollowingPageComponent implements OnInit, OnDestroy {
 
   username: string;
   following: Profile[];
-
-  followingSub: Subscription;
+  subs: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -23,18 +22,24 @@ export class FollowingPageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.followingSub = this.route.params.pipe(
-      switchMap((params: Params) => {
-        this.username = params['username'];
-        return this.usersService.getFollowing(params['username'], { number: 1, size: 15});
+    this.subs.push( 
+
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          this.username = params['username'];
+          return this.usersService.getFollowing(params['username'], { number: 1, size: 15});
+        })
+      ).subscribe((profiles: Profile[]) => { 
+        console.log(profiles);
+        this.following = profiles;
       })
-    ).subscribe((response: ProfilesResponse) => { 
-      console.log(response);
-      this.following = response.profiles;
-    });
+
+    );
   }
-  
-  indexChanged($event: any) {
-    console.log($event);
+
+  ngOnDestroy() {
+    this.subs.forEach(s => {
+      s.unsubscribe();
+    });
   }
 }

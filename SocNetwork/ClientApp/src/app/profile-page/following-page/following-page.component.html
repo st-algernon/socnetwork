@@ -1,7 +1,6 @@
 <main>
     <section class="users-header">
         <div class="header-content flex fd-c ai-s jc-sb">
-            <button class="back-btn">Back</button>
             <div class="flex fd-c ai-c">
                 <div class="source-name">st. Algernon</div>
                 <div class="nick-name">@st.algernon</div>
@@ -13,21 +12,23 @@
         </div>
     </section>
     <section class="user-list">
-        <cdk-virtual-scroll-viewport (scrolledIndexChange)="indexChanged($event)" *ngIf="following; else loading" itemSize="10" class="users-viewport">
-            <div *cdkVirtualFor="let user of following" class="user flex fd-c">
+            <div *ngFor="let user of following" class="user flex fd-c">
                 <div class="flex fd-r jc-sb ai-c">
                     <div class="avatar-box square-40">
-                        <img [src]="user.currentAvatarPath" alt="avatar">
+                        <img 
+                            [src]="user.currentAvatarPath"
+                            alt="avatar"
+                            class="square-40"
+                        >
                     </div>
                     <div class="flex fd-c fg-1">
                         <div class="source-name">{{ user.name }}</div>
                         <div class="nick-name">@{{ user.username }}</div>
                     </div>
-                    <button class="btn btn-outlined">Follow</button>
+                    <button class="btn btn-lg btn-outlined">Follow</button>
                 </div>
                 <div class="bio">{{ user.bio }}</div>
             </div>
-        </cdk-virtual-scroll-viewport>
         <ng-template #loading>
             <div id="floatingCirclesG">
                 <div class="f_circleG" id="frotateG_01"></div>
@@ -42,3 +43,7 @@
         </ng-template>
     </section>
 </main>
+<div class="right-col">
+    <app-trends></app-trends>
+    <app-follow-offers></app-follow-offers>
+</div>

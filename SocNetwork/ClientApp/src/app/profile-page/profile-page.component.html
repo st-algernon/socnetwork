@@ -24,15 +24,15 @@
           </div>
           <div class="flex ai-c fd-r">
             <button *ngIf="user" class="square-40 create-chat" (click)="openChat()"></button>
-            <button *ngIf="isUnFollowed && !isMe" class="btn btn-outlined profile-action-btn" (click)="follow()">Follow</button>
+            <button *ngIf="isUnFollowed && !isMe" class="btn btn-lg btn-outlined profile-action-btn" (click)="follow()">Follow</button>
             <button 
               *ngIf="isFollowed && !isMe"
-              class="btn btn-filled profile-action-btn"
+              class="btn btn-lg btn-filled profile-action-btn"
               (mouseover)="changeTitleToUnfollow($event)"
               (mouseout)="changeTitleToUnfollow($event)"
               (click)="unfollow()"
               >Following</button>
-            <button *ngIf="isMe" class="btn btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
+            <button *ngIf="isMe" class="btn btn-lg btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
           </div>
         </div>
         <div class="flex fd-r jc-fe">
@@ -84,9 +84,7 @@
         <section class="wall-header flex row jc-sb">
           <div data-container="post-switches">
             <button data-action="loadAll" data-state="active">All posts</button>
-            <button data-action="loadByMe" data-state="inactive">
-              Written by me
-            </button>
+            <button data-action="loadByMe" data-state="inactive">Original</button>
           </div>
           <form action="" method="get" class="search-form flex col jc-c">
             <input
@@ -99,7 +97,8 @@
         </section>
         <app-post [isOnWall]="true"></app-post>
     </section>
-    <section class="right-col">
-      
-    </section>   
 </main>
+<section class="right-col">
+  <app-trends></app-trends>
+  <app-follow-offers></app-follow-offers>
+</section>   

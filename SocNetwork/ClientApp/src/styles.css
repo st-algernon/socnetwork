@@ -9,6 +9,7 @@
 }
 
 a {
+	color: #1da1f2;
 	text-decoration: none;
 }
 
@@ -245,19 +246,29 @@ textarea {
 }
 
 .btn {
+	display: inline-flex;
+	align-items: center; 
 	padding: 8px 14px;
 	border-radius: 20px;
 	font-weight: bold;
 	cursor: pointer;
 	font-size: 16px;
 	font-family: inherit;
-	box-sizing: border-box;
+	box-sizing: content-box;
+}
+
+.btn.btn-lg {
+	height: 20px;
+}
+
+.btn.btn-sm {
+	height: 16px;
 }
 
 .btn.btn-outlined {
 	color: #1da1f2;
 	border: 2px solid #1da1f2;
-	background: #fff;
+	background: inherit;
 }
 
 .btn.btn-outlined:hover {
@@ -304,16 +315,18 @@ body {
 .source-name {
 	font-weight: bold;
 	font-size: 16px;
+	line-height: 21px;
+	max-height: 21px;
+	overflow: hidden;
 	color: #333;
 }
 
 .nick-name {
 	font-size: 14px;
+	line-height: 19px;
+	max-height: 19px;
+	overflow: hidden;
 	color: #7a8b9b;
-}
-
-.cdk-virtual-scroll-content-wrapper {
-	display: contents;
 }
 
 #floatingCirclesG{
