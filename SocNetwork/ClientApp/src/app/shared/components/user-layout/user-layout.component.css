@@ -10,10 +10,12 @@ header {
 	box-sizing: border-box;
 }
 
+.wrapper {
+	width: 1224px;
+}
+
 .logo {
 	font-family: 'Concert One', cursive;
-	width: 200px;
-	height: 40px;
 	color: #00a3e8!important;
 	font-size: 30px;
 	text-align: right;
@@ -80,21 +82,22 @@ header {
 
 aside {
 	position: fixed;
-	background: #fff;
-	border-radius: 0px 15px 15px 0px;
-	padding: 20px 30px 10px 10px;
-	left: 0px;
-	top: 64px;
-	min-width: 270px;
-	width: 25.7%;
-	height: 100%;
+	left: 10%;
+	top: 69px;
+	bottom: 15px;
+	min-width: 220px;
+	width: 18.5%;
+	border-radius: 15px;
+	padding: 10px;
+	padding-left: 30px;
 	box-sizing: border-box;
+	background-color: #fff;
 }
 
 .main-nav {
-	width: 165px;
+	width: 200px;
 	position: absolute;
-	right: 84px;
+	left: 15px;
 	font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
@@ -103,18 +106,10 @@ aside {
 }
 
 .main-nav a {
-	display: inline-block;
 	color: #333;
-	font-size: 20px;
-	padding: 7px;
-	border-radius: 17px;
+	font-size: 22px;
 	width: 100%;
-	padding-left: 48px;
-	margin-bottom: 10px;
-	background-color: #fff;
-	background-repeat: no-repeat;
-	background-position: 8px center;
-	background-size: 25px;
+	border-radius: 15px;
 }
 
 .main-nav a:hover {
@@ -122,139 +117,151 @@ aside {
 	color: #1da1f2;
 }
 
-.main-nav a.is-active {
+.main-nav a.active {
 	color: #1da1f2;
 }
 
-.main-nav a.profile {
+.main-nav a > .menu-icon {
+	width: 48px;
+	height: 48px;
+	background-repeat: no-repeat;
+	background-position: 8px center;
+	background-size: 28px;
+}
+
+.main-nav a > .menu-title {
+	margin-left: 6px;
+}
+
+.main-nav a.profile .menu-icon {
 	background-image: url(../../../../assets/images/home.png);
 }
 
-.main-nav a.profile.is-active {
+.main-nav a.profile.active .menu-icon {
 	background-image: url(../../../../assets/images/home-hover.png);
 }
 
-.main-nav a.profile:hover {
+.main-nav a.profile:hover .menu-icon {
 	background-image: url(../../../../assets/images/home-hover.png);
 }
 
-.main-nav a.news {
+.main-nav a.news .menu-icon {
 	background-image: url(../../../../assets/images/news.png);
 }
 
-.main-nav a.news.is-active {
+.main-nav a.news.active .menu-icon {
 	background-image: url(../../../../assets/images/news-hover.png);
 }
 
-.main-nav a.news:hover {
+.main-nav a.news:hover .menu-icon {
 	background-image: url(../../../../assets/images/news-hover.png);
 }
 
-.main-nav a.messages {
+.main-nav a.messages .menu-icon {
 	background-image: url(../../../../assets/images/chat.png);
 }
 
-.main-nav a.messages.is-active {
+.main-nav a.messages.active .menu-icon {
 	background-image: url(../../../../assets/images/chat-hover.png);
 }
 
-.main-nav a.messages:hover {
+.main-nav a.messages:hover .menu-icon {
 	background-image: url(../../../../assets/images/chat-hover.png);
 }
 
-.main-nav a.friends {
+.main-nav a.friends .menu-icon {
 	background-image: url(../../../../assets/images/friends.png);
 }
 
-.main-nav a.friends.is-active {
+.main-nav a.friends.active .menu-icon {
 	background-image: url(../../../../assets/images/friends-hover.png);
 }
 
-.main-nav a.friends:hover {
+.main-nav a.friends:hover .menu-icon {
 	background-image: url(../../../../assets/images/friends-hover.png);
 }
 
-.main-nav a.photos {
+.main-nav a.photos .menu-icon {
 	background-image: url(../../../../assets/images/photos.png);
 }
 
-.main-nav a.photos.is-active {
+.main-nav a.photos.active .menu-icon {
 	background-image: url(../../../../assets/images/photos-hover.png);
 }
 
-.main-nav a.photos:hover {
+.main-nav a.photos:hover .menu-icon {
 	background-image: url(../../../../assets/images/photos-hover.png);
 }
 
-.main-nav a.communities.is-active {
+.main-nav a.communities.active .menu-icon {
 	background-image: url(../../../../assets/images/communities-hover.png);
 }
 
-.main-nav a.communities {
+.main-nav a.communities .menu-icon {
 	background-image: url(../../../../assets/images/communities.png);
 }
 
-.main-nav a.communities:hover {
+.main-nav a.communities:hover .menu-icon {
 	background-image: url(../../../../assets/images/communities-hover.png);
 }
 
-.main-nav a.music {
+.main-nav a.music .menu-icon {
 	background-image: url(../../../../assets/images/music.png);
 }
 
-.main-nav a.music.is-active {
+.main-nav a.music.active .menu-icon {
 	background-image: url(../../../../assets/images/music-hover.png);
 }
 
-.main-nav a.music:hover {
+.main-nav a.music:hover .menu-icon {
 	background-image: url(../../../../assets/images/music-hover.png);
 }
 
-.main-nav a.video {
+.main-nav a.video .menu-icon {
 	background-image: url(../../../../assets/images/video.png);
 }
 
-.main-nav a.video.is-active {
+.main-nav a.video.active .menu-icon {
 	background-image: url(../../../../assets/images/video-hover.png);
 }
 
-.main-nav a.video:hover {
+.main-nav a.video:hover .menu-icon {
 	background-image: url(../../../../assets/images/video-hover.png);
 }
 
-.main-nav a.saved {
+.main-nav a.saved .menu-icon {
 	background-image: url(../../../../assets/images/bookmarks.png);
 }
 
-.main-nav a.saved.is-active {
+.main-nav a.saved.active .menu-icon {
 	background-image: url(../../../../assets/images/bookmarks-hover.png);
 }
 
-.main-nav a.saved:hover {
+.main-nav a.saved:hover .menu-icon {
 	background-image: url(../../../../assets/images/bookmarks-hover.png);
 }
 
-.main-nav a.explore {
+.main-nav a.explore .menu-icon {
 	background-image: url(../../../../assets/images/compass.png);
 }
 
-.main-nav a.explore.is-active {
+.main-nav a.explore.active .menu-icon {
 	background-image: url(../../../../assets/images/compass-hover.png);
 }
 
-.main-nav a.explore:hover {
+.main-nav a.explore:hover .menu-icon {
 	background-image: url(../../../../assets/images/compass-hover.png);
 }
 
-.main-nav a.notifications {
+.main-nav a.notifications .menu-icon {
 	background-image: url(../../../../assets/images/bell.png);
 }
 
-.main-nav a.notifications.is-active {
+.main-nav a.notifications.active .menu-icon {
 	background-image: url(../../../../assets/images/bell-hover.png);
 }
 
-.main-nav a.notifications:hover {
+.main-nav a.notifications:hover .menu-icon {
 	background-image: url(../../../../assets/images/bell-hover.png);
 }
 
@@ -270,4 +277,24 @@ aside {
 	top: 64px;
 	z-index: 9;
 	box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+	aside {
+		width: 10%;
+		min-width: 44px;
+		padding-right: 10px;
+	}
+
+	.main-nav {
+		width: 44px;
+	}
+
+	.main-nav a span {
+		display: none;
+	}
+
+	.main-nav a {
+		height: 30.4px;
+	}
 }

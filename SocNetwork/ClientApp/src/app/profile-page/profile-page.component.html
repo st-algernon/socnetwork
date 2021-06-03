@@ -42,19 +42,34 @@
               <div class="empty bio"></div>
             </ng-template>
             <ul class="follow-wrap flex fd-r jc-sb">
-              <li class=""><span *ngIf="user; else empty_count_posts">30</span>
-                <ng-template #empty_count_posts>
-                  <span class="empty count"></span>
-                </ng-template> posts
+              <li class="">
+                <a href="#">
+                  <span *ngIf="user; else empty_count_posts">30</span>
+                  <ng-template #empty_count_posts>
+                    <span class="empty count"></span>
+                  </ng-template> 
+                  <span> posts</span>
+                </a>
               </li>
-              <li class=""><span *ngIf="user; else empty_count_followers">24</span>
-                <ng-template #empty_count_followers>
-                  <span class="empty count"></span>
-                </ng-template> followers</li>
-              <li class=""><span *ngIf="user; else empty_count_following">10</span>
-                <ng-template #empty_count_following>
-                  <span class="empty count"></span>
-                </ng-template> following</li>
+              <li class="">
+                <a [routerLink]="['followers']">
+                  <span *ngIf="user; else empty_count_followers">24</span>
+                  <ng-template #empty_count_followers>
+                    <span class="empty count"></span>
+                  </ng-template> 
+                  <span class="followers-label"> followers</span>
+                </a>
+              </li>
+
+              <li class="">
+                <a [routerLink]="['following']">
+                  <span *ngIf="user; else empty_count_following">10</span>
+                  <ng-template #empty_count_following>
+                    <span class="empty count"></span>
+                  </ng-template>
+                  <span class="following-label"> following</span>
+                </a>
+              </li>
             </ul>
             <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
               <li class="residence">Zhytomyr</li>

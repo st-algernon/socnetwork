@@ -1,9 +1,9 @@
 .make-post-box {
-	margin-top: 10px;
-	background: #fff;
-	border-radius: 15px;
+	margin-top: 15px;
 	padding: 12px 15px;
+	border-radius: 15px;
 	color: #272727;
+	background: #fff;
 }
 
 .make-post-box form {

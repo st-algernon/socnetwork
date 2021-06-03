@@ -1,6 +1,5 @@
 .follow-offers {
-    border-radius: 15px;
-    background-color: #f3f7fa;
+
 }
 
 .follow-offers-header,
@@ -14,6 +13,11 @@
     border-bottom: 1px solid #e6eef5;
     color: #222;
     font-family: 'Deezer', 'Open-sans', sans-serif;
+}
+
+.follow-offers-body {
+    border-radius: 15px;
+    background-color: #fff;
 }
 
 .follow-offers-body .follow-offer-item {

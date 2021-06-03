@@ -25,7 +25,7 @@ namespace SocNetwork.Controllers
 
         [Authorize(Roles = "User")]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetCurrentUserChats()
         {
             var currentUser = HttpContext.Items["User"] as User;
             var chatHelper = new ChatHelper(db);
@@ -44,7 +44,7 @@ namespace SocNetwork.Controllers
 
         [Authorize(Roles = "User")]
         [HttpGet("chat/{userId}")]
-        public async Task<IActionResult> GetChatByUserId(string userId)
+        public async Task<IActionResult> GetChatWith(string userId)
         {
             var currentUser = HttpContext.Items["User"] as User;
             var withUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);

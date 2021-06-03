@@ -1,18 +1,18 @@
-<section [ngClass]="{'without-top-b-radius':isOnWall}" class="post-wrap flex fd-c">
-    <div class="post-header flex fd-r ai-c">
-        <div class="avatar-box square-48">
-            <img 
-                src="../../../../assets/images/empty_photo.jpg"
-                class="square-48"
-                alt=""
-            >
+<section [ngClass]="{'without-top-b-radius':isOnWall}" class="post-wrap">
+    <div class="post">
+        <div class="post-header flex ai-c">
+            <div class="avatar-box square-48">
+                <img 
+                    src="../../../../assets/images/empty_photo.jpg"
+                    class="square-48"
+                    alt=""
+                >
+            </div>
+            <div class="flex fd-c">
+                <span class="source-name">Rick and Morty</span>
+                <span class="nick-name">@rickandmorty</span>
+            </div>
         </div>
-        <div class="flex fd-c">
-            <span class="source-name">Rick and Morty</span>
-            <span class="nick-name">@rickandmorty</span>
-        </div>
-    </div>
-    <div class="to-right-post">
         <div class="post-body">
             <p class="post-text">The new season is coming soon! <a href="#" class="hashtag">#rickandmorty</a></p>
             <div class="media-box flex fd-r wrap">
@@ -36,40 +36,49 @@
             </ul>
             <div class="published-date">yesterday at 1:01 pm</div>
         </div>
-        <div class="post-comments">
-            <div class="best-comment">
-                <div class="comment-header flex fd-r ai-c">
-                    <div class="avatar-box square-48">
-                        <img 
-                            src="../../../../assets/images/empty_photo.jpg"
-                            class="square-48"
-                            alt=""
-                        >
-                    </div>
-                    <div class="flex fd-c">
-                        <span class="source-name">Mr. Algernon</span>
-                        <span class="nick-name">@AwakE</span>
-                    </div>
-                </div>
-                <div class="to-right-comment">
-                    <div class="comment-body">
-                        <p class="comment-text">i'm waiting <a href="#" class="hashtag">#rickandmorty</a></p>
-                        <div class="media-box flex fd-r wrap">
-                            <img src="../../../../assets/images/zhdun.jpg" alt="">
+        <div class="comments-section">
+            <div class="comments-box">
+                <div class="comment flex ai-fs">
+                    <div class="comment-author-avatar">
+                        <div class="avatar-box square-48">
+                            <img 
+                                src="../../../../assets/images/empty_photo.jpg"
+                                class="square-48"
+                                alt=""
+                            >
                         </div>
                     </div>
-                    <div class="comment-footer flex fd-r ai-c jc-sb">
-                        <span class="published-date">yesterday at 5:07 pm</span>
-                        <ul class="content-actions flex fd-r" data-container="content-actions">
-                            <li class="flex fd-r">
-                                <span class="like-btn round r-22 square-32" data-action="like" data-state=""></span>
-                                <span class="like-count" data-state="">2</span>
-                            </li>
-                        </ul>
+                    <div class="flex fd-c">
+                        <div class="flex ai-c">
+                            <div class="wrap-comment-header-body">
+                                <div class="comment-header">
+                                    <div class="flex fd-c">
+                                        <span class="source-name">Mr. Algernon</span>
+                                    </div>
+                                </div>
+                                <div class="comment-body">
+                                    <p class="comment-text">i'm waiting <a href="#" class="hashtag">#rickandmorty</a></p>
+                                    <!-- <div class="media-box flex fd-r wrap">
+                                        <img src="../../../../assets/images/zhdun.jpg" alt="">
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="content-actions" data-container="content-actions">
+                                <div class="flex fd-r">
+                                    <span class="like-btn round r-22 square-32" data-action="like" data-state=""></span>
+                                    <span class="like-count" data-state="">2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-footer flex jc-sb">
+                            <span class="replay-btn">Replay</span>
+                            <span class="published-date">yesterday at 5:07 pm</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="show-more-btn">show more comments</div>
+
             <div class="write-comment flex fd-r">
                 <div class="avatar-box square-48">
                     <img 

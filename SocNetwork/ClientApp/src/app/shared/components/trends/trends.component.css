@@ -1,6 +1,4 @@
 .trends {
-    border-radius: 15px;
-    background-color: #f3f7fa;
     margin-bottom: 20px;
 }
 
@@ -9,10 +7,15 @@
 }
 
 .trends-header {
-    border-radius: 15px 15px 0px 0px;
+    border-radius: 15px;
     border-bottom: 1px solid #e6eef5;
     color: #222;
     font-family: 'Deezer', 'Open-sans', sans-serif;
+}
+
+.trends-body {
+    border-radius: 15px;
+    background-color: #fff;
 }
 
 .trends .trend-item {

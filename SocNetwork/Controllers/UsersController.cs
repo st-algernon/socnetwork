@@ -49,7 +49,7 @@ namespace SocNetwork.Controllers
 
         [HttpGet("me")]
         [Authorize(Roles = "User")]
-        public IActionResult Get()
+        public IActionResult GetCurrentUser()
         {
             var currentUser = HttpContext.Items["User"] as User;
 
@@ -193,7 +193,7 @@ namespace SocNetwork.Controllers
 
         [HttpPut("edit")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Put([FromBody] EditProfileInfoRequest request)
+        public async Task<IActionResult> EditProfile([FromBody] EditProfileInfoRequest request)
         {
             User currentUser = HttpContext.Items["User"] as User;
 

@@ -1,20 +1,22 @@
-<header class="flex fd-r ai-c jc-sb">
-  <div class="logo"><a href="#">algernon</a></div>
-  <div class="search-profile-wrap flex fd-r ai-c jc-sb">
-    <form action="" method="get" class="search-form">
-      <input type="search" name="search" placeholder="Search" />
-      <app-search-result-popup *ngIf="false"></app-search-result-popup>
-    </form>
-    <div class="top-profile-menu flex fd-c ai-fe">
-      <div class="avatar-box square-32" (click)="profileMenuIsOpened = !profileMenuIsOpened">
-        <img 
-          *ngIf="me"
-          [src]="me.currentAvatarPath"
-          class="square-32"
-          alt="photo" 
-        />
+<header class="flex jc-c">
+  <div class="wrapper flex ai-c jc-sb">
+    <div class="logo"><a href="#">algernon</a></div>
+    <div class="search-profile-wrap flex fd-r ai-c jc-sb">
+      <form action="" method="get" class="search-form">
+        <input type="search" name="search" placeholder="Search" />
+        <app-search-result-popup *ngIf="false"></app-search-result-popup>
+      </form>
+      <div class="top-profile-menu flex fd-c ai-fe">
+        <div class="avatar-box square-32" (click)="profileMenuIsOpened = !profileMenuIsOpened">
+          <img 
+            *ngIf="me"
+            [src]="me.currentAvatarPath"
+            class="square-32"
+            alt="photo" 
+          />
+        </div>
+        <app-profile-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-profile-menu-popup>
       </div>
-      <app-profile-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-profile-menu-popup>
     </div>
   </div>
 </header>
@@ -23,15 +25,65 @@
 	<aside>
 		<nav class="main-nav">
 			<ul>
-				<li><a [routerLink]="[me?.username]" routerLinkActive="is-active" class="profile">Profile</a></li>
-				<li><a routerLink="/news" routerLinkActive="is-active" class="news">News</a></li>
-				<li><a routerLink="/explore" routerLinkActive="is-active" class="explore">Explore</a></li>
-		  	<li><a routerLink="/messenger" routerLinkActive="is-active" class="messages">Messenger</a></li>
-		  	<li><a routerLink="/notifications" routerLinkActive="is-active" class="notifications">Notifications</a></li>
-		  	<li><a routerLink="/photos" routerLinkActive="is-active" class="photos">Photos</a></li>
-		  	<li><a routerLink="/music" routerLinkActive="is-active" class="music">Music</a></li>
-		  	<li><a routerLink="/videos" routerLinkActive="is-active" class="video">Videos</a></li>
-				<li><a routerLink="/saved" routerLinkActive="is-active" class="saved">Saved</a></li>
+				<li>
+          <a [routerLink]="[me?.username]" routerLinkActive="active" class="profile flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Profile</span>
+          </a>
+        </li>
+				<li>
+          <a routerLink="/news" routerLinkActive="active" class="news flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">News</span>
+          </a>
+        </li>
+				<li>
+          <a routerLink="/explore" routerLinkActive="active" class="explore flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Explore</span>
+          </a>
+        </li>
+		  	<li>
+          <a routerLink="/messenger" routerLinkActive="active" class="messages flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Messenger</span>
+          </a>
+        </li>
+		  	<li>
+          <a routerLink="/notifications" routerLinkActive="active" class="notifications flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Notifications</span>
+          </a>
+        </li>
+		  	<li>
+          <a routerLink="/photos" routerLinkActive="active" class="photos flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Photos</span>
+          </a>
+        </li>
+		  	<li>
+          <a routerLink="/music" routerLinkActive="active" class="music flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Music</span>
+          </a>
+        </li>
+		  	<li>
+          <a routerLink="/videos" routerLinkActive="active" class="video flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Videos</span>
+          </a>
+        </li>
+				<li>
+          <a routerLink="/saved" routerLinkActive="active" class="saved flex ai-c">
+            <span class="menu-icon"></span>
+            <span class="menu-title">Saved</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/settings" routerLinkActive="active" class="settings flex ai-c">
+            <span class="menu-icon"></span>
+          </a>
+        </li>
 			</ul>
         </nav>
     </aside>

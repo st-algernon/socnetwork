@@ -150,15 +150,14 @@ main .user-info {
 
 .user-info .follow-wrap > li {
 	font-size: 17px;
-	color: #7f7f7f;
 	cursor: pointer;
 }
 
-.user-info .follow-wrap > li > span {
-	color: #333;
+.user-info .follow-wrap a {
+	color: #7f7f7f;
 }
 
-.user-info .follow-wrap > li:hover span {
+.user-info .follow-wrap a:hover {
 	color: #1da1f2;
 }
 
