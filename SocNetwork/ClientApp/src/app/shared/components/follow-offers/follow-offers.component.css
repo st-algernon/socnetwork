@@ -1,31 +1,48 @@
-.follow-offers {
+ng-scrollbar {
+	--scrollbar-track-color: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
+}
 
+.follow-offers {
+    border-radius: 15px;
+    padding: 8px;
+    padding-top: 0px;
+    background-color: #fff;
 }
 
 .follow-offers-header,
-.follow-offers-body > .follow-offer-item,
 .follow-offers-footer > a {
     padding: 8px 16px;
 }
 
 .follow-offers-header {
-    border-radius: 15px 15px 0px 0px;
-    border-bottom: 1px solid #e6eef5;
     color: #222;
-    font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
 .follow-offers-body {
+    padding: 4px 0px 4px 4px;
+    height: 168px;
     border-radius: 15px;
-    background-color: #fff;
+    background-color: #f7f9fa;
+}
+
+.follow-offers-body li {
+    border-radius: 15px;
+}
+
+.follow-offers-body li:hover {
+    background-color: #e5f2fc;
+}
+
+.follow-offers-body li:last-of-type .follow-offer-item {
+    border-bottom: none;
 }
 
 .follow-offers-body .follow-offer-item {
     border-bottom: 1px solid #e6eef5;
-}
-
-.follow-offers-body .follow-offer-item:last-of-type {
-    border-bottom: none;
+    padding: 8px 0px;
+    margin: 0px 16px;
 }
 
 .follow-offer-item .source-name,
@@ -41,10 +58,6 @@
 	overflow: hidden;
 	color: #333;
 	padding: 5px 5px 0px 12px;
-}
-
-.follow-offers-footer {
-    border-top: 1px solid #e6eef5;
 }
 
 .follow-offers-footer > a {

@@ -3,6 +3,11 @@
 	src: url(assets/fonts/Deezer/deezer-bold.woff2) format('woff2');
 }
 
+.scrollbar-track {
+	transform: scaleY(0.98);
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
 * {
 	margin: 0px;
 	padding: 0px;
@@ -15,6 +20,11 @@ a {
 
 ul {
 	list-style: none;
+}
+
+h2 {
+	font-size: 22px;
+    font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
 button {
@@ -248,21 +258,23 @@ textarea {
 .btn {
 	display: inline-flex;
 	align-items: center; 
-	padding: 8px 14px;
 	border-radius: 20px;
 	font-weight: bold;
 	cursor: pointer;
-	font-size: 16px;
 	font-family: inherit;
 	box-sizing: content-box;
 }
 
 .btn.btn-lg {
 	height: 20px;
+	font-size: 16px;
+	padding: 8px 14px;
 }
 
 .btn.btn-sm {
-	height: 16px;
+	height: 14px;
+	font-size: 14px;
+	padding: 6px 11px;
 }
 
 .btn.btn-outlined {
@@ -327,108 +339,4 @@ body {
 	max-height: 19px;
 	overflow: hidden;
 	color: #7a8b9b;
-}
-
-#floatingCirclesG{
-	position:relative;
-	width:51px;
-	height:51px;
-	margin: 0 auto;
-	transform:scale(0.6);
-		-ms-transform:scale(0.6);
-}
-
-.f_circleG{
-	position:absolute;
-	background-color:rgb(217,217,217);
-	height:9px;
-	width:9px;
-	border-radius:5px;
-		-ms-border-radius:5px;
-	animation-name:f_fadeG;
-		-ms-animation-name:f_fadeG;
-	animation-duration:1.2s;
-		-ms-animation-duration:1.2s;
-	animation-iteration-count:infinite;
-		-ms-animation-iteration-count:infinite;
-	animation-direction:normal;
-		-ms-animation-direction:normal;
-}
-
-#frotateG_01{
-	left:0;
-	top:21px;
-	animation-delay:0.45s;
-		-ms-animation-delay:0.45s;
-}
-
-#frotateG_02{
-	left:6px;
-	top:6px;
-	animation-delay:0.6s;
-		-ms-animation-delay:0.6s;
-}
-
-#frotateG_03{
-	left:21px;
-	top:0;
-	animation-delay:0.75s;
-		-ms-animation-delay:0.75s;
-}
-
-#frotateG_04{
-	right:6px;
-	top:6px;
-	animation-delay:0.9s;
-		-ms-animation-delay:0.9s;
-}
-
-#frotateG_05{
-	right:0;
-	top:21px;
-	animation-delay:1.05s;
-		-ms-animation-delay:1.05s;
-}
-
-#frotateG_06{
-	right:6px;
-	bottom:6px;
-	animation-delay:1.2s;
-		-ms-animation-delay:1.2s;
-}
-
-#frotateG_07{
-	left:21px;
-	bottom:0;
-	animation-delay:1.35s;
-		-ms-animation-delay:1.35s;
-}
-
-#frotateG_08{
-	left:6px;
-	bottom:6px;
-	animation-delay:1.5s;
-		-ms-animation-delay:1.5s;
-}
-
-
-
-@keyframes f_fadeG{
-	0%{
-		background-color:rgb(29,161,242);
-	}
-
-	100%{
-		background-color:rgba(189,189,189,0.32);
-	}
-}
-
-@-ms-keyframes f_fadeG{
-	0%{
-		background-color:rgb(29,161,242);
-	}
-
-	100%{
-		background-color:rgba(189,189,189,0.32);
-	}
 }

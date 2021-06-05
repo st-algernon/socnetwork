@@ -1,66 +1,51 @@
 :host {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+	justify-content: center;
 }
 
-main {
-	position: absolute;
-	top: 64px;
-	width: 64%;
-	min-height: calc(100% - 64px);
-	box-sizing: border-box;
-	border-radius: 15px 15px 0px 0px;
-	z-index: 1;
+ng-scrollbar {
+	--scrollbar-track-color: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
+	--scrollbar-size: 6px;
 }
 
-.main-header {
+.chat {
 	position: fixed;
-	top: 54px;
-	width: 47.1%;
-	border-bottom: 1px solid #eee;
-	z-index: 4;
-	background-color: rgb(230, 236, 240);
-}
-
-.main-header .header-content {
-	margin-top: 10px;
-	min-height: 40px;
-	padding: 5px 0px;
-	border-radius: 15px 15px 0px 0px;
+	top: 69px;
+	bottom: 15px;
+	width: 40%;
+	box-sizing: border-box;
+	border-radius: 15px;
+	z-index: 1;
+	padding: 0px 8px;
+	margin-right: 60px;
 	background-color: #fff;
 }
 
-.header-content .back-btn {
-	padding: 5px 20px;
-	color: #7f7f7f;
-	font-size: 16px;
-	background: url(../../../assets/images/back.png) left center no-repeat;
-	background-size: 15px;
-	cursor: pointer;
+.chat-header {
+	border-radius: 15px 15px 0px 0px;
+	padding: 6px 0px 2px 0px;
+	background-color: #fff;
+	min-height: 40px;
 }
 
-.header-content .back-btn:hover {
-	color: #1da1f2;
-	background: url(../../../assets/images/back-hover.png) left center no-repeat;	
-	background-size: 15px;
-}
-
-.header-content .source-name {
+.chat-header .source-name {
 	font-weight: bold;
 	color: #333;
 }
 
-.header-content .last-visited {
-	font-size: 14px;
+.chat-header .last-visited {
+	font-size: 13px;
 	color: #555;
 }
 
-.header-content .search-message-form input {
+.chat-header .search-message-form input {
 	background-image: url(../../../assets/images/search.png);
 	background-position: 5px center;
 	background-repeat: no-repeat;
-	background-size: 22px 22px;
+	background-size: 22px;
     background-color: transparent;
 	border-radius: 20px;
 	padding: 5px 8px 5px 32px;
@@ -72,58 +57,23 @@ main {
 	cursor: pointer;
 }
 
-.header-content .search-message-form input:hover {
+.chat-header .search-message-form input:hover {
 	background-image: url(../../../assets/images/search-hover.png);
 }
 
-.header-content .search-message-form input:focus {
+.chat-header .search-message-form input:focus {
 	width: 300px;
 	background-image: url(../../../assets/images/search-hover.png);
 }
 
-.messages-box {
-	padding: 0px 2%;
-	min-height: 100%;
-	position: absolute;
-	width: 100%;
-	box-sizing: border-box;
-	background: #fff;
-	padding-bottom: 63px;
-}
-
-.messages-box .user-message {
-	max-width: 70%;
-	position: absolute;
-    right: 0px;
-    bottom: 60px;
-}
-
-.messages-box .another-user-message {
-	max-width: 70%;
-	position: absolute;
-	left: 0px;
-    bottom: 10px;
-}
-
-.messages-box .message-text {
-	display: inline-block;
-	padding: 10px 15px;
+.chat-body {
 	border-radius: 15px;
+	box-sizing: border-box;
+	background-color: #f7f9fa;
 }
 
-.messages-box .user-message .message-text {
-	margin: 4px 6px 0px 0px;
-	color: #fff;
-	background-color: #1da1f2;
-}
-
-.messages-box .another-user-message .message-text {
-	margin: 4px 0px 0px 6px;
-	color: #333;
-	background-color: #eee;
-}
-
-.message-item {
+.chat-body .message-item {
+	margin: 0px 10px;
 	padding-top: 2px;
 	z-index: 2;
 }
@@ -160,37 +110,33 @@ main {
 	color: #d9ecf8;
 }
 
-.input-message {
-	position: fixed;
-	bottom: 0px;
-	left: 27%;
-	right: 27%;
+.chat-footer {
 	background-color: #fff;
-	border-top: 1px solid #eee;
+	border-radius: 0px 0px 15px 15px;
 	padding: 10px 0px;
 	z-index: 3;
 }
 
-.input-message .textarea-attach-wrap {
+.chat-footer .textarea-attach-wrap {
 	width: 100%;
 	border-radius: 15px;
 	border: 1px solid #eee;
 	margin: 0px 10px;
 }
 
-.input-message textarea {
+.chat-footer textarea {
 	padding: 4px 10px;
 	font-size: 17px;
 	height: 20px;
 }
 
-.input-message .submit-btn {
+.chat-footer .submit-btn {
 	background: url(../../../assets/images/send.png) no-repeat;
 	background-size: contain;
 	cursor: pointer;
 }
 
-.input-message .submit-btn-disable {
+.chat-footer .submit-btn-disable {
 	background: url(../../../assets/images/send-disable.png) no-repeat;
 	background-size: contain;
 }

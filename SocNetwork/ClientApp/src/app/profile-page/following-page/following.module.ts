@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FollowingPageComponent } from './following-page.component';
 import { FollowingRoutingModule } from './following-routing.module';
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
@@ -10,7 +9,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     FollowingRoutingModule,
-    ScrollingModule,
     SharedModule
   ]
 })

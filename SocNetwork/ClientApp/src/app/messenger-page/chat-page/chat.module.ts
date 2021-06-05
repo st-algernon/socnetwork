@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
 import { MessengerService } from 'src/app/shared/services/messenger.service';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { ChatPageComponent } from './chat-page.component';
 import { ChatRoutingModule } from './chat-routing.module';
-
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,9 @@ import { ChatRoutingModule } from './chat-routing.module';
   imports: [
     ChatRoutingModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    NgScrollbarModule,
+    SharedModule
   ],
   providers: [
     MessengerService

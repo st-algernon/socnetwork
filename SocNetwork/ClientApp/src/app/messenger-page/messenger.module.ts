@@ -5,7 +5,10 @@ import { MessengerService } from "../shared/services/messenger.service";
 import { ChatPageComponent } from "./chat-page/chat-page.component";
 import { MessengerPageComponent } from "./messenger-page.component";
 import { MessengerRoutingModule } from "./messenger-routing.module";
+import { NgScrollbarModule } from 'ngx-scrollbar';
+
 import localeUk from '@angular/common/locales/uk';
+import { SharedModule } from "../shared/shared.module";
 
 registerLocaleData(localeUk, 'uk');
 
@@ -16,7 +19,9 @@ registerLocaleData(localeUk, 'uk');
     imports: [
         MessengerRoutingModule,
         CommonModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgScrollbarModule,
+        SharedModule
     ],
     exports: [],
     providers: [MessengerService]

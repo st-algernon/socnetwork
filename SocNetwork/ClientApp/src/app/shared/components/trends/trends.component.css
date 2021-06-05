@@ -1,34 +1,50 @@
-.trends {
-    margin-bottom: 20px;
+ng-scrollbar {
+	--scrollbar-track-color: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
 }
 
-.trends-header, .trends-body > .trend-item, .trends-footer > a {
+.trends {
+    margin-bottom: 15px;
+    border-radius: 15px;
+    padding: 8px;
+    padding-top: 0px;
+    background-color: #fff;
+}
+
+.trends-header, 
+.trends-footer > a {
     padding: 8px 16px;
 }
 
 .trends-header {
-    border-radius: 15px;
-    border-bottom: 1px solid #e6eef5;
     color: #222;
-    font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
 .trends-body {
+    padding: 4px 0px 4px 4px;
+    height: 168px;
     border-radius: 15px;
-    background-color: #fff;
+    background-color: #f7f9fa;
+}
+
+.trends-body li {
+    border-radius: 15px;
+}
+
+.trends-body li:hover {
+    background-color: #e5f2fc;
+}
+
+.trends-body li:last-of-type .trend-item {
+    border-bottom: none;
 }
 
 .trends .trend-item {
     display: block;
     border-bottom: 1px solid #e6eef5;
-}
-
-.trends .trend-item:hover {
-    background-color: #dcecf8;
-}
-
-.trends .trend-item:last-of-type {
-    border-bottom: none;
+    padding: 8px 0px;
+    margin: 0px 16px;
 }
 
 .trend-item-body {
@@ -38,10 +54,6 @@
 .trend-item-footer {
     font-size: 13px;
     color: rgb(145, 145, 145);
-}
-
-.trends-footer {
-    border-top: 1px solid #e6eef5;
 }
 
 .trends-footer > a {

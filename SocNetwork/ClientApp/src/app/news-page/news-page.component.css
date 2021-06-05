@@ -1,26 +1,17 @@
-:host {
-    width: 100%;
-	display: flex;
-    justify-content: center;
-}
-
-.wrapper {
-	width: 1224px;
-}
-
 main {
 	width: 50%;
-	margin-top: 54px;
+	min-width: 612px;
+	margin: 54px 60px 0px 0px;
 	box-sizing: border-box;
 }
 
 .right-col {
 	position: fixed;
-	right: 10%;
+	/* right: 10%; */
 	top: 69px;
 	bottom: 15px;
-	min-width: 220px;
-	width: 18.5%;
+	/* width: 18.5%; */
+	width: 320px;
 	z-index: 9;
 	box-sizing: border-box;
 }

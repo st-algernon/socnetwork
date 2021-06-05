@@ -8,7 +8,7 @@ import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
 import { MessengerService } from 'src/app/shared/services/messenger.service';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { formatDate } from '@angular/common';
-import { clear } from 'console';
+import { NgScrollbar } from 'ngx-scrollbar';
 
 @Component({
   selector: 'app-chat-page',
@@ -20,7 +20,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   form: FormGroup;
   chat: Chat;
 
-  @ViewChild('messageList', { static: true }) messageList: ElementRef;
+  @ViewChild('messagesList', { static: true }) messagesList: ElementRef;
 
   constructor(
     private messengerHub: MessengerHub,
@@ -45,16 +45,16 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         return this.messengerService.getChatWith(params['id']);
       })
     ).subscribe((response: Chat) => { 
+      console.log(this.messagesList);
+
       this.chat = response;
       this.chat = this.messengerService.includeWithUser(this.chat, this.me);
       this.chat.messagesDTO.reverse();
-      this.clearMessageList();
 
       for (let m of this.chat.messagesDTO) {
         this.renderMessageTemplate(m);
         this.scrollToBottom();
       }
-      console.log(this.chat.id);
     });
 
     this.messengerHub.message$.subscribe((messageDTO: Message) => {
@@ -96,7 +96,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private hideSameAuthors(messageDTO: Message) {
-    const lastMessage = (this.messageList.nativeElement as HTMLElement).lastElementChild;
+    const lastMessage = (this.messagesList as NgScrollbar).viewport.contentWrapperElement.lastElementChild;
     const lastAuthor = lastMessage?.querySelector('.message-author');
     const lastAuthorId = lastAuthor?.querySelector('.author-id')?.innerHTML;
 
@@ -134,6 +134,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     (messageDate as HTMLElement).classList.add('message-date');
     const shortTimeText = formatDate(new Date(messageDTO.creationDate), 'shortTime', 'uk');
     const messageDateText = this.renderer.createText(shortTimeText);
+    const scrollContent = (this.messagesList as NgScrollbar).viewport.contentWrapperElement;
 
     this.renderer.appendChild(avatarBox, avatarBoxImg);
     this.renderer.appendChild(messageAuthor, avatarBox);
@@ -146,18 +147,14 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.renderer.appendChild(messageBody, messageText);
     this.renderer.appendChild(messageBody, messageFooter);
     this.renderer.appendChild(messageItem, messageBody);
-    this.renderer.appendChild(this.messageList.nativeElement, messageItem);
+    this.renderer.appendChild(scrollContent, messageItem);
   }
 
   private scrollToBottom() {
     window.scrollTo({ 
       left: 0, 
-      top: this.messageList.nativeElement.offsetHeight,
+      top: this.messagesList.nativeElement.offsetHeight,
       behavior: 'smooth'
     });
-  }
-
-  private clearMessageList() {
-    (this.messageList.nativeElement as HTMLElement).innerHTML = "";
   }
 }

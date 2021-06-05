@@ -5,6 +5,8 @@ import { PostComponent } from "./components/post/post.component";
 import { TrendsComponent } from './components/trends/trends.component';
 import { FollowOffersComponent } from './components/follow-offers/follow-offers.component';
 import { PhotosComponent } from './components/photos/photos.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -12,17 +14,20 @@ import { PhotosComponent } from './components/photos/photos.component';
     PostFormComponent,
     TrendsComponent,
     FollowOffersComponent,
-    PhotosComponent
+    PhotosComponent,
+    LoaderComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    NgScrollbarModule
   ],
   exports: [
     PostComponent,
     PostFormComponent,
     TrendsComponent,
     FollowOffersComponent,
-    PhotosComponent
+    PhotosComponent,
+    LoaderComponent
   ],
   providers: [],
   bootstrap: []

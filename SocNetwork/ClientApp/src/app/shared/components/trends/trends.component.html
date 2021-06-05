@@ -2,27 +2,43 @@
     <div class="trends-header">
         <h2>Trends for you</h2>
     </div>
-    <div class="trends-body">
-        <a href="#" class="trend-item">
-            <div class="trend-item-body">
-                <h4>#Медведчук</h4>
-            </div>
-            <div class="trend-item-footer"><span class="count-posts">1522</span> posts</div>
-        </a>
-        <a href="#" class="trend-item">
-            <div class="trend-item-body">
-                <h4>#bitcoin</h4>
-            </div>
-            <div class="trend-item-footer"><span class="count-posts">16822</span> posts</div>
-        </a>
-        <a href="#" class="trend-item">
-            <div class="trend-item-body">
-                <h4>#Tesla</h4>
-            </div>
-            <div class="trend-item-footer"><span class="count-posts">16822</span> posts</div>
-        </a>
-    </div>
+    <ul class="trends-body">
+        <ng-scrollbar visibility="hover" appearance="standard">
+        <li>
+            <a href="#" class="trend-item">
+                <div class="trend-item-body">
+                    <h4>#Медведчук</h4>
+                </div>
+                <div class="trend-item-footer"><span class="count-posts">1522</span> posts</div>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="trend-item">
+                <div class="trend-item-body">
+                    <h4>#bitcoin</h4>
+                </div>
+                <div class="trend-item-footer"><span class="count-posts">16822</span> posts</div>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="trend-item">
+                <div class="trend-item-body">
+                    <h4>#Tesla</h4>
+                </div>
+                <div class="trend-item-footer"><span class="count-posts">16822</span> posts</div>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="trend-item">
+                <div class="trend-item-body">
+                    <h4>#Tesla</h4>
+                </div>
+                <div class="trend-item-footer"><span class="count-posts">16822</span> posts</div>
+            </a>
+        </li>
+</ng-scrollbar>
+
+    </ul>
     <div class="trends-footer">
-        <!-- <a routerLink="/explore">See more</a> -->
     </div>
 </div>

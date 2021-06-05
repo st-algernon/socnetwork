@@ -1,9 +1,14 @@
-/* HEADER */
+ng-scrollbar {
+	--scrollbar-track-color: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
+	--scrollbar-size: 6px;
+}
 
 header {
 	position: fixed;
 	width: 100%;
-	padding: 7px 20px;
+	padding: 7px 10px;
 	background: #fff;
 	z-index: 11;
 	border-bottom: 1px solid #F4F4F4;
@@ -40,7 +45,7 @@ header {
 	}
 
 .search-profile-wrap {
-	width: 350px;
+	width: 320px;
 }
 
 .search-form {
@@ -49,12 +54,12 @@ header {
 
 .search-form input {
 	background: url(../../../../assets/images/search.png) 10px center no-repeat;
-	border-radius: 20px;
-	padding: 10px 30px 10px 40px;
-	border: none;
 	background-color: rgb(230, 236, 240);
 	background-size: 20px 20px;
-	width: 300px;
+	border-radius: 20px;
+	padding: 10px 15px 10px 40px;
+	border: none;
+	width: 100%;
 }
 
 .search-form input:focus {
@@ -67,6 +72,7 @@ header {
 
 .top-profile-menu {
 	position: relative;
+	margin-left: 10px;
 }
 
 .top-profile-menu > .avatar-box {
@@ -82,22 +88,20 @@ header {
 
 aside {
 	position: fixed;
-	left: 10%;
+	/* left: 10%; */
 	top: 69px;
 	bottom: 15px;
-	min-width: 220px;
-	width: 18.5%;
+	width: 260px;
 	border-radius: 15px;
 	padding: 10px;
-	padding-left: 30px;
+	padding-left: 15px;
 	box-sizing: border-box;
 	background-color: #fff;
+	z-index: 10;
 }
 
 .main-nav {
-	width: 200px;
-	position: absolute;
-	left: 15px;
+	width: 210px;
 	font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
@@ -127,10 +131,7 @@ aside {
 	background-repeat: no-repeat;
 	background-position: 8px center;
 	background-size: 28px;
-}
-
-.main-nav a > .menu-title {
-	margin-left: 6px;
+	margin: 0 5px;
 }
 
 .main-nav a.profile .menu-icon {
@@ -265,22 +266,8 @@ aside {
 	background-image: url(../../../../assets/images/bell-hover.png);
 }
 
-.right-col {
-	position: fixed;
-	background: #fff;
-	border-radius: 15px 0px 0px 15px;
-	width: 25.7%;
-	min-width: 270px;
-	height: 100%;
-	padding: 10px 10px 10px 30px;
-	right: 0px;
-	top: 64px;
-	z-index: 9;
-	box-sizing: border-box;
-}
-
 @media screen and (max-width: 768px) {
-	aside {
+	/* aside {
 		width: 10%;
 		min-width: 44px;
 		padding-right: 10px;
@@ -296,5 +283,5 @@ aside {
 
 	.main-nav a {
 		height: 30.4px;
-	}
+	} */
 }
