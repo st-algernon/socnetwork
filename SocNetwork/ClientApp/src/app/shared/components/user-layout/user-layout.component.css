@@ -8,7 +8,7 @@ ng-scrollbar {
 header {
 	position: fixed;
 	width: 100%;
-	padding: 7px 10px;
+	padding: 7px 10px 7px 15px;
 	background: #fff;
 	z-index: 11;
 	border-bottom: 1px solid #F4F4F4;
@@ -88,25 +88,35 @@ header {
 
 aside {
 	position: fixed;
-	/* left: 10%; */
 	top: 69px;
 	bottom: 15px;
 	width: 260px;
+	padding-right: 4px;
 	border-radius: 15px;
-	padding: 10px;
-	padding-left: 15px;
 	box-sizing: border-box;
 	background-color: #fff;
 	z-index: 10;
 }
 
 .main-nav {
-	width: 210px;
+	width: 88%;
 	font-family: 'Deezer', 'Open-sans', sans-serif;
 }
 
 .main-nav ul {
 	list-style: none;
+}
+
+.main-nav li {
+	margin-left: 6%;
+}
+
+.main-nav li:first-child {
+	margin-top: 10px;
+}
+
+.main-nav li:last-child {
+	margin-bottom: 10px;
 }
 
 .main-nav a {
@@ -125,7 +135,7 @@ aside {
 	color: #1da1f2;
 }
 
-.main-nav a > .menu-icon {
+.main-nav a .menu-icon {
 	width: 48px;
 	height: 48px;
 	background-repeat: no-repeat;
@@ -266,22 +276,86 @@ aside {
 	background-image: url(../../../../assets/images/bell-hover.png);
 }
 
-@media screen and (max-width: 768px) {
-	/* aside {
-		width: 10%;
-		min-width: 44px;
-		padding-right: 10px;
+@media screen and (min-width: 1024px) and (max-width: 1224px) {
+	header .search-profile-wrap {
+		width: 26.8%;
 	}
 
-	.main-nav {
-		width: 44px;
+	aside {
+		width: 21%;
 	}
 
-	.main-nav a span {
+	aside .main-nav {
+		width: 200px;
+	}
+
+	.main-nav a .menu-icon {
+		margin: 0px;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	header .logo a {
 		display: none;
 	}
 
-	.main-nav a {
-		height: 30.4px;
-	} */
+	header .search-profile-wrap {
+		width: 32.8%;
+	}
+
+	aside {
+		width: 8%;
+		min-width: 68px;
+	}
+
+	aside .main-nav {
+		width: auto;
+	}
+
+	aside .main-nav li {
+		margin: 0px 5px;
+	}
+
+	aside .main-nav li a {
+		justify-content: center;
+	}
+
+	aside .main-nav a .menu-title {
+		display: none;
+	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	header .logo a {
+		display: none;
+	}
+
+	aside {
+		width: 8%;
+		min-width: 68px;
+		bottom: 0px;
+	}
+
+	aside .main-nav {
+		width: auto;
+	}
+
+	aside .main-nav li {
+		margin: 0px 5px;
+	}
+	aside .main-nav li:first-child {
+		margin-top: 5px;
+	}
+	
+	aside .main-nav li:last-child {
+		margin-bottom: 5px;
+	}
+
+	aside .main-nav li a {
+		justify-content: center;
+	}
+
+	aside .main-nav a .menu-title {
+		display: none;
+	}
 }

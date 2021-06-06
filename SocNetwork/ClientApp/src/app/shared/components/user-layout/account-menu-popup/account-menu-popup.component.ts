@@ -4,11 +4,11 @@ import { Profile } from 'src/app/shared/interfaces';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
-  selector: 'app-profile-menu-popup',
-  templateUrl: './profile-menu-popup.component.html',
-  styleUrls: ['./profile-menu-popup.component.css']
+  selector: 'app-account-menu-popup',
+  templateUrl: './account-menu-popup.component.html',
+  styleUrls: ['./account-menu-popup.component.css']
 })
-export class ProfileMenuPopupComponent implements OnInit {
+export class AccountMenuPopupComponent implements OnInit {
 
   @Input() me: Profile;
   

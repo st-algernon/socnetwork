@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Profile, ProfilesResponse } from 'src/app/shared/interfaces';
@@ -14,23 +14,32 @@ export class FollowersPageComponent implements OnInit {
 
   username: string;
   followers: Profile[];
-
-  followersSub: Subscription;
+  subs: Subscription[] = [];
 
   constructor(
     private usersService: UsersService,
-    private route: ActivatedRoute
+    private router: Router
   ){ }
 
   ngOnInit() {
-    this.followersSub = this.route.params.pipe(
-      switchMap((params: Params) => {
-        this.username = params['username'];
-        return this.usersService.getFollowers(params['username']);
-      })
-    ).subscribe((response: ProfilesResponse) => { 
-      this.followers = response.profiles;
-      console.log(this.followers);
+
+    const urlTree = this.router.parseUrl(this.router.url);
+    this.username = urlTree.root.children.primary.segments[0].path;
+
+    this.subs.push( 
+
+      // this.usersService
+      //   .getFollowers(this.username, { number: 1, size: 15 })
+      //   .subscribe((response: Profile[]) => { 
+      //     this.followers = response;
+      //   })
+
+    );
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(s => {
+      s.unsubscribe();
     });
   }
 

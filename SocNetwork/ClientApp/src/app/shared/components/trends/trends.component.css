@@ -44,7 +44,7 @@ ng-scrollbar {
     display: block;
     border-bottom: 1px solid #e6eef5;
     padding: 8px 0px;
-    margin: 0px 16px;
+    margin: 0px 5%;
 }
 
 .trend-item-body {

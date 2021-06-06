@@ -42,7 +42,7 @@ ng-scrollbar {
 .follow-offers-body .follow-offer-item {
     border-bottom: 1px solid #e6eef5;
     padding: 8px 0px;
-    margin: 0px 16px;
+    margin: 0px 5%;
 }
 
 .follow-offer-item .source-name,

@@ -15,7 +15,7 @@
             alt="photo" 
           />
         </div>
-        <app-profile-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-profile-menu-popup>
+        <app-account-menu-popup [me]="me" *ngIf="profileMenuIsOpened"></app-account-menu-popup>
       </div>
     </div>
   </div>
@@ -24,7 +24,10 @@
 <div class="flex jc-c">
   <div class="wrapper">
     <aside>
-      <ng-scrollbar>
+      <ng-scrollbar 
+        trackClass="scrollbar-track"
+        visibility="hover"
+      >
       <nav class="main-nav">
         <ul>
           <li>

@@ -1,0 +1,19 @@
+    <div *ngFor="let user of following" class="user flex fd-c">
+        <div class="flex fd-r jc-sb ai-c">
+            <div class="avatar-box square-40">
+                <img 
+                    [src]="user.currentAvatarPath"
+                    alt="avatar"
+                    class="square-40"
+                >
+            </div>
+            <div class="flex fd-c fg-1">
+                <div class="source-name">{{ user.name }}</div>
+                <div class="nick-name">@{{ user.username }}</div>
+            </div>
+            <button class="btn btn-lg btn-outlined">Follow</button>
+        </div>
+        <div class="bio">{{ user.bio }}</div>
+    </div>
+  
+    <app-loader [active]="!following"></app-loader>

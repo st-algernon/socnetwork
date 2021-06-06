@@ -1,119 +1,127 @@
-<main>
-    <section class="user-info">
-        <div class="photo-cover">
-          <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.currentCoverPath" alt="cover">
-        </div>
-        <div class="user-avatar-back">
-          <div class="user-avatar">
-            <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
-            <ng-template #default_avatar>
-              <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
-            </ng-template>
+<div class="flex jc-c">
+  <main>
+      <section class="user-info">
+          <div class="photo-cover">
+            <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.currentCoverPath" alt="cover">
           </div>
-        </div>
-        <div class="flex fd-r jc-sb ai-c">
-          <div class="flex fd-c">
-            <span *ngIf="user; else empty_name" class="source-name">{{ user.name }}</span>
-            <ng-template #empty_name>
-              <span class="empty source-name"></span>
-            </ng-template>
-            <span *ngIf="user; else empty_username" class="nick-name">@{{ user.username }}</span>
-            <ng-template #empty_username>
-              <span class="empty nick-name"></span>
-            </ng-template>
+          <div class="user-avatar-back">
+            <div class="user-avatar">
+              <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
+              <ng-template #default_avatar>
+                <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
+              </ng-template>
+            </div>
           </div>
-          <div class="flex ai-c fd-r">
-            <button *ngIf="user" class="square-40 create-chat" (click)="openChat()"></button>
-            <button *ngIf="isUnFollowed && !isMe" class="btn btn-lg btn-outlined profile-action-btn" (click)="follow()">Follow</button>
-            <button 
-              *ngIf="isFollowed && !isMe"
-              class="btn btn-lg btn-filled profile-action-btn"
-              (mouseover)="changeTitleToUnfollow($event)"
-              (mouseout)="changeTitleToUnfollow($event)"
-              (click)="unfollow()"
-              >Following</button>
-            <button *ngIf="isMe" class="btn btn-lg btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
+          <div class="flex fd-r jc-sb ai-c">
+            <div class="flex fd-c">
+              <span *ngIf="user; else empty_name" class="source-name">{{ user.name }}</span>
+              <ng-template #empty_name>
+                <span class="empty source-name"></span>
+              </ng-template>
+              <span *ngIf="user; else empty_username" class="nick-name">@{{ user.username }}</span>
+              <ng-template #empty_username>
+                <span class="empty nick-name"></span>
+              </ng-template>
+            </div>
+            <div class="flex ai-c fd-r">
+              <button *ngIf="user" class="square-40 create-chat" (click)="openChat()"></button>
+              <button *ngIf="isUnFollowed && !isMe" class="btn btn-lg btn-outlined profile-action-btn" (click)="follow()">Follow</button>
+              <button 
+                *ngIf="isFollowed && !isMe"
+                class="btn btn-lg btn-filled profile-action-btn"
+                (mouseover)="changeTitleToUnfollow($event)"
+                (mouseout)="changeTitleToUnfollow($event)"
+                (click)="unfollow()"
+                >Following</button>
+              <button *ngIf="isMe" class="btn btn-lg btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
+            </div>
           </div>
-        </div>
-        <div class="flex fd-r jc-fe">
-          <div class="wrap-info flex fd-c">
-            <div *ngIf="user; else empty_bio" class="bio">{{ user.bio }}</div>
-            <ng-template #empty_bio>
-              <div class="empty bio"></div>
-            </ng-template>
-            <ul class="follow-wrap flex fd-r jc-sb">
-              <li class="">
-                <a href="#">
-                  <span *ngIf="user; else empty_count_posts">30</span>
-                  <ng-template #empty_count_posts>
-                    <span class="empty count"></span>
-                  </ng-template> 
-                  <span> posts</span>
-                </a>
-              </li>
-              <li class="">
-                <a [routerLink]="['followers']">
-                  <span *ngIf="user; else empty_count_followers">24</span>
-                  <ng-template #empty_count_followers>
-                    <span class="empty count"></span>
-                  </ng-template> 
-                  <span class="followers-label"> followers</span>
-                </a>
-              </li>
+          <div class="flex fd-r jc-fe">
+            <div class="wrap-info flex fd-c">
+              <div *ngIf="user; else empty_bio" class="bio">{{ user.bio }}</div>
+              <ng-template #empty_bio>
+                <div class="empty bio"></div>
+              </ng-template>
+              <ul class="follow-wrap flex fd-r jc-sb">
+                <li class="">
+                  <a href="#">
+                    <span *ngIf="user; else empty_count_posts">30</span>
+                    <ng-template #empty_count_posts>
+                      <span class="empty count"></span>
+                    </ng-template> 
+                    <span> posts</span>
+                  </a>
+                </li>
+                <li class="">
+                  <a [routerLink]="['followers']">
+                    <span *ngIf="user; else empty_count_followers">24</span>
+                    <ng-template #empty_count_followers>
+                      <span class="empty count"></span>
+                    </ng-template> 
+                    <span class="followers-label"> followers</span>
+                  </a>
+                </li>
 
-              <li class="">
-                <a [routerLink]="['following']">
-                  <span *ngIf="user; else empty_count_following">10</span>
-                  <ng-template #empty_count_following>
-                    <span class="empty count"></span>
-                  </ng-template>
-                  <span class="following-label"> following</span>
-                </a>
-              </li>
-            </ul>
-            <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
-              <li class="residence">Zhytomyr</li>
-              <li class="birthday">Born June 26, 1998</li>
-              <li class="relationship">Married</li>
-              <li class="more-details"></li>
-            </ul>
-            <ng-template #empty_short_info>
-              <ul class="empty-short-info flex jc-sb">
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="">
+                  <a [routerLink]="['following']">
+                    <span *ngIf="user; else empty_count_following">10</span>
+                    <ng-template #empty_count_following>
+                      <span class="empty count"></span>
+                    </ng-template>
+                    <span class="following-label"> following</span>
+                  </a>
+                </li>
               </ul>
-            </ng-template>
+              <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
+                <li class="residence">Zhytomyr</li>
+                <li class="birthday">Born June 26, 1998</li>
+                <li class="relationship">Married</li>
+                <li class="more-details"></li>
+              </ul>
+              <ng-template #empty_short_info>
+                <ul class="empty-short-info flex jc-sb">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </ng-template>
+            </div>
           </div>
-        </div>
-    </section>
+      </section>
 
-    <app-edit-profile-popup
-        *ngIf="editProfileFlag && isMe"
-        (onClose)="editProfileFlag = false"
-        [user] = "user"
-    ></app-edit-profile-popup>    
+      <app-edit-profile-popup
+          *ngIf="editProfileFlag && isMe"
+          (onClose)="editProfileFlag = false"
+          [user] = "user"
+      ></app-edit-profile-popup>    
 
-    <section class="user-wall">
-        <app-post-form [me]="me"></app-post-form>
-        <section class="wall-header flex row jc-sb">
-          <div data-container="post-switches">
-            <button data-action="loadAll" data-state="active">All posts</button>
-            <button data-action="loadByMe" data-state="inactive">Original</button>
-          </div>
-          <form action="" method="get" class="search-form flex col jc-c">
-            <input
-              type="search"
-              name="search_field"
-              placeholder="Search for people and groups"
-              autocomplete="off"
-            />
-          </form>
-        </section>
-        <app-post [isOnWall]="true"></app-post>
-    </section>
-</main>
-<section class="right-col">
-  <app-trends></app-trends>
-  <app-follow-offers></app-follow-offers>
-</section>   
+      <section class="user-wall">
+          <app-post-form [me]="me"></app-post-form>
+          <section class="user-wall-header-wrapper">
+            <div class="user-wall-header flex row jc-sb">
+              <div data-container="post-switches">
+                <button data-action="loadAll" data-state="active">All posts</button>
+                <button data-action="loadByMe" data-state="inactive">Original</button>
+              </div>
+              <form action="" method="get" class="search-form flex col jc-c">
+                <input
+                  type="search"
+                  name="search_field"
+                  placeholder="Search for people and groups"
+                  autocomplete="off"
+                />
+              </form>
+            </div>
+          </section>
+          <section class="user-wall-body">
+            <app-post></app-post>
+          </section>
+      </section>
+  </main>
+</div>
+<div class="flex jc-fe">
+  <section class="right-col">
+    <app-trends></app-trends>
+    <app-follow-offers></app-follow-offers>
+  </section>   
+</div>

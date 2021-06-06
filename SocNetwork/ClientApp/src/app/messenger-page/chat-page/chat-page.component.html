@@ -1,41 +1,49 @@
-<main class="chat flex fd-c">
-    <section class="chat-header flex fd-r jc-sb">
-            <div></div>
-            <div *ngIf="chat" class="flex fd-c ai-c">
-                <div class="source-name">{{ chat.withUser?.name || 'Saved Messages'}}</div>
-                <div class="last-visited">14 October 2019 at 09:23 am</div>
-            </div>
-            <form action="" method="get" class="search-message-form flex fd-c jc-c" >
-                <input type="search" name="search_field" placeholder="Search for people and groups" autocomplete="off" />
-            </form>
-    </section>
-    <section class="chat-body fg-1">
-        <ng-scrollbar 
-            #messagesList 
-            visibility="hover" 
-            appearance="standard"
-            trackClass="scrollbar-track"
-        ></ng-scrollbar>
-        <app-loader [active]="!chat"></app-loader>
-    </section>
-    <section class="chat-footer">
-        <form 
-            [formGroup]="form"
-            (ngSubmit)="submit()"
-            class="flex fd-r ai-fe"
-        >
-            <ul class="attach flex fd-r jc-c" data-container="attach">
-                <li class="add-picture-btn round r-20 square-28" data-attach="picture"></li>
-                <li class="add-music-btn round r-20 square-28" data-attach="music"></li>
-                <li class="add-video-btn round r-22 square-28" data-attach="video"></li>
-            </ul>
-            <div class="textarea-attach-wrap flex fd-r ai-fe">
-                <textarea name="post-field" formControlName="messageText" placeholder="Write a message..." data-submit-btn="blink"></textarea>
-                <ul class="attach flex fd-r jc-sb" data-container="attach">
-                    <li class="add-emoji-btn round r-22 square-28" data-attach="emoji"></li>
+<div class="flex jc-c">
+    <main class="chat flex fd-c">
+        <section class="chat-header flex fd-r jc-sb">
+                <div>
+                    <button 
+                        routerLink="/messenger"
+                        class="back-btn square-40 round r-22"
+                    ></button>
+                </div>
+                <div *ngIf="chat" class="flex fd-c ai-c">
+                    <div class="source-name">{{ chat.withUser?.name || 'Saved Messages'}}</div>
+                    <div class="last-visited">14 October 2019 at 09:23 am</div>
+                </div>
+                <form action="" method="get" class="search-message-form flex fd-c jc-c" >
+                    <input type="search" name="search_field" placeholder="Search for people and groups" autocomplete="off" />
+                </form>
+        </section>
+        <section class="chat-body fg-1">
+            <ng-scrollbar 
+                #messagesList 
+                visibility="hover" 
+                appearance="standard"
+                trackClass="scrollbar-track"
+            >
+                <app-loader [active]="!chat"></app-loader>
+            </ng-scrollbar>
+        </section>
+        <section class="chat-footer">
+            <form 
+                [formGroup]="form"
+                (ngSubmit)="submit()"
+                class="flex fd-r ai-fe"
+            >
+                <ul class="attach flex fd-r jc-c" data-container="attach">
+                    <li class="add-picture-btn round r-20 square-28" data-attach="picture"></li>
+                    <li class="add-music-btn round r-20 square-28" data-attach="music"></li>
+                    <li class="add-video-btn round r-22 square-28" data-attach="video"></li>
                 </ul>
-            </div>
-            <button type="submit" class="submit-btn square-32 fs-0"></button>
-        </form>
-    </section>
-</main>
+                <div class="textarea-attach-wrap flex fd-r ai-fe">
+                    <textarea name="post-field" formControlName="messageText" placeholder="Write a message..." data-submit-btn="blink"></textarea>
+                    <ul class="attach flex fd-r jc-sb" data-container="attach">
+                        <li class="add-emoji-btn round r-22 square-28" data-attach="emoji"></li>
+                    </ul>
+                </div>
+                <button type="submit" class="submit-btn square-32 fs-0"></button>
+            </form>
+        </section>
+    </main>
+</div>

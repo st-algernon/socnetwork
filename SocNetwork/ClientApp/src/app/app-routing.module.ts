@@ -8,10 +8,11 @@ import { AuthService } from "./shared/services/auth.service";
 const routes : Routes = [
     { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
     { path: '', component: UserLayoutComponent, children: [
+        { path: '', redirectTo: 'news', pathMatch: 'full' },
         { path: 'news', loadChildren: () => import('./news-page/news.module').then(m => m.NewsModule), canActivate: [AuthGuard] },
         { path: 'messenger', loadChildren: () => import('./messenger-page/messenger.module').then(m => m.MessengerModule), canActivate: [AuthGuard] },
         { path: 'explore', loadChildren: () => import('./explore-page/explore.module').then(m => m.ExploreModule), canActivate: [AuthGuard] },
-        { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] }
+        { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] },
     ]},
     { path: '**', component: NotFoundPageComponent }
 ];

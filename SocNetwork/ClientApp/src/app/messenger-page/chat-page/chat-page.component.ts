@@ -45,16 +45,19 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         return this.messengerService.getChatWith(params['id']);
       })
     ).subscribe((response: Chat) => { 
-      console.log(this.messagesList);
 
       this.chat = response;
-      this.chat = this.messengerService.includeWithUser(this.chat, this.me);
       this.chat.messagesDTO.reverse();
+
+      this.clearMessagesList();
+      this.chat = this.messengerService.includeWithUser(this.chat, this.me);
 
       for (let m of this.chat.messagesDTO) {
         this.renderMessageTemplate(m);
-        this.scrollToBottom();
       }
+
+      this.toBottomList();
+      this.scrollToBottom();
     });
 
     this.messengerHub.message$.subscribe((messageDTO: Message) => {
@@ -151,10 +154,26 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private scrollToBottom() {
-    window.scrollTo({ 
+    console.dir((this.messagesList as NgScrollbar).viewport.contentWrapperElement);
+
+    (this.messagesList as NgScrollbar).scrollTo({ 
       left: 0, 
-      top: this.messagesList.nativeElement.offsetHeight,
-      behavior: 'smooth'
+      top: (this.messagesList as NgScrollbar).viewport.contentWrapperElement.offsetHeight
     });
+  }
+
+  private clearMessagesList() {
+    (this.messagesList as NgScrollbar).viewport.contentWrapperElement.innerHTML = "";
+  }
+
+  private toBottomList() {
+    const contentWrapper = (this.messagesList as NgScrollbar).viewport.contentWrapperElement;
+    
+    contentWrapper.style.minHeight = '100%';
+    contentWrapper.style.display = 'flex';
+    contentWrapper.style.flexDirection = 'column';
+    contentWrapper.style.justifyContent = 'flex-end';
+    (contentWrapper.lastElementChild as HTMLElement).style.marginBottom = '8px';
+
   }
 }

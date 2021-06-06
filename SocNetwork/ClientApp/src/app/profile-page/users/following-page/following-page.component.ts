@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router, UrlSegmentGroup } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Profile, ProfilesResponse } from 'src/app/shared/interfaces';
@@ -17,22 +17,21 @@ export class FollowingPageComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
     private usersService: UsersService
   ) { }
 
   ngOnInit() {
+    const urlTree = this.router.parseUrl(this.router.url);
+    this.username = urlTree.root.children.primary.segments[0].path;
+
     this.subs.push( 
 
-      this.route.params.pipe(
-        switchMap((params: Params) => {
-          this.username = params['username'];
-          return this.usersService.getFollowing(params['username'], { number: 1, size: 15});
+      this.usersService
+        .getFollowing(this.username, { number: 1, size: 15 })
+        .subscribe((response: Profile[]) => { 
+          this.following = response;
         })
-      ).subscribe((profiles: Profile[]) => { 
-        console.log(profiles);
-        this.following = profiles;
-      })
 
     );
   }

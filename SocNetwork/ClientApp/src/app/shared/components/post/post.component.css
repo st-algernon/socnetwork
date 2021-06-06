@@ -2,17 +2,6 @@
 	margin-top: 10px;
 }
 
-
-.without-top-b-radius:first-child {
-	border-radius: 0px 0px 15px 15px!important;
-}
-
-.post-wrap .no-posts {
-	text-align: center;
-	color: #777;
-	padding: 25px;
-}
-
 .post-wrap .post {
 	background: #fff;
 	border-radius: 15px;

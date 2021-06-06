@@ -8,7 +8,7 @@ import { EditProfilePopupComponent } from './edit-profile-popup/edit-profile-pop
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { UsersService } from "../shared/services/users.service";
 import { CustomSelectComponent } from "../shared/components/custom-select/custom-select.component";
-import { FollowingFollowersPageComponent } from './following-followers-page/following-followers-page.component';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
@@ -16,13 +16,13 @@ import { SharedModule } from "../shared/shared.module";
         ProfilePageComponent,
         EditProfilePopupComponent,
         CustomSelectComponent,
-        FollowingFollowersPageComponent,
     ],
     imports: [
         ProfileRoutingModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        NgScrollbarModule,
         SharedModule
     ],
     exports: [],

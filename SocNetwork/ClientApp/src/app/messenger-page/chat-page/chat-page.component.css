@@ -15,10 +15,10 @@ ng-scrollbar {
 	position: fixed;
 	top: 69px;
 	bottom: 15px;
-	width: 40%;
+	width: 612px;
 	box-sizing: border-box;
 	border-radius: 15px;
-	z-index: 1;
+	z-index: 10;
 	padding: 0px 8px;
 	margin-right: 60px;
 	background-color: #fff;
@@ -29,6 +29,14 @@ ng-scrollbar {
 	padding: 6px 0px 2px 0px;
 	background-color: #fff;
 	min-height: 40px;
+}
+
+.chat-header .back-btn {
+	background-image: url(../../../assets/images/back-btn.png);	
+}
+
+.chat-header .back-btn:hover {
+	background-image: url(../../../assets/images/back-btn-hover.png);
 }
 
 .chat-header .source-name {
@@ -159,4 +167,27 @@ ng-scrollbar {
 
 .attach .add-emoji-btn {
 	background-image: url(../../../assets/images/emoji.png);
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1224px) {
+	.chat {
+		width: 49.5%;
+		margin-right: 6%;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	.chat {
+		width: 56%;
+		margin-right: 25%;
+	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	.chat {
+		width: 86%;
+		margin-left: 73px;
+		margin-right: 0px;
+		bottom: 0px;
+	}
 }

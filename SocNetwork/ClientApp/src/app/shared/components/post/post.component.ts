@@ -7,9 +7,6 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PostComponent implements OnInit {
 
-  @Input()
-  isOnWall: boolean = false;
-
   constructor() { }
 
   ngOnInit() {
