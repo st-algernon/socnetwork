@@ -14,7 +14,13 @@ namespace SocNetwork.Helpers
 
         public RelationshipsHelper(SocNetworkContext context) {
             db = context;
-        }       
+        }
+
+        public UserRelationship Get(User fromUser, User toUser)
+        {
+            return db.UserRelationships
+                .FirstOrDefault( ur => ur.FromUserId == fromUser.Id && ur.ToUserId == toUser.Id);
+        }
         
         public UserRelationship GetOrDefault(User fromUser, User toUser) {
 
@@ -30,23 +36,18 @@ namespace SocNetwork.Helpers
             };
         }
 
-        public UserRelationship CreateOrExisting(User fromUser, User toUser) {
+        public UserRelationship Create(User fromUser, User toUser) 
+        {
+            var ur = new UserRelationship()
+            {
+                FromUserId = fromUser.Id,
+                ToUserId = toUser.Id,
+                UserRelationshipType = UserRelationshipType.UnFollowed,
+                CreationDate = DateTime.Now
+            };
 
-            var ur = db.UserRelationships
-                .FirstOrDefault(
-                    ur => ur.FromUserId == fromUser.Id && ur.ToUserId == toUser.Id
-                );
-            
-            if (ur == null) {
-                ur = new() {
-                    FromUserId = fromUser.Id,
-                    ToUserId = toUser.Id,
-                    CreationDate = DateTime.Now
-                };
-
-                db.UserRelationships.Add(ur);
-                db.SaveChanges();
-            }
+            db.UserRelationships.Add(ur);
+            db.SaveChanges();
 
             return ur;
         }

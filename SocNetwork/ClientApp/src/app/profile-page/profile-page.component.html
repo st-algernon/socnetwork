@@ -2,11 +2,11 @@
   <main>
       <section class="user-info">
           <div class="photo-cover">
-            <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.currentCoverPath" alt="cover">
+            <img *ngIf="user?.profileMediaDTOs?.length > 0" [src]="user.currentCoverPath" alt="cover">
           </div>
           <div class="user-avatar-back">
             <div class="user-avatar">
-              <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
+              <img *ngIf="user?.profileMediaDTOs?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
               <ng-template #default_avatar>
                 <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
               </ng-template>
@@ -88,13 +88,12 @@
             </div>
           </div>
       </section>
-
-      <app-edit-profile-popup
-          *ngIf="editProfileFlag && isMe"
-          (onClose)="editProfileFlag = false"
-          [user] = "user"
-      ></app-edit-profile-popup>    
-
+      <section class="user-photo">
+        <app-photos 
+        *ngIf="user" 
+        [photos]="user.mediaDTO"
+        ></app-photos>
+      </section>
       <section class="user-wall">
           <app-post-form [me]="me"></app-post-form>
           <section class="user-wall-header-wrapper">
@@ -121,7 +120,19 @@
 </div>
 <div class="flex jc-fe">
   <section class="right-col">
-    <app-trends></app-trends>
-    <app-follow-offers></app-follow-offers>
+    <ng-scrollbar>
+      <app-photos 
+        *ngIf="user" 
+        [photos]="user.mediaDTO"
+      ></app-photos>
+      <app-trends></app-trends>
+      <app-follow-offers></app-follow-offers>
+    </ng-scrollbar>
   </section>   
 </div>
+
+<app-edit-profile-popup
+  *ngIf="editProfileFlag && isMe"
+  (onClose)="editProfileFlag = false"
+  [user] = "user"
+></app-edit-profile-popup>    

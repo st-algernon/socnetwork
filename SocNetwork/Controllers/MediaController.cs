@@ -28,15 +28,9 @@ namespace SocNetwork.Controllers
             db = context;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         [Authorize(Roles = "User")]
         [HttpPost("profile"), DisableRequestSizeLimit]
-        public async Task<IActionResult> ProfileMedia()
+        public async Task<IActionResult> UploadProfileMedia()
         {
             var currentUser = HttpContext.Items["User"] as User;
 
@@ -63,18 +57,6 @@ namespace SocNetwork.Controllers
             await db.SaveChangesAsync();
 
             return Ok();
-        }
-
-        // PUT api/<MediaController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MediaController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

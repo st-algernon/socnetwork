@@ -15,8 +15,9 @@ export class MediaService {
       'Media-For': mediaFor.toString()
     });
     
-    return this.http
-      .post(`${environment.apiUrl}/media/profile`, formData, { headers: header })
-      .pipe(tap(console.log));
+    return this.http.post(`${environment.apiUrl}/media/profile`, formData, { headers: header })
+    .pipe(
+      tap(console.log)
+    );
   }
 }

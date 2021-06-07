@@ -2,7 +2,7 @@ import { AfterContentChecked, AfterContentInit, ChangeDetectorRef, Component, Do
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MediaFor } from '../../enums';
-import { Profile } from '../../interfaces';
+import { ShortProfile } from '../../interfaces';
 import { AuthService } from '../../services/auth.service';
 import { UsersService } from '../../services/users.service';
 
@@ -13,8 +13,8 @@ import { UsersService } from '../../services/users.service';
 })
 export class UserLayoutComponent implements OnInit, OnDestroy {
 
-  me: Profile;
-  meSub: Subscription;
+  me: ShortProfile;
+  subs: Subscription[] = [];
   profileMenuIsOpened = false;
 
   constructor(
@@ -22,10 +22,14 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.meSub = this.usersService.me$.subscribe((response: Profile) => { this.me = response });
+    this.subs.push(
+      this.usersService.me$.subscribe((shortProfile: ShortProfile) => { this.me = shortProfile })
+    );
   }
 
-  ngOnDestroy(): void {
-    this.meSub.unsubscribe();
+  ngOnDestroy() {
+    this.subs.forEach(
+      s => s.unsubscribe()
+    );
   }
 }

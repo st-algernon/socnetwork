@@ -18,46 +18,15 @@ namespace SocNetwork.Helpers
             db = context;
         }
 
-        public ProfileDTO GetProfileDTO(string username)
+        public static MediaDTO GetCurrentAvatar(User user)
         {
-            var user = db.Users
-                .Include(u => u.ProfileMedia)
-                .FirstOrDefault(u => u.Username == username);
+            var avatar = user.ProfileMedia
+                .FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Avatar);
+            var avatarDTO = new MediaDTO();
 
-            var profileDTO = new ProfileDTO();
+            avatar.CopyPropertiesTo(avatarDTO);
 
-            user.CopyPropertiesTo<User, ProfileDTO>(profileDTO);
-
-            profileDTO.MediaDTO = GetProfileMediaDTO(user);
-
-            return profileDTO;
-        }
-
-        public ProfileDTO GetProfileDTO(User user)
-        {
-            var profileDTO = new ProfileDTO();
-
-            user.CopyPropertiesTo<User, ProfileDTO>(profileDTO);
-
-            profileDTO.MediaDTO = GetProfileMediaDTO(user);
-
-            return profileDTO;
-        }
-
-        public List<ProfileMediaDTO> GetProfileMediaDTO(User user)
-        {
-            var media = user.ProfileMedia.ToList();
-
-            var mediaDTO = new List<ProfileMediaDTO>();
-
-            media.ForEach(m =>
-            {
-                var mDTO = new ProfileMediaDTO();
-                m.CopyPropertiesTo<ProfileMedia, ProfileMediaDTO>(mDTO);
-                mediaDTO.Add(mDTO);
-            });
-
-            return mediaDTO;
+            return avatarDTO;
         }
     }
 }

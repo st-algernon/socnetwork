@@ -7,7 +7,7 @@ namespace SocNetwork.DTO
 {
     public class UserPostDTO
     {
-        public Guid UserId { get; set; }
+        public UserDTO UserDTO { get; set; }
         public bool IsLiked { get; set; }
         public bool IsSaved { get; set; }
         public bool IsAuthor { get; set; }

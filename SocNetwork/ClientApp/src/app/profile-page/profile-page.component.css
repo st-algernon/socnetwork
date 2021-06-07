@@ -5,6 +5,10 @@
 	position: relative;
 }
 
+ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
+}
+
 main {
 	width: 612px;
 	margin: 69px 60px 0px 0px;
@@ -16,6 +20,7 @@ main .user-info {
 	background: #fff;
 	border-radius: 15px;
 	overflow: hidden;
+	margin-bottom: 15px;
 }
 
 .user-info .photo-cover {
@@ -208,6 +213,10 @@ main .user-info {
 	border-radius: 10px;
 }
 
+.user-photo {
+	display: none;
+}
+
 .user-wall {
     width: 100%;
 }
@@ -279,8 +288,10 @@ main .user-info {
 .right-col {
 	position: fixed;
 	top: 69px;
-	bottom: 15px;
+	bottom: 0px;
 	width: 320px;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
 	z-index: 9;
 	box-sizing: border-box;
 }
@@ -316,5 +327,9 @@ main .user-info {
 
 	.right-col {
 		display: none;
+	}
+
+	.user-photo {
+		display: block;
 	}
 }

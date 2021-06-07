@@ -1,6 +1,6 @@
 <header class="flex jc-c">
   <div class="wrapper flex ai-c jc-sb">
-    <div class="logo"><a href="#">algernon</a></div>
+    <div routerLink="/news" class="logo"><a>algernon</a></div>
     <div class="search-profile-wrap flex fd-r ai-c jc-sb">
       <form action="" method="get" class="search-form fg-1">
         <input type="search" name="search" placeholder="Search" />
@@ -10,7 +10,7 @@
         <div class="avatar-box square-32" (click)="profileMenuIsOpened = !profileMenuIsOpened">
           <img 
             *ngIf="me"
-            [src]="me.currentAvatarPath"
+            [src]="me.avatarDTO.path"
             class="square-32"
             alt="photo" 
           />

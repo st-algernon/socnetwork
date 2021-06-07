@@ -14,7 +14,7 @@ ng-scrollbar {
 .chat {
 	position: fixed;
 	top: 69px;
-	bottom: 15px;
+	bottom: 0px;
 	width: 612px;
 	box-sizing: border-box;
 	border-radius: 15px;

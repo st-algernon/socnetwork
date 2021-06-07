@@ -17,38 +17,5 @@ namespace SocNetwork.Helpers
             db = context;
         }
 
-        public MessageDTO ConvertToDTO(Message message)
-        {
-            var messageDTO = new MessageDTO();
-
-            message.CopyPropertiesTo(messageDTO);
-            
-            messageDTO.MessageMediaDTO = ConvertMediaToDTO(message.MessageAttachments);
-
-            return messageDTO;
-        }
-
-        public Message ConvertFromDTO(MessageDTO messageDTO)
-        {
-            var message = new Message();
-
-            messageDTO.CopyPropertiesTo(message);
-
-            return message;
-        }
-
-        public List<MediaDTO> ConvertMediaToDTO(List<MessageMedia> media)
-        {
-            var mediaDTO = new List<MediaDTO>();
-
-            media.ForEach(m =>
-            {
-                var mDTO = new MediaDTO();
-                m.CopyPropertiesTo(mDTO);
-                mediaDTO.Add(mDTO);
-            });
-
-            return mediaDTO;
-        }
     }
 }

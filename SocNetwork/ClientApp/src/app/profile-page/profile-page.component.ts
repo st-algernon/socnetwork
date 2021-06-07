@@ -4,10 +4,11 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MediaFor, UserRelationshipType } from '../shared/enums';
-import { Profile, UserRelationship } from '../shared/interfaces';
+import { Profile, ShortProfile, UserRelationship } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
 import { MessengerHub } from '../shared/hubs/messenger.hub';
 import { UsersService } from '../shared/services/users.service';
+import { RelationshipsService } from '../shared/services/relationships.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -17,63 +18,64 @@ import { UsersService } from '../shared/services/users.service';
 export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChecked{
 
   user: Profile;
-  me: Profile;  
+  me: ShortProfile;  
 
   editProfileFlag: boolean = false;
   isMe: boolean = false;
   isFollowed: boolean = false;
   isUnFollowed: boolean = false;
 
-  userSub: Subscription;
-  meSub: Subscription;
-  urSub: Subscription;
-  followSub: Subscription;
+  subs: Subscription[];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private usersService: UsersService,
+    private relationshipsService: RelationshipsService,
     private messengerHub: MessengerHub
     ) { }
 
   ngOnInit(): void {
-    this.meSub = this.usersService.me$.subscribe((response: Profile) => this.me = response);
 
-    this.userSub = this.route.params.pipe(
-      switchMap((params: Params) => {
-        return this.usersService.getProfile(params['username']);
-      })
-    ).subscribe((response: Profile) => { 
-      console.log(response);
-      this.user = response;
-    });
+    this.subs.push(
 
-    this.urSub = this.route.params.pipe(
-      switchMap((params: Params) => {
-        return this.usersService.getRelationshipWith(params['username']);
+      this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
+
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          return this.usersService.getProfile(params['username']);
+        })
+      ).subscribe((profile: Profile) => { 
+        console.log(profile);
+        this.user = profile;
+      }),
+    
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          return this.relationshipsService.getRelationshipWith(params['username']);
+        })
+      ).subscribe((userRelationship: UserRelationship) => {
+        if (userRelationship.userRelationshipType == UserRelationshipType.Followed) {
+          this.isFollowed = true;
+        }
+        if (response.userRelationshipType == UserRelationshipType.UnFollowed) {
+          this.isUnFollowed = true;
+        }
       })
-    ).subscribe((response: UserRelationship) => {
-      if (response.userRelationshipType == UserRelationshipType.Followed) {
-        this.isFollowed = true;
-      }
-      if (response.userRelationshipType == UserRelationshipType.UnFollowed) {
-        this.isUnFollowed = true;
-      }
-    });
+    
+    );
 
     // this.messengerHub.startConnection();
     // this.messengerHub.addReceivedMessageListener();
   }
 
-  ngOnDestroy(): void {
-    this.userSub?.unsubscribe();
-    this.meSub?.unsubscribe();
-    this.urSub?.unsubscribe();
-    this.followSub?.unsubscribe();
+  ngOnDestroy() {
+    this.subs.forEach(
+      s => s.unsubscribe()
+    );
   }
 
   ngAfterContentChecked(): void {
-
     if (this.me?.id == this.user?.id) {
       this.isMe = true;
     }
@@ -84,25 +86,33 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   }
 
   follow() {
-    this.followSub = this.route.params.pipe(
-      switchMap((params: Params) => {
-        return this.usersService.follow(params['username']);
+    this.subs.push( 
+
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          return this.usersService.follow(params['username']);
+        })
+      ).subscribe(() => { 
+        this.isFollowed = true;
+        this.isUnFollowed = false;
       })
-    ).subscribe(() => { 
-      this.isFollowed = true;
-      this.isUnFollowed = false;
-    });
+
+    );
   }
 
   unfollow() {
-    this.followSub = this.route.params.pipe(
-      switchMap((params: Params) => {
-        return this.usersService.unfollow(params['username']);
+    this.subs.push( 
+
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          return this.usersService.unfollow(params['username']);
+        })
+      ).subscribe(() => { 
+        this.isUnFollowed = true;
+        this.isFollowed = false;
       })
-    ).subscribe(() => { 
-      this.isUnFollowed = true;
-      this.isFollowed = false;
-    });
+
+    );
   }
 
   changeTitleToUnfollow($event: MouseEvent) {

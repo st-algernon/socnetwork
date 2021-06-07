@@ -11,11 +11,11 @@ namespace SocNetwork.Models
         public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<Repost> Reposts { get; set; }
+        public DbSet<RePost> RePosts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<ReMessage> ReMessages { get; set; }
-        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Chat> Chats { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<MessageMedia> MessageMedia { get; set; }
         public DbSet<PostMedia> PostMedia { get; set; }

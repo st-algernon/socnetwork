@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Profile } from '../shared/interfaces';
+import { ShortProfile } from '../shared/interfaces';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { UsersService } from '../shared/services/users.service';
   styleUrls: ['./news-page.component.css']
 })
 export class NewsPageComponent implements OnInit, OnDestroy {
-  me: Profile;
+  me: ShortProfile;
   subs: Subscription[] = [];
 
   constructor(
@@ -18,7 +18,7 @@ export class NewsPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.push(
-      this.usersService.me$.subscribe((response: Profile) => this.me = response),
+      this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
     );
   }
 

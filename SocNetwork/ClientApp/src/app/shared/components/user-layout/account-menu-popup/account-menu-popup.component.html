@@ -3,12 +3,12 @@
     <span class="flex fd-r ai-c">
       <span class="avatar-box square-40">
         <img 
-          [src]="me.currentAvatarPath"
+          [src]="me?.avatarDTO.path"
           class="square-40"
           alt="photo" 
         />
       </span>
-      <span>{{ me.name }}</span>
+      <span>{{ me?.name }}</span>
     </span>
   </a>
   <ul class="menu-body">

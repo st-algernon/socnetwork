@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router, UrlSegmentGroup } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Profile, ProfilesResponse } from 'src/app/shared/interfaces';
+import { ShortProfile } from 'src/app/shared/interfaces';
 import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { UsersService } from 'src/app/shared/services/users.service';
 export class FollowingPageComponent implements OnInit, OnDestroy {
 
   username: string;
-  following: Profile[];
+  following: ShortProfile[];
   subs: Subscription[] = [];
 
   constructor(
@@ -22,16 +22,16 @@ export class FollowingPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+
     const urlTree = this.router.parseUrl(this.router.url);
     this.username = urlTree.root.children.primary.segments[0].path;
 
     this.subs.push( 
 
-      this.usersService
-        .getFollowing(this.username, { number: 1, size: 15 })
-        .subscribe((response: Profile[]) => { 
-          this.following = response;
-        })
+      this.usersService.getFollowing(this.username, { number: 1, size: 15 })
+      .subscribe((response: ShortProfile[]) => { 
+        this.following = response;
+      })
 
     );
   }

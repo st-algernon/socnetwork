@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO
 {
-    public class UserDTO
+    public class ShortChatDTO
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Username { get; set; }
+        public string Title { get; set; }
+        public MediaDTO CoverDTO { get; set; }
+        public MessageDTO LastMessageDTO { get; set; }
     }
 }

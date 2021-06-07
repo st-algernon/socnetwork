@@ -1,3 +1,7 @@
+ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
+}
+
 main {
 	width: 612px;
 	margin: 54px 60px 0px 0px;
@@ -7,8 +11,10 @@ main {
 .right-col {
 	position: fixed;
 	top: 69px;
-	bottom: 15px;
+	bottom: 0px;
 	width: 320px;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
 	z-index: 9;
 	box-sizing: border-box;
 }

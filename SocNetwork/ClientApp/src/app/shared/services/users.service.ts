@@ -4,24 +4,19 @@ import { forkJoin, Observable, ReplaySubject } from "rxjs";
 import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { EditProfileInfoRequest, Media, Profile, ProfileMedia, ProfileMediaResponse, ProfileResponse, ProfilesResponse, UserRelationship, UsersPageParams } from "../interfaces";
+import { EditProfileInfoRequest, Media, ShortProfileResponse, Profile, ProfileMedia, ProfileMediaResponse, ProfileResponse, ProfilesResponse, ShortProfile, ShortProfilesResponse, UserRelationship, UsersPageParams } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
 
-    private _me$ = new ReplaySubject<Profile>();
+    private _me$ = new ReplaySubject<ShortProfile>();
     
-    get me$(): ReplaySubject<Profile> {
+    get me$(): ReplaySubject<ShortProfile> {
 
         if (localStorage.me == null) {
-            this.getMyUsername()
-            .pipe(
-                switchMap((response: { username: string }) => {
-                    return this.getProfile(response.username)
-                })
-            ).subscribe(
-                (response: Profile) => {
-                    localStorage.me = JSON.stringify(response);
+            this.getMyShortProfile().subscribe(
+                (shortProfile: ShortProfile) => {
+                    localStorage.me = JSON.stringify(shortProfile);
                 },
                 (error) => {
                     console.log(error);
@@ -41,26 +36,25 @@ export class UsersService {
         private http: HttpClient
     ) {}
 
-    getAll() {
-        return this.http.get(`${environment.apiUrl}/users`)
-        .pipe(tap(console.log));
-    }
-
-    getFollowers(username: string) {
-        return this.http.get(`${environment.apiUrl}/users/${username}/followers`)
-    }
-
-    getFollowing(username: string, usersPageParams?: UsersPageParams): Observable<Profile[]> {
+    getFollowers(username: string, usersPageParams?: UsersPageParams): Observable<ShortProfile[]> {
         const params = new HttpParams()
         .set('Number', usersPageParams?.number.toString())
         .set('Size', usersPageParams?.size.toString());
 
-        return this.http.get<ProfilesResponse>(`${environment.apiUrl}/users/${username}/following`, { params })
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}/followers`, { params })
         .pipe(
-            map((response: ProfilesResponse) => response.profiles ),
-            tap((profiles: Profile[]) => {
-                return profiles.map(u => this.completeProfile(u));
-            })
+            map((response: ShortProfilesResponse) => response.shortProfiles )
+        )
+    }
+
+    getFollowing(username: string, usersPageParams?: UsersPageParams): Observable<ShortProfile[]> {
+        const params = new HttpParams()
+        .set('Number', usersPageParams?.number.toString())
+        .set('Size', usersPageParams?.size.toString());
+
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}/following`, { params })
+        .pipe(
+            map((response: ShortProfilesResponse) => response.shortProfiles )
         )
     }
 
@@ -75,38 +69,41 @@ export class UsersService {
                     lastVisited: new Date(response.profile.lastVisited)
                 }
             }),
-            map((response: Profile) => this.completeProfile(response))
+            map((profile: Profile) => this.completeProfile(profile))
         )
     }
 
-    getMyUsername() {
-        return this.http.get(`${environment.apiUrl}/users/me`);
+    getShortProfile(username: string): Observable<ShortProfile> {
+        return this.http.get<ShortProfileResponse>(`${environment.apiUrl}/users/${username}`)
+        .pipe(
+            map((response: ShortProfileResponse) => { 
+                return { 
+                    ...response.shortProfile,
+                    lastVisited: new Date(response.shortProfile.lastVisited)
+                }
+            })
+        );
+    }
+
+    getMyShortProfile(): Observable<ShortProfile> {
+        return this.http.get<ShortProfileResponse>(`${environment.apiUrl}/users/me`)
+        .pipe(
+            map((response: ShortProfileResponse) => response.shortProfile)
+        );
     }
 
     getProfileMedia(username: string): Observable<ProfileMedia[]> {
         return this.http.get<ProfileMediaResponse>(`${environment.apiUrl}/media/profile/${username}`)
         .pipe(
-          map((response: ProfileMediaResponse) => { return response.media })
+          map((response: ProfileMediaResponse) => response.media)
         )
-    }
-
-    getRelationshipWith(username: string) {
-        return this.http.get<UserRelationship>(`${environment.apiUrl}/users/relationship-with/${username}`);
     }
 
     editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
         return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
     }
 
-    follow(username: string) {        
-        return this.http.put(`${environment.apiUrl}/users/follow/${username}`, null);
-    }
-
-    unfollow(username: string) {        
-        return this.http.delete(`${environment.apiUrl}/users/unfollow/${username}`);
-    }
-
-    completeProfile(user: Profile): Profile {
+    private completeProfile(user: Profile): Profile {
         return {
             ...user,
             currentAvatarPath: user.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,

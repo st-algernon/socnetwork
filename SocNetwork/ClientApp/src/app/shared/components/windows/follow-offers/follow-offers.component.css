@@ -5,9 +5,9 @@ ng-scrollbar {
 }
 
 .follow-offers {
+    margin-bottom: 15px;
     border-radius: 15px;
-    padding: 8px;
-    padding-top: 0px;
+    padding: 0px 6px 8px 6px;
     background-color: #fff;
 }
 

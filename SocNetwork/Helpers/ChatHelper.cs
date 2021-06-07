@@ -19,37 +19,26 @@ namespace SocNetwork.Helpers
             db = context;
         }
 
-        public async Task<List<Conversation>> GetUserChatsAsync(User user)
+        public async Task<List<Chat>> GetUserChatsAsync(User user)
         {
-            await db.Entry(user).Collection(c => c.Conversations).LoadAsync();
-
-            //var mychats = db.Conversations
-            //    .Where(c => c.Members.Contains(user))
-            //    .Include(c => c.Members)
-            //    .ThenInclude(m => m.ProfileMedia)
-            //    .Include(c => c.Messages)
-            //    .Select(c => new Conversation { c.Messages.Take(DEFAULT_MESSAGES_NUM).ToList() })
-            //    .ToList();
-            //var mychats2 = db.Users..FirstOrDefault(u => u.Id == user.Id);
-            //var chats = db.Conversations.Include(c => c.Members)
-            //    .ThenInclude(m => m.ProfileMedia).Include(c => c.Messages).Select(c => {  }).ToList();
+            await db.Entry(user).Collection(c => c.Chats).LoadAsync();
        
-            foreach (var chat in user.Conversations)
+            foreach (var chat in user.Chats)
             {
                 await LoadChatUserMediaAsync(chat);
                 await LoadLastChatMessagesAsync(chat, DEFAULT_LAST_MESSAGES_NUM);
             }
 
-            return user.Conversations;
+            return user.Chats;
         }
 
-        public async Task<Conversation> GetChatByMembersAsync(List<User> members)
+        public async Task<Chat> GetChatByMembersAsync(List<User> members)
         {
-            List<Conversation> chats = db.Conversations
+            List<Chat> chats = db.Chats
                 .Include(c => c.Members)
                 .ToList();
 
-            Conversation wantedChat = null;
+            Chat wantedChat = null;
 
             foreach (var chat in chats)
             {
@@ -64,49 +53,22 @@ namespace SocNetwork.Helpers
             return wantedChat;
         }
 
-        public async Task<Conversation> CreateChatAsync(List<User> members)
+        public async Task<Chat> CreateChatAsync(List<User> members)
         {
-            var chat = new Conversation()
+            var chat = new Chat()
             {
                 Members = members,
                 Messages = new List<Message>(),
                 CreationDate = DateTime.Now
             };
 
-            await db.Conversations.AddAsync(chat);
+            await db.Chats.AddAsync(chat);
             await db.SaveChangesAsync();
 
             return chat;
         }
 
-        public ChatDTO ConvertToDTO(Conversation chat)
-        {
-            var chatDTO = new ChatDTO
-            {
-                MembersDTO = new List<ProfileDTO>(),
-                MessagesDTO = new List<MessageDTO>()
-            };
-
-            chat.CopyPropertiesTo(chatDTO);
-
-            var usersHelper = new UsersHelper(db);
-
-            chat.Members.ForEach(m =>
-            {
-                chatDTO.MembersDTO.Add(usersHelper.GetProfileDTO(m));
-            });
-
-            var messagesHelper = new MessagesHelper(db);
-
-            chat.Messages.ForEach(m =>
-            {
-                chatDTO.MessagesDTO.Add(messagesHelper.ConvertToDTO(m));
-            });
-
-            return chatDTO;
-        }
-
-        public async Task LoadChatUserMediaAsync(Conversation chat)
+        public async Task LoadChatUserMediaAsync(Chat chat)
         {
             await db.Entry(chat).Collection(c => c.Members).LoadAsync();
 
@@ -116,7 +78,7 @@ namespace SocNetwork.Helpers
             }
         }
 
-        public async Task LoadLastChatMessagesAsync(Conversation chat, int number)
+        public async Task LoadLastChatMessagesAsync(Chat chat, int number)
         {
             await db.Entry(chat)
                 .Collection(c => c.Messages)
@@ -125,6 +87,16 @@ namespace SocNetwork.Helpers
                 .OrderByDescending(m => m.CreationDate)
                 .Take(number)
                 .ToListAsync();
+        }
+
+        public static string GenerateChatName(Chat chat, User currentUser)
+        {
+            var otherMembers = chat.Members.Except(new List<User> { currentUser }).ToList();
+            var namesOfOthers = new List<string>();
+
+            otherMembers.ForEach(m => namesOfOthers.Add(m.Name));
+
+            return string.Join(", ", namesOfOthers);
         }
     }
 }

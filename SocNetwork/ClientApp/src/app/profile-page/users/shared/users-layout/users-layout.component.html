@@ -1,17 +1,17 @@
 <div class="flex jc-c">
     <main class="users flex fd-c">
         <section class="users-header flex fd-c ai-s jc-sb">
-            <div class="flex fd-c ai-c">
-                <div class="source-name">st. Algernon</div>
-                <div class="nick-name">@st.algernon</div>
+            <div *ngIf="user" class="flex fd-c ai-c">
+                <div class="source-name">{{ user.name }}</div>
+                <div class="nick-name">@{{ user.username }}</div>
             </div>
-            <div class="user-switches flex fd-r" data-container="user-switches">
+            <div *ngIf="user" class="user-switches flex fd-r" data-container="user-switches">
                 <button 
-                    [routerLink]="['/', username, 'followers']"
+                    [routerLink]="['/', user.username, 'followers']"
                     routerLinkActive="active"
                 >Followers</button>
                 <button 
-                    [routerLink]="['/', username, 'following']"
+                    [routerLink]="['/', user.username, 'following']"
                     routerLinkActive="active"
                 >Following</button>
             </div>
@@ -25,7 +25,9 @@
 </div>
 <div class="flex jc-fe">
     <div class="right-col">
-        <app-trends></app-trends>
-        <app-follow-offers></app-follow-offers>
+        <ng-scrollbar>
+            <app-trends></app-trends>
+            <app-follow-offers></app-follow-offers>
+        </ng-scrollbar>
     </div>
 </div>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Profile, ProfilesResponse } from 'src/app/shared/interfaces';
+import { ShortProfile } from 'src/app/shared/interfaces';
 import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
@@ -28,11 +28,10 @@ export class FollowersPageComponent implements OnInit {
 
     this.subs.push( 
 
-      // this.usersService
-      //   .getFollowers(this.username, { number: 1, size: 15 })
-      //   .subscribe((response: Profile[]) => { 
-      //     this.followers = response;
-      //   })
+      this.usersService.getFollowers(this.username, { number: 1, size: 15 })
+        .subscribe((response: ShortProfile[]) => { 
+          this.followers = response;
+        })
 
     );
   }

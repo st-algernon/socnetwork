@@ -14,11 +14,11 @@ namespace SocNetwork.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MessengerController : ControllerBase
+    public class ChatsController : ControllerBase
     {
         private readonly SocNetworkContext db;
 
-        public MessengerController(SocNetworkContext context)
+        public ChatsController(SocNetworkContext context)
         {
             db = context;
         }
@@ -30,20 +30,20 @@ namespace SocNetwork.Controllers
             var currentUser = HttpContext.Items["User"] as User;
             var chatHelper = new ChatHelper(db);
             var chats = await chatHelper.GetUserChatsAsync(currentUser);
-            var chatsDTO = new List<ChatDTO>();
+            var shortChatDTOs = new List<ShortChatDTO>();
 
             chats.ForEach(c => {
-                chatsDTO.Add(chatHelper.ConvertToDTO(c));
+                shortChatDTOs.Add(ConvertHelper.ToShortChatDTO(c, currentUser));
             });
 
-            return Ok(new ChatsResponse {
+            return Ok(new ShortChatsResponse {
                 Result = true,
-                Chats = chatsDTO
+                ShortChats = shortChatDTOs
             });
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("chat/{userId}")]
+        [HttpGet("with/{userId}")]
         public async Task<IActionResult> GetChatWith(string userId)
         {
             var currentUser = HttpContext.Items["User"] as User;
@@ -51,7 +51,7 @@ namespace SocNetwork.Controllers
 
             if (withUser == null)
             {
-                return BadRequest(new ChatsResponse {
+                return BadRequest(new ShortChatsResponse {
                     Result = false,
                     Errors = new List<string>() { "No user with this id was found" }
                 });
@@ -60,12 +60,12 @@ namespace SocNetwork.Controllers
             var members = new List<User>() { currentUser, withUser };
             var chatHelper = new ChatHelper(db);
             var chat = await chatHelper.GetChatByMembersAsync(members) ?? await chatHelper.CreateChatAsync(members);
-            var chatDTO = chatHelper.ConvertToDTO(chat);
+            var chatDTO = chatHelper.ConvertToChatDTO(chat);
 
-            return Ok(new ChatsResponse
+            return Ok(new ShortChatsResponse
             {
                 Result = true,
-                Chats = new List<ChatDTO> { chatDTO }
+                ShortChats = new List<ChatDTO> { chatDTO }
             });
         }
 

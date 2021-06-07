@@ -15,7 +15,7 @@ ng-scrollbar {
 .chat-lining {
 	position: absolute;
 	top: 69px;
-	bottom: 15px;
+	bottom: 0px;
 	width: 612px;
 	border-radius: 15px;
 	background-color: #fff;
@@ -33,7 +33,7 @@ ng-scrollbar {
 .messenger {
 	position: fixed;
 	top: 69px;
-	bottom: 15px;
+	bottom: 0px;
 	width: 320px;
 	background: #fff;
 	border-radius: 15px;

@@ -41,13 +41,13 @@ namespace SocNetwork.Models
         public string Location { get; set; }
         public Gender Gender { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
-        public List<Conversation> Conversations { get; set; }
+        public List<Chat> Chats { get; set; }
         public List<UserPost> UserPosts { get; set; }
         public List<ProfileMedia> ProfileMedia { get; set; }
 
         public User()
         {
-            Conversations = new List<Conversation>();
+            Chats = new List<Chat>();
             UserPosts = new List<UserPost>();
             ProfileMedia = new List<ProfileMedia>();
         }

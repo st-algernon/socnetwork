@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SocNetwork.DTO;
+using SocNetwork.Extensions;
 using SocNetwork.Models;
 using System;
 using System.Collections.Generic;

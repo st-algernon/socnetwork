@@ -1,8 +1,8 @@
-    <div *ngFor="let user of following" class="user flex fd-c">
+    <div *ngFor="let user of following" class="user">
         <div class="flex fd-r jc-sb ai-c">
             <div class="avatar-box square-40">
                 <img 
-                    [src]="user.currentAvatarPath"
+                    [src]="user.avatarDTO.path"
                     alt="avatar"
                     class="square-40"
                 >
@@ -13,7 +13,6 @@
             </div>
             <button class="btn btn-lg btn-outlined">Follow</button>
         </div>
-        <div class="bio">{{ user.bio }}</div>
     </div>
   
-    <app-loader [active]="!following"></app-loader>
+    <app-loader *ngIf="!following"></app-loader>

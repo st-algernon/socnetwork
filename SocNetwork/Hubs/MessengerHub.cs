@@ -25,21 +25,21 @@ namespace SocNetwork.Hubs
 
         public async Task Send(MessageDTO messageDTO)
         {
-            var chat = await db.Conversations
+            var chat = await db.Chats
                 .Include(c => c.Members)
-                .FirstOrDefaultAsync(c => c.Id == messageDTO.ConversationId);
+                .FirstOrDefaultAsync(c => c.Id == messageDTO.ChatId);
             var memberIds = chat.Members.Select(m => m.Id.ToString());
             var caller = Context.User.Identity.Name;
 
             if (memberIds.Contains(caller))
             {
                 var messagesHelper = new MessagesHelper(db);
-                var message = messagesHelper.ConvertFromDTO(messageDTO);
+                var message = messagesHelper.ConvertToMessage(messageDTO);
 
                 await db.Messages.AddAsync(message);
                 await db.SaveChangesAsync();
 
-                messageDTO = messagesHelper.ConvertToDTO(message);
+                messageDTO = messagesHelper.ConvertToMessageDTO(message);
                 await Clients.Users(memberIds).SendAsync("Receive", messageDTO);
             }
         }

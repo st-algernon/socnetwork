@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { ShortProfile } from 'src/app/shared/interfaces';
+import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-users-layout',
@@ -9,18 +12,23 @@ import { Subscription } from 'rxjs';
 })
 export class UsersLayoutComponent implements OnInit {
 
-  username: string;
+  user: ShortProfile;
   subs: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
+    private usersService: UsersService
   ) { }
 
   ngOnInit() {
     this.subs.push( 
 
-      this.route.params.subscribe((params: Params) => {
-        this.username = params['username'];
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          return this.usersService.getShortProfile(params['username']);
+        })
+      ).subscribe((shortProfile: ShortProfile) => {
+        this.user = shortProfile;
       })
 
     );

@@ -38,10 +38,17 @@ export interface ProfileResponse
     errors: string[]
 }
 
-export interface ProfilesResponse
+export interface ShortProfileResponse
 {
     result: string,
-    profiles: Profile[],
+    shortProfile: ShortProfile,
+    errors: string[]
+}
+
+export interface ShortProfilesResponse
+{
+    result: string,
+    shortProfiles: ShortProfile[],
     errors: string[]
 }
 
@@ -49,6 +56,26 @@ export interface ProfileMediaResponse {
     result: string,
     media: ProfileMedia[],
     errors: string[]
+}
+
+export interface ChatResponse {
+    result: string,
+    chat: Chat,
+    errors: string[]
+}
+
+export interface ShortChatsResponse {
+    result: string,
+    shortChats: ShortChat[],
+    errors: string[]
+}
+
+export interface Media {
+    id: string,
+    mimeType: string,
+    path: string,
+    size: number,
+    creationDate: Date,
 }
 
 export interface ProfileMedia {
@@ -75,9 +102,17 @@ export interface Profile {
     location: string,
     gender: Gender,
     maritalStatus: MaritalStatus,
-    mediaDTO: ProfileMedia[],
+    profileMediaDTOs: ProfileMedia[],
     currentAvatarPath?: string
     currentCoverPath?: string
+}
+
+export interface ShortProfile {
+    id: string,
+    name: string,
+    username: string,
+    lastVisited: Date,
+    avatarDTO: Media
 }
 
 export interface UserRelationship {
@@ -88,39 +123,30 @@ export interface UserRelationship {
     creationDate: Date,
 }
 
-export interface Media {
-    id: string,
-    mimeType: string,
-    path: string,
-    size: number,
-    creationDate: Date,
-}
-
 export interface Message {
     id?: string,
-    authorId: string,
-    author?: Profile,
-    conversationId: string,
+    authorDTO: ShortProfile,
+    chatId: string,
     text: string,
     creationDate: string,
-    messageMediaDTO: Media[],
+    messageMediaDTOs: Media[],
     messageStatus: MessageStatus,
     messageState: MessageState
 }
 
 export interface Chat {
     id: string,
-    messagesDTO: Message[],
+    title: string,
+    messageDTOs: Message[],
     creationDate: string,
-    membersDTO: Profile[],
-    withUser?: Profile,
-    isDeleted: boolean
+    memberDTOs: ShortProfile[],
 }
 
-export interface ChatsResponse {
-    result: string,
-    chats: Chat[],
-    errors: string[]
+export interface ShortChat {
+    id: string,
+    title: string,
+    coverDTO: Media,
+    lastMessageDTO: Message,
 }
 
 export interface Options {

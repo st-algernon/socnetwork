@@ -23,16 +23,16 @@ namespace SocNetwork.Models
         public Guid Id { get; set; }
         public Guid AuthorId { get; set; }
         public User Author { get; set; }
-        public Guid ConversationId { get; set; }
-        public Conversation Conversation { get; set; }
+        public Guid ChatId { get; set; }
+        public Chat Chat { get; set; }
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
-        public List<MessageMedia> MessageAttachments { get; set; }
+        public List<MessageMedia> MessageMedia { get; set; }
         public MessageStatus MessageStatus { get; set; }
         public MessageState MessageState { get; set; }
         public Message()
         {
-            MessageAttachments = new List<MessageMedia>();
+            MessageMedia = new List<MessageMedia>();
         }
     }
 }

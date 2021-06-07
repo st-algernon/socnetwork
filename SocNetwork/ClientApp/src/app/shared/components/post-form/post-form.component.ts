@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Profile } from '../../interfaces';
+import { ShortProfile } from '../../interfaces';
 
 @Component({
   selector: 'app-post-form',
@@ -8,7 +8,7 @@ import { Profile } from '../../interfaces';
 })
 export class PostFormComponent implements OnInit {
 
-  @Input() me: Profile;
+  @Input() me: ShortProfile;
 
   constructor() { }
 
