@@ -22,6 +22,8 @@ namespace SocNetwork.DTO
         public Gender Gender { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public List<ProfileMediaDTO> ProfileMediaDTOs { get; set; }
+        public string AvatarPath { get; set; }
+        public string CoverPath { get; set; }
 
         public ProfileDTO()
         {

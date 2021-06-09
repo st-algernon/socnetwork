@@ -4,11 +4,12 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MediaFor, UserRelationshipType } from '../shared/enums';
-import { Profile, ShortProfile, UserRelationship } from '../shared/interfaces';
+import { Profile, ShortChat, ShortProfile, UserRelationship } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
 import { MessengerHub } from '../shared/hubs/messenger.hub';
 import { UsersService } from '../shared/services/users.service';
 import { RelationshipsService } from '../shared/services/relationships.service';
+import { ChatsService } from '../shared/services/chats.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -25,12 +26,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   isFollowed: boolean = false;
   isUnFollowed: boolean = false;
 
-  subs: Subscription[];
+  subs: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private usersService: UsersService,
+    private chatsService: ChatsService,
     private relationshipsService: RelationshipsService,
     private messengerHub: MessengerHub
     ) { }
@@ -38,7 +40,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   ngOnInit(): void {
 
     this.subs.push(
-
+      
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 
       this.route.params.pipe(
@@ -58,7 +60,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
         if (userRelationship.userRelationshipType == UserRelationshipType.Followed) {
           this.isFollowed = true;
         }
-        if (response.userRelationshipType == UserRelationshipType.UnFollowed) {
+        if (userRelationship.userRelationshipType == UserRelationshipType.UnFollowed) {
           this.isUnFollowed = true;
         }
       })
@@ -82,7 +84,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   }
 
   openChat() {
-    this.router.navigate(['messenger', 'chat', this.user.id]);
+    this.subs.push(
+
+      this.chatsService.getShortChatWith(this.user.id)
+      .subscribe((shortChat: ShortChat) => {
+        this.router.navigate(['messenger', 'chat', shortChat.id]);
+      })
+      
+    );
   }
 
   follow() {
@@ -90,7 +99,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
 
       this.route.params.pipe(
         switchMap((params: Params) => {
-          return this.usersService.follow(params['username']);
+          return this.relationshipsService.follow(params['username']);
         })
       ).subscribe(() => { 
         this.isFollowed = true;
@@ -105,7 +114,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
 
       this.route.params.pipe(
         switchMap((params: Params) => {
-          return this.usersService.unfollow(params['username']);
+          return this.relationshipsService.unfollow(params['username']);
         })
       ).subscribe(() => { 
         this.isUnFollowed = true;

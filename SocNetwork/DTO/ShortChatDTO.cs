@@ -9,7 +9,7 @@ namespace SocNetwork.DTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
-        public MediaDTO CoverDTO { get; set; }
+        public string CoverPath { get; set; }
         public MessageDTO LastMessageDTO { get; set; }
     }
 }

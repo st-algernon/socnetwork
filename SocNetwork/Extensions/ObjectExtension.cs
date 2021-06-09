@@ -17,38 +17,41 @@ namespace SocNetwork.Extensions
                     .Where(x => x.CanWrite)
                     .ToList();
 
-            foreach (var sourceProp in sourceProps)
+            if (source != null && dest != null)
             {
-                if (destProps.Any(x => x.Name == sourceProp.Name))
+                foreach (var sourceProp in sourceProps)
                 {
-                    var p = destProps.First(x => x.Name == sourceProp.Name);
+                    if (destProps.Any(x => x.Name == sourceProp.Name))
+                    {
+                        var p = destProps.First(x => x.Name == sourceProp.Name);
 
-                    if (p.CanWrite) {
-
-                        object parsed = null;
-
-                        if (p.PropertyType == typeof(DateTime))
+                        if (p.CanWrite)
                         {
-                            if (sourceProp.PropertyType != typeof(DateTime))
+
+                            object parsed = null;
+
+                            if (p.PropertyType == typeof(DateTime))
                             {
-                                parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                                if (sourceProp.PropertyType != typeof(DateTime))
+                                {
+                                    parsed = DateTime.Parse(sourceProp.GetValue(source).ToString());
+                                }
                             }
-                        }
 
-                        if (p.PropertyType.BaseType == typeof(Enum))
-                        {
-                            parsed = Enum.Parse(p.PropertyType, sourceProp.GetValue(source).ToString());
-                        }
+                            if (p.PropertyType.BaseType == typeof(Enum))
+                            {
+                                parsed = Enum.Parse(p.PropertyType, sourceProp.GetValue(source).ToString());
+                            }
 
-                        if (p.PropertyType == typeof(Guid))
-                        {
-                            parsed = Guid.Parse(sourceProp.GetValue(source).ToString());
-                        }
+                            if (p.PropertyType == typeof(Guid))
+                            {
+                                parsed = Guid.Parse(sourceProp.GetValue(source).ToString());
+                            }
 
-                        p.SetValue(dest, parsed ?? sourceProp.GetValue(source));
+                            p.SetValue(dest, parsed ?? sourceProp.GetValue(source));
+                        }
                     }
                 }
-
             }
         }
     }

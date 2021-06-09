@@ -7,20 +7,27 @@ import { Chat, ShortChatsResponse, Message, Profile, ChatResponse, ShortChat } f
 import { UsersService } from "./users.service";
 
 @Injectable()
-export class MessengerService {
+export class ChatsService {
   constructor(
     private http: HttpClient, 
     private usersService: UsersService
   ) {}
-
-  getChatWith(userId: string): Observable<Chat> {
-    return this.http.get<ChatResponse>(`${environment.apiUrl}/chats/with/${userId}`)
+  
+  getChatById(chatId: string): Observable<Chat> {
+    return this.http.get<ChatResponse>(`${environment.apiUrl}/chats/${chatId}`)
     .pipe(
       map((response: ChatResponse) => response.chat)
+    )
+  }
+
+  getShortChatWith(userId: string): Observable<ShortChat> {
+    return this.http.get<ShortChatsResponse>(`${environment.apiUrl}/chats/with/${userId}`)
+    .pipe(
+      map((response: ShortChatsResponse) => response.shortChats[0])
     );
   }
 
-  getChats(): Observable<ShortChat[]> {
+  getShortChats(): Observable<ShortChat[]> {
     return this.http.get<ShortChatsResponse>(`${environment.apiUrl}/chats`)
     .pipe(
       map((response: ShortChatsResponse) => response.shortChats)

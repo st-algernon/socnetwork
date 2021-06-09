@@ -44,7 +44,7 @@ namespace SocNetwork.Controllers
 
         [Authorize(Roles = "User")]
         [HttpGet("with/{userId}")]
-        public async Task<IActionResult> GetChatWith(string userId)
+        public async Task<IActionResult> GetShortChatWith(string userId)
         {
             var currentUser = HttpContext.Items["User"] as User;
             var withUser = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
@@ -57,15 +57,62 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var members = new List<User>() { currentUser, withUser };
+            var chat = new Chat();
             var chatHelper = new ChatHelper(db);
-            var chat = await chatHelper.GetChatByMembersAsync(members) ?? await chatHelper.CreateChatAsync(members);
-            var chatDTO = chatHelper.ConvertToChatDTO(chat);
+
+            if (withUser != currentUser)
+            {
+                var members = new List<User>() { currentUser, withUser };
+                chat = await chatHelper.GetChatByMembersAsync(members) ?? await chatHelper.CreateChatAsync(members);
+            } else {
+                chat = await chatHelper.CreateSavedMessages(currentUser);
+            }
+
+            var shortChatDTO = ConvertHelper.ToShortChatDTO(chat, currentUser);
 
             return Ok(new ShortChatsResponse
             {
                 Result = true,
-                ShortChats = new List<ChatDTO> { chatDTO }
+                ShortChats = new List<ShortChatDTO> { shortChatDTO }
+            });
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetChatById(string id)
+        {
+            var chatHelper = new ChatHelper(db);
+            var currentUser = HttpContext.Items["User"] as User;
+            var currentUserChats = await chatHelper.GetUserChatsAsync(currentUser);
+
+            var chat = await db.Chats.FirstOrDefaultAsync(c => c.Id.ToString() == id);
+
+            if (chat == null)
+            {
+                return BadRequest(new ProfileResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "Chat not found" }
+                });
+            }
+
+            var isMine = currentUserChats.Contains(chat);
+
+            if (isMine == false)
+            {
+                return BadRequest(new ProfileResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "You do not have access to this chat" }
+                });
+            }
+
+            var chatDTO = ConvertHelper.ToChatDTO(chat, currentUser);
+
+            return Ok(new ChatResponse()
+            {
+                Result = true,
+                Chat = chatDTO
             });
         }
 

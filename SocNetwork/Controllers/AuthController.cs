@@ -67,14 +67,15 @@ namespace SocNetwork.Controllers
                     Errors = new List<string>() { "A user with this email or username already exists" }
                 });
             }
-
+            
             user = new User
             {
                 Name = request.Name,
                 Email = request.Email,
                 Username = request.Username,
                 Password = HashHelper.ComputeSha256Hash(request.Password),
-                CreationDate = DateTime.UtcNow
+                CreationDate = DateTime.UtcNow,
+                ProfileMedia = new List<ProfileMedia> {  }
             };
 
             db.Users.Add(user);

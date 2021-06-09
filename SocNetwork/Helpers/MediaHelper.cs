@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SocNetwork.DTO;
 using SocNetwork.Extensions;
 using SocNetwork.Models;
@@ -12,13 +13,7 @@ namespace SocNetwork.Helpers
 {
     public class MediaHelper
     {
-        private readonly SocNetworkContext db;
-        public MediaHelper(SocNetworkContext context)
-        {
-            db = context;
-        }
-
-        public string SaveFile(IFormFile file)
+        public static string SaveToFileSystem(IFormFile file)
         {
             try
             {
@@ -55,23 +50,6 @@ namespace SocNetwork.Helpers
             {
                 return null;
             }
-        }
-
-        public void ResetCurrentImage(User user, MediaFor resetFor)
-        {
-            var media = db.ProfileMedia.Where(
-                        m => m.ProfileId == user.Id
-                          && m.MediaFor == resetFor)
-                        ?.ToList();
-
-            var medialist = media.ToList();
-
-            foreach (var m in media)
-            {
-                m.IsCurrent = false;
-            }
-
-            db.SaveChanges();
         }
     }
 }

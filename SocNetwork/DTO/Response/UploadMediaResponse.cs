@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO.Response
 {
-    public class ShortProfileResponse
+    public class UploadMediaResponse
     {
         public bool Result { get; set; }
-        public ShortProfileDTO ShortProfile { get; set; }
+        public List<Guid> MediaIds { get; set; }
         public List<string> Errors { get; set; }
     }
 }

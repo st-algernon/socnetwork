@@ -3,12 +3,14 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
 import { MediaFor, MessageState, MessageStatus } from 'src/app/shared/enums';
-import { Chat, Message, Profile } from 'src/app/shared/interfaces';
+import { Chat, Message, MessageRequest, ShortProfile } from 'src/app/shared/interfaces';
 import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
-import { MessengerService } from 'src/app/shared/services/messenger.service';
+import { ChatsService } from 'src/app/shared/services/chats.service';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { formatDate } from '@angular/common';
 import { NgScrollbar } from 'ngx-scrollbar';
+import { Subscription } from 'rxjs';
+import { MediaService } from 'src/app/shared/services/media.service';
 
 @Component({
   selector: 'app-chat-page',
@@ -16,66 +18,67 @@ import { NgScrollbar } from 'ngx-scrollbar';
   styleUrls: ['./chat-page.component.css']
 })
 export class ChatPageComponent implements OnInit, OnDestroy {
-  me: Profile;
+  me: ShortProfile;
   form: FormGroup;
   chat: Chat;
+  subs: Subscription[] = [];
 
   @ViewChild('messagesList', { static: true }) messagesList: ElementRef;
 
   constructor(
     private messengerHub: MessengerHub,
-    private messengerService: MessengerService,
+    private messengerService: ChatsService,
+    private mediaService: MediaService,
     private usersService: UsersService,
     private route: ActivatedRoute,
     private renderer: Renderer2
     ) { }
 
   ngOnInit() {
-    this.usersService.me$.subscribe((response: Profile) => this.me = response);
-
     this.messengerHub.startConnection();
     this.messengerHub.addReceivedMessageListener();
-    
+
+    this.subs.push(
+
+      this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
+      
+      this.route.params.pipe(
+        switchMap((params: Params) => {
+          return this.messengerService.getChatById(params['id']);
+        })
+      ).subscribe((chat: Chat) => { 
+  
+        this.chat = chat;
+        this.chat.messageDTOs.reverse();
+  
+        this.clearMessagesList();
+  
+        for (let m of this.chat.messageDTOs) {
+          this.renderMessageTemplate(m);
+        }
+  
+        this.toBottomList();
+        this.scrollToBottom();
+      }),
+
+      this.messengerHub.message$.subscribe((messageDTO: Message) => {
+        if (messageDTO.chatId === this.chat.id) {
+          this.renderMessageTemplate(messageDTO);
+          this.scrollToBottom();
+        }
+      })
+
+    );
+  
     this.form = new FormGroup({
       messageText: new FormControl(null)
     })
-
-    this.route.params.pipe(
-      switchMap((params: Params) => {
-        return this.messengerService.getChatWith(params['id']);
-      })
-    ).subscribe((response: Chat) => { 
-
-      this.chat = response;
-      this.chat.messagesDTO.reverse();
-
-      this.clearMessagesList();
-      this.chat = this.messengerService.includeWithUser(this.chat, this.me);
-
-      for (let m of this.chat.messagesDTO) {
-        this.renderMessageTemplate(m);
-      }
-
-      this.toBottomList();
-      this.scrollToBottom();
-    });
-
-    this.messengerHub.message$.subscribe((messageDTO: Message) => {
-
-      if (messageDTO.conversationId === this.chat.id) {
-        messageDTO = this.messengerService.includeAuthor(this.chat, messageDTO);
-        this.renderMessageTemplate(messageDTO);
-        this.scrollToBottom();
-      }
-    });
-    const now = new Date().toJSON();
-
-    console.log('now', now);
-    console.log('new Date(now)', new Date(now));
   }
 
   ngOnDestroy() {
-    console.log('destroy');
+    this.subs.forEach(
+      s => s.unsubscribe()
+    );
   }
 
   submit() {
@@ -83,18 +86,21 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     if (!this.form.get('messageText')) {
       return
     }
+  
+    // this.mediaService.uploadMedia().subscribe(
+    //   (mediaIds: string[]) => {
 
-    const message: Message = {
-      authorId: this.me.id,
-      conversationId: this.chat.id,
-      text: this.form.value.messageText,
-      creationDate: new Date().toJSON(),
-      messageMediaDTO: [],
-      messageStatus: MessageStatus.IsInitial,
-      messageState: MessageState.IsSent
-    };
+    //     const messageRequest: MessageRequest = {
+    //       authorId: this.me.id,
+    //       chatId: this.chat.id,
+    //       text: this.form.value.messageText,
+    //       messageMediaDTO: []
+    //     };
+        
+    //     this.messengerHub.sendMessage(message);
+    //   }
+    //)
 
-    this.messengerHub.sendMessage(message);
     this.form.reset();
   }
 
@@ -103,7 +109,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     const lastAuthor = lastMessage?.querySelector('.message-author');
     const lastAuthorId = lastAuthor?.querySelector('.author-id')?.innerHTML;
 
-    if (lastAuthorId === messageDTO.authorId) {
+    if (lastAuthorId === messageDTO.authorDTO.id) {
       (lastAuthor as HTMLElement).style.visibility = 'hidden';
     }
   }
@@ -113,22 +119,22 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.hideSameAuthors(messageDTO);
 
     const messageItem = this.renderer.createElement('div');
-    const messageItemClasses = messageDTO.authorId === this.me.id ? ['fd-rr'] : ['fd-r'];
+    const messageItemClasses = messageDTO.authorDTO.id === this.me.id ? ['fd-rr'] : ['fd-r'];
     (messageItem as HTMLElement).classList.add('message-item', 'flex', 'ai-fe', ...messageItemClasses);
 
     const messageAuthor = this.renderer.createElement('div');
     (messageAuthor as HTMLElement).classList.add('message-author');
     const authorId = this.renderer.createElement('div');
     (authorId as HTMLElement).classList.add('author-id', 'hidden');
-    const authorIdText = this.renderer.createText(messageDTO.authorId);
+    const authorIdText = this.renderer.createText(messageDTO.authorDTO.id);
     const avatarBox = this.renderer.createElement('div');
     (avatarBox as HTMLElement).classList.add('avatar-box', 'square-32');
     const avatarBoxImg = this.renderer.createElement('img');
     (avatarBoxImg as HTMLImageElement).classList.add('square-32');
-    (avatarBoxImg as HTMLImageElement).src = messageDTO.author?.currentAvatarPath;
+    (avatarBoxImg as HTMLImageElement).src = messageDTO.authorDTO.avatarPath;
 
     const messageBody = this.renderer.createElement('div');
-    const messageBodyClasses = messageDTO.authorId === this.me.id ? ['me'] : ['other'];
+    const messageBodyClasses = messageDTO.authorDTO.id === this.me.id ? ['me'] : ['other'];
     (messageBody as HTMLElement).classList.add('message-body', ...messageBodyClasses);
     const messageText = this.renderer.createText(messageDTO.text);
     const messageFooter = this.renderer.createElement('div');

@@ -13,6 +13,7 @@ namespace SocNetwork.Helpers
     {
         private readonly SocNetworkContext db;
         private const int DEFAULT_LAST_MESSAGES_NUM = 25;
+        public const string SAVED_MESSAGES_PATH = "Resources\\defaults\\saved-messages.jpg";
 
         public ChatHelper(SocNetworkContext context)
         {
@@ -34,9 +35,9 @@ namespace SocNetwork.Helpers
 
         public async Task<Chat> GetChatByMembersAsync(List<User> members)
         {
-            List<Chat> chats = db.Chats
+            List<Chat> chats = await db.Chats
                 .Include(c => c.Members)
-                .ToList();
+                .ToListAsync();
 
             Chat wantedChat = null;
 
@@ -58,7 +59,29 @@ namespace SocNetwork.Helpers
             var chat = new Chat()
             {
                 Members = members,
-                Messages = new List<Message>(),
+                CreationDate = DateTime.Now
+            };
+
+            await db.Chats.AddAsync(chat);
+            await db.SaveChangesAsync();
+
+            return chat;
+        }
+
+        public async Task<Chat> CreateSavedMessages(User user)
+        {
+            var title = "Saved Messages";
+            var cover = new Media()
+            {
+                Path = SAVED_MESSAGES_PATH,
+                CreationDate = DateTime.Now
+            };
+
+            var chat = new Chat()
+            {
+                Title = title,
+                Cover = cover,
+                Members = new List<User> { user },
                 CreationDate = DateTime.Now
             };
 
@@ -89,7 +112,7 @@ namespace SocNetwork.Helpers
                 .ToListAsync();
         }
 
-        public static string GenerateChatName(Chat chat, User currentUser)
+        public static string GenerateChatTitle(Chat chat, User currentUser)
         {
             var otherMembers = chat.Members.Except(new List<User> { currentUser }).ToList();
             var namesOfOthers = new List<string>();
@@ -97,6 +120,13 @@ namespace SocNetwork.Helpers
             otherMembers.ForEach(m => namesOfOthers.Add(m.Name));
 
             return string.Join(", ", namesOfOthers);
+        }
+
+        public static ProfileMedia GenerateChatCover(Chat chat, User currentUser)
+        {
+            var otherMembers = chat.Members.Except(new List<User> { currentUser }).ToList();
+
+            return UsersHelper.GetCurrentAvatar(otherMembers[0]);
         }
     }
 }

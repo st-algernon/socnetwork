@@ -13,7 +13,7 @@ import { UsersService } from 'src/app/shared/services/users.service';
 export class FollowersPageComponent implements OnInit {
 
   username: string;
-  followers: Profile[];
+  followers: ShortProfile[];
   subs: Subscription[] = [];
 
   constructor(

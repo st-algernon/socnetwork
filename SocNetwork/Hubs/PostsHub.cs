@@ -18,7 +18,7 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async Task Publish()
+        public void Publish()
         {
             
         }

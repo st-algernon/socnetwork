@@ -24,6 +24,13 @@ export interface EditProfileInfoRequest {
     maritalStatus: string
 }
 
+export interface MessageRequest {
+    authorId: string,
+    chatId: string,
+    text: string,
+    mediaIds: string[]
+}
+
 export interface AuthResponse {
     token: string,
     expiresIn: string
@@ -35,13 +42,6 @@ export interface ProfileResponse
 {
     result: string,
     profile: Profile,
-    errors: string[]
-}
-
-export interface ShortProfileResponse
-{
-    result: string,
-    shortProfile: ShortProfile,
     errors: string[]
 }
 
@@ -67,6 +67,12 @@ export interface ChatResponse {
 export interface ShortChatsResponse {
     result: string,
     shortChats: ShortChat[],
+    errors: string[]
+}
+
+export interface UploadMediaResponse {
+    result: string,
+    mediaIds: string[],
     errors: string[]
 }
 
@@ -103,8 +109,8 @@ export interface Profile {
     gender: Gender,
     maritalStatus: MaritalStatus,
     profileMediaDTOs: ProfileMedia[],
-    currentAvatarPath?: string
-    currentCoverPath?: string
+    avatarPath: string
+    coverPath: string
 }
 
 export interface ShortProfile {
@@ -112,7 +118,7 @@ export interface ShortProfile {
     name: string,
     username: string,
     lastVisited: Date,
-    avatarDTO: Media
+    avatarPath: string
 }
 
 export interface UserRelationship {
@@ -124,7 +130,7 @@ export interface UserRelationship {
 }
 
 export interface Message {
-    id?: string,
+    id: string,
     authorDTO: ShortProfile,
     chatId: string,
     text: string,
@@ -137,6 +143,7 @@ export interface Message {
 export interface Chat {
     id: string,
     title: string,
+    coverDTO: Media,
     messageDTOs: Message[],
     creationDate: string,
     memberDTOs: ShortProfile[],
@@ -145,7 +152,7 @@ export interface Chat {
 export interface ShortChat {
     id: string,
     title: string,
-    coverDTO: Media,
+    coverPath: string,
     lastMessageDTO: Message,
 }
 

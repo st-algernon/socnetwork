@@ -27,28 +27,28 @@
                 >
                     <section *ngFor="let chat of chats" class="chat-item-wrapper">
                         <a 
-                            [routerLink]="chat.withUser ? ['chat', chat.withUser?.id] : ['chat', me.id]" 
-                            routerLinkActive="is-active"
+                            [routerLink]="['chat', chat.id]"
+                            routerLinkActive="active"
                             class="chat-item flex fd-r ai-c"
                         >
                             <div class="avatar-box square-48">
                                 <img 
-                                    [src]="chat.withUser?.currentAvatarPath || '../../assets/images/saved-messages.jpg'"
+                                    [src]="chat.coverPath"
                                     class="square-48"
                                     alt="user"
                                 >
                             </div>
                             <div class="message-wrap flex fd-c">
-                                <div class="source-name">{{ chat.withUser?.name || 'Saved Messages' }}</div>
-                                <div *ngIf="chat.messagesDTO[0]" class="last-message flex fd-r ai-c">
+                                <div class="source-name">{{ chat.title }}</div>
+                                <div *ngIf="chat.lastMessageDTO" class="last-message flex fd-r ai-c">
                                     <div class="avatar-box square-24">
                                         <img 
-                                            [src]="chat.messagesDTO[0].author?.currentAvatarPath" 
+                                            [src]="chat.lastMessageDTO.authorDTO.avatarPath" 
                                             class="square-24" 
                                             alt="user"
                                         >
                                     </div>
-                                    <div class="message-text">{{ chat.messagesDTO[0].text }}</div>
+                                    <div class="message-text">{{ chat.lastMessageDTO.text }}</div>
                                 </div>
                             </div>
                         </a>

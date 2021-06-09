@@ -18,7 +18,7 @@ ng-scrollbar {
 .edit-profile {
 	position: fixed;
 	top: 30px;
-	max-width: 500px;
+	width: 500px;
 	background: #fff;
 	border-radius: 15px;
 	border: 1px solid #ddd;

@@ -23,23 +23,38 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async Task Send(MessageDTO messageDTO)
+        public async Task Send(MessageRequest request)
         {
             var chat = await db.Chats
                 .Include(c => c.Members)
-                .FirstOrDefaultAsync(c => c.Id == messageDTO.ChatId);
+                .FirstOrDefaultAsync(c => c.Id.ToString() == request.ChatId);
             var memberIds = chat.Members.Select(m => m.Id.ToString());
             var caller = Context.User.Identity.Name;
 
             if (memberIds.Contains(caller))
             {
-                var messagesHelper = new MessagesHelper(db);
-                var message = messagesHelper.ConvertToMessage(messageDTO);
+                var message = new Message
+                {
+                    Id = Guid.NewGuid(),
+                    AuthorId = Guid.Parse(request.AuthorId),
+                    ChatId = Guid.Parse(request.ChatId),
+                    Text = request.Text,
+                    CreationDate = DateTime.Now
+                };
 
+                foreach (var mediaId in request.MediaIds)
+                {
+                    await db.MessageMedia.AddAsync(new MessageMedia
+                    {
+                        Id = Guid.Parse(mediaId),
+                        MessageId = message.Id,
+                    });
+                }
+   
                 await db.Messages.AddAsync(message);
                 await db.SaveChangesAsync();
 
-                messageDTO = messagesHelper.ConvertToMessageDTO(message);
+                var messageDTO = ConvertHelper.ToMessageDTO(message);
                 await Clients.Users(memberIds).SendAsync("Receive", messageDTO);
             }
         }

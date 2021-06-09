@@ -22,8 +22,11 @@ namespace SocNetwork.Helpers
 
             if (string.IsNullOrEmpty(chatDTO.Title))
             {
-                chatDTO.Title = ChatHelper.GenerateChatName(chat, currentUser);
+                chatDTO.Title = ChatHelper.GenerateChatTitle(chat, currentUser);
             }
+
+            chatDTO.CoverDTO = ToMediaDTO(chat.Cover) ?? 
+                ToMediaDTO(ChatHelper.GenerateChatCover(chat, currentUser));
 
             chat.Members.ForEach(m =>
             {
@@ -44,12 +47,12 @@ namespace SocNetwork.Helpers
 
             chat.CopyPropertiesTo(shortChatDTO);
 
-            if (string.IsNullOrEmpty(shortChatDTO.Title))
+            if(string.IsNullOrEmpty(chat.Title))
             {
-                shortChatDTO.Title = ChatHelper.GenerateChatName(chat, currentUser);
+                shortChatDTO.Title = ChatHelper.GenerateChatTitle(chat, currentUser);
             }
 
-            chat.Cover.CopyPropertiesTo(shortChatDTO.CoverDTO);
+            shortChatDTO.CoverPath = chat.Cover?.Path ?? ChatHelper.GenerateChatCover(chat, currentUser).Path;
 
             var lastMessage = chat.Messages.Last();
 
@@ -83,15 +86,6 @@ namespace SocNetwork.Helpers
             return messageDTO;
         }
 
-        public static Message ToMessage(MessageDTO messageDTO)
-        {
-            var message = new Message();
-
-            messageDTO.CopyPropertiesTo(message);
-
-            return message;
-        }
-
         public static ProfileDTO ToProfileDTO(User user)
         {
             var profileDTO = new ProfileDTO();
@@ -103,6 +97,9 @@ namespace SocNetwork.Helpers
                 profileDTO.ProfileMediaDTOs.Add(ToProfileMediaDTO(m));
             });
 
+            profileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path ?? UsersHelper.DEFAULT_AVATAR_PATH;
+            profileDTO.CoverPath = UsersHelper.GetCurrentCover(user)?.Path;
+
             return profileDTO;
         }
 
@@ -112,7 +109,7 @@ namespace SocNetwork.Helpers
 
             user.CopyPropertiesTo(shortProfileDTO);
 
-            shortProfileDTO.AvatarDTO = UsersHelper.GetCurrentAvatar(user);
+            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path ?? UsersHelper.DEFAULT_AVATAR_PATH;
 
             return shortProfileDTO;
         }

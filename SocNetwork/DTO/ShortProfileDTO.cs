@@ -11,6 +11,6 @@ namespace SocNetwork.DTO
         public string Name { get; set; }
         public string Username { get; set; }
         public DateTime LastVisited { get; set; }
-        public MediaDTO AvatarDTO { get; set; }
+        public string AvatarPath { get; set; }
     }
 }

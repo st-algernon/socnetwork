@@ -9,6 +9,7 @@ namespace SocNetwork.DTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public MediaDTO CoverDTO { get; set; }
         public List<MessageDTO> MessageDTOs { get; set; }
         public DateTime CreationDate { get; set; }
         public List<ShortProfileDTO> MemberDTOs { get; set; }

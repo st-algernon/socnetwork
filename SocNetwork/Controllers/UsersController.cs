@@ -26,7 +26,7 @@ namespace SocNetwork.Controllers
             db = context;
         }
 
-        [HttpGet("me")]
+        [HttpGet("current")]
         [Authorize(Roles = "User")]
         public IActionResult GetCurrentUser()
         {
@@ -34,10 +34,10 @@ namespace SocNetwork.Controllers
 
             var shortProfileDTO = ConvertHelper.ToShortProfileDTO(currentUser);
 
-            return Ok(new ShortProfileResponse()
+            return Ok(new ShortProfilesResponse()
             {
                 Result = true,
-                ShortProfile = shortProfileDTO
+                ShortProfiles = new List<ShortProfileDTO> { shortProfileDTO }
             });
         }
 
@@ -80,10 +80,10 @@ namespace SocNetwork.Controllers
 
             var shortProfileDTO = ConvertHelper.ToShortProfileDTO(user);
 
-            return Ok(new ShortProfileResponse()
+            return Ok(new ShortProfilesResponse()
             {
                 Result = true,
-                ShortProfile = shortProfileDTO
+                ShortProfiles = new List<ShortProfileDTO> { shortProfileDTO }
             });
         }
 

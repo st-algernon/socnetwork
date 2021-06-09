@@ -15,13 +15,15 @@ export class PhotosComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.photos.sort(
-      (a, b) => { 
-        return +new Date(b.creationDate) - +new Date(a.creationDate);
-    });
+    if (this.photos) {
+      this.photos.sort(
+        (a, b) => { 
+          return +new Date(b.creationDate) - +new Date(a.creationDate);
+      });
 
-    this.photos = this.photos.filter(p => p.isCurrent != true && p.mediaFor == MediaFor.Avatar);
-    this.photos = this.photos.slice(0, 6);
+      this.photos = this.photos.filter(p => p.isCurrent != true && p.mediaFor == MediaFor.Avatar);
+      this.photos = this.photos.slice(0, 6);
+    }
   }
 
 }

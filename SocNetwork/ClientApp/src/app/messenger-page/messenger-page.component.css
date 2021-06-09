@@ -109,7 +109,7 @@ ng-scrollbar {
 	margin-bottom: 5px;
 }
 
-.messenger-body .chat-item.is-active {
+.messenger-body .chat-item.active {
 	background-color: hsl(204, 70%, 90%)
 }
 

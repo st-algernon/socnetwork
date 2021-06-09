@@ -4,7 +4,11 @@ import { forkJoin, Observable, ReplaySubject } from "rxjs";
 import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { EditProfileInfoRequest, Media, ShortProfileResponse, Profile, ProfileMedia, ProfileMediaResponse, ProfileResponse, ProfilesResponse, ShortProfile, ShortProfilesResponse, UserRelationship, UsersPageParams } from "../interfaces";
+import { 
+    EditProfileInfoRequest, Media, Profile, 
+    ProfileMedia, ProfileMediaResponse, ProfileResponse,
+    ShortProfile, ShortProfilesResponse, UserRelationship, UsersPageParams 
+} from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
 export class UsersService {
@@ -68,27 +72,28 @@ export class UsersService {
                     creationDate: new Date(response.profile.creationDate),
                     lastVisited: new Date(response.profile.lastVisited)
                 }
-            }),
-            map((profile: Profile) => this.completeProfile(profile))
+            })
         )
     }
 
     getShortProfile(username: string): Observable<ShortProfile> {
-        return this.http.get<ShortProfileResponse>(`${environment.apiUrl}/users/${username}`)
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}`)
         .pipe(
-            map((response: ShortProfileResponse) => { 
+            map((response: ShortProfilesResponse) => response.shortProfiles),
+            map((shortProfiles: ShortProfile[]) => { 
                 return { 
-                    ...response.shortProfile,
-                    lastVisited: new Date(response.shortProfile.lastVisited)
+                    ...shortProfiles[0],
+                    lastVisited: new Date(shortProfiles[0].lastVisited)
                 }
             })
         );
     }
 
     getMyShortProfile(): Observable<ShortProfile> {
-        return this.http.get<ShortProfileResponse>(`${environment.apiUrl}/users/me`)
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/current`)
         .pipe(
-            map((response: ShortProfileResponse) => response.shortProfile)
+            map((response: ShortProfilesResponse) => response.shortProfiles[0]),
+            tap(console.log)
         );
     }
 
@@ -101,13 +106,5 @@ export class UsersService {
 
     editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
         return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
-    }
-
-    private completeProfile(user: Profile): Profile {
-        return {
-            ...user,
-            currentAvatarPath: user.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar)?.path,
-            currentCoverPath: user.mediaDTO.find(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover)?.path
-        }
     }
 }

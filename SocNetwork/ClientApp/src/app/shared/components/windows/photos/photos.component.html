@@ -3,6 +3,7 @@
     <h2>Photos</h2>
   </div>
   <div 
+    *ngIf="photos"
     class="photos-body flex fw-w"
     [ngClass]="{'vertical': photos.length == 2, 'horizontal': photos.length != 2 }"
   >

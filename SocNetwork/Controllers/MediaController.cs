@@ -35,15 +35,14 @@ namespace SocNetwork.Controllers
             var currentUser = HttpContext.Items["User"] as User;
 
             var formCollection = await Request.ReadFormAsync();
-            var mediaForStr = Request.Headers["Media-For"][0];
-            var mediaFor = (MediaFor) Enum.Parse(typeof(MediaFor), mediaForStr);
             var file = formCollection.Files[0];
-            var mediaHelper = new MediaHelper(db);
-            var pathToFile = mediaHelper.SaveFile(file);
+            var pathToFile = MediaHelper.SaveToFileSystem(file);
+            var mediaForStr = Request.Headers["Media-For"][0];
+            var mediaFor = (MediaFor)Enum.Parse(typeof(MediaFor), mediaForStr);
 
-            mediaHelper.ResetCurrentImage(currentUser, mediaFor);
+            UsersHelper.ResetCurrentProfileMedia(currentUser, mediaFor);
 
-            db.ProfileMedia.Add(new ProfileMedia()
+            await db.ProfileMedia.AddAsync(new ProfileMedia()
             {
                 ProfileId = currentUser.Id,
                 Path = pathToFile,
@@ -57,6 +56,40 @@ namespace SocNetwork.Controllers
             await db.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost, DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadMedia()
+        {
+            var formCollection = await Request.ReadFormAsync();
+            var files = formCollection.Files;
+            var mediaIds = new List<Guid>();
+
+            foreach(var file in files)
+            {
+                var pathToFile = MediaHelper.SaveToFileSystem(file);
+
+                var media = new Media()
+                {
+                    Id = Guid.NewGuid(),
+                    Path = pathToFile,
+                    Size = (int)file.Length,
+                    MimeType = file.ContentType,
+                };
+
+                mediaIds.Add(media.Id);
+
+                db.Media.Add(media);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok(new UploadMediaResponse()
+            {
+                Result = true,
+                MediaIds = mediaIds
+            });
         }
     }
 }

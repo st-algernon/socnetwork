@@ -10,6 +10,8 @@ import { UsersService } from "../shared/services/users.service";
 import { CustomSelectComponent } from "../shared/components/custom-select/custom-select.component";
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { SharedModule } from "../shared/shared.module";
+import { ChatsService } from "../shared/services/chats.service";
+import { RelationshipsService } from "../shared/services/relationships.service";
 
 @NgModule({
     declarations: [
@@ -26,6 +28,9 @@ import { SharedModule } from "../shared/shared.module";
         SharedModule
     ],
     exports: [],
-    providers: []
+    providers: [
+        ChatsService,
+        RelationshipsService
+    ]
 })
 export class ProfileModule {}

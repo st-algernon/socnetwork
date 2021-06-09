@@ -8,7 +8,7 @@
                     ></button>
                 </div>
                 <div *ngIf="chat" class="flex fd-c ai-c">
-                    <div class="source-name">{{ chat.withUser?.name || 'Saved Messages'}}</div>
+                    <div class="source-name">{{ chat.title }}</div>
                     <div class="last-visited">14 October 2019 at 09:23 am</div>
                 </div>
                 <form action="" method="get" class="search-message-form flex fd-c jc-c" >
@@ -22,7 +22,7 @@
                 appearance="standard"
                 trackClass="scrollbar-track"
             >
-                <app-loader [active]="!chat"></app-loader>
+                <app-loader *ngIf="!chat"></app-loader>
             </ng-scrollbar>
         </section>
         <section class="chat-footer">

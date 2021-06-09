@@ -2,11 +2,11 @@
   <main>
       <section class="user-info">
           <div class="photo-cover">
-            <img *ngIf="user?.profileMediaDTOs?.length > 0" [src]="user.currentCoverPath" alt="cover">
+            <img *ngIf="user?.profileMediaDTOs?.length > 0" [src]="user.coverPath" alt="cover">
           </div>
           <div class="user-avatar-back">
             <div class="user-avatar">
-              <img *ngIf="user?.profileMediaDTOs?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
+              <img *ngIf="user?.profileMediaDTOs?.length > 0; else default_avatar" [src]="user.avatarPath" alt="avatar">
               <ng-template #default_avatar>
                 <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
               </ng-template>
@@ -123,7 +123,7 @@
     <ng-scrollbar>
       <app-photos 
         *ngIf="user" 
-        [photos]="user.mediaDTO"
+        [photos]="user.profileMediaDTOs"
       ></app-photos>
       <app-trends></app-trends>
       <app-follow-offers></app-follow-offers>
