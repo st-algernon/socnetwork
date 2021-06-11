@@ -4,7 +4,7 @@ import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
-import { UploadMediaResponse } from "../interfaces";
+import { Media, UploadMediaResponse } from "../interfaces";
 
 @Injectable({ providedIn: "root" })
 export class MediaService {
@@ -23,10 +23,10 @@ export class MediaService {
     );
   }
 
-  uploadMedia(formData: FormData): Observable<string[]> {
-    return this.http.post<UploadMediaResponse>(`${environment.apiUrl}/media`, formData)
+  uploadMedia(formData: FormData): Observable<Media[]> {
+    return this.http.post<UploadMediaResponse>(`${environment.apiUrl}/media/message`, formData)
     .pipe(
-      map((response: UploadMediaResponse) => response.mediaIds)
+      map((response: UploadMediaResponse) => response.mediaDTOs)
     );
   }
 }

@@ -42,6 +42,7 @@ namespace SocNetwork.Models
         public Gender Gender { get; set; }
         public MaritalStatus MaritalStatus { get; set; }
         public List<Chat> Chats { get; set; }
+        public List<Post> Posts { get; set; }
         public List<UserPost> UserPosts { get; set; }
         public List<ProfileMedia> ProfileMedia { get; set; }
 

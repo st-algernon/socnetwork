@@ -9,6 +9,8 @@ import { ShortProfile } from '../../interfaces';
 export class PostFormComponent implements OnInit {
 
   @Input() me: ShortProfile;
+  text: string = '';
+  isEmojiPickerVisible: boolean = false;
 
   constructor() { }
 
@@ -18,21 +20,17 @@ export class PostFormComponent implements OnInit {
   resize(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;
 
-    // textarea.style.height = 'auto';
-    // textarea.style.height = textarea.scrollHeight + 'px';
-
-    console.dir(textarea);
-    console.log(textarea.clientHeight);
-    console.log(textarea.scrollHeight);
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
   }
 
-  submit(textarea: HTMLTextAreaElement) {
-    console.dir(textarea.value);
-    console.log(textarea.value);
+  addEmoji(event) {
+    console.log(event.emoji);
+    this.text = `${this.text}${event.emoji.native}`;
+    this.isEmojiPickerVisible = false;
+ }
 
-    const parser = new DOMParser();
-    const result = parser.parseFromString(textarea.value, 'text/html');
+  submit() {
 
-    console.log(result);
   }
 }

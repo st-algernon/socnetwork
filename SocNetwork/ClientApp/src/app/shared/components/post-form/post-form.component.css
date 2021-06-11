@@ -13,7 +13,7 @@
 .make-post-box textarea{
 	margin-top: 14px;
 	font-size: 18px;
-	height: 20px;
+	height: 22px;
 }
 
 .make-post-box .media-box {
@@ -81,5 +81,6 @@
 }
 
 .attach .add-emoji-btn {
+	position: relative;
 	background-image: url(../../../../assets/images/emoji.png);
 }

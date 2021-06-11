@@ -1,9 +1,9 @@
-import { AfterViewChecked, Component, ElementRef, HostListener, ModuleWithComponentFactories, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AfterViewChecked, Component, ComponentFactoryResolver, ElementRef, HostListener, ModuleWithComponentFactories, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
 import { MediaFor, MessageState, MessageStatus } from 'src/app/shared/enums';
-import { Chat, Message, MessageRequest, ShortProfile } from 'src/app/shared/interfaces';
+import { Chat, Media, Message, MessageRequest, ShortProfile } from 'src/app/shared/interfaces';
 import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
 import { ChatsService } from 'src/app/shared/services/chats.service';
 import { UsersService } from 'src/app/shared/services/users.service';
@@ -11,6 +11,8 @@ import { formatDate } from '@angular/common';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { Subscription } from 'rxjs';
 import { MediaService } from 'src/app/shared/services/media.service';
+import { MessageComponent } from 'src/app/shared/components/message/message.component';
+import { ContainerDirective } from 'src/app/shared/directives/container.directive';
 
 @Component({
   selector: 'app-chat-page',
@@ -19,11 +21,18 @@ import { MediaService } from 'src/app/shared/services/media.service';
 })
 export class ChatPageComponent implements OnInit, OnDestroy {
   me: ShortProfile;
-  form: FormGroup;
   chat: Chat;
   subs: Subscription[] = [];
+  
+  messageForm: {
+    text: string,
+    images: File[] | null
+  }
 
-  @ViewChild('messagesList', { static: true }) messagesList: ElementRef;
+  previewFiles: Media[] = [];
+
+  @ViewChild(ContainerDirective, { static: true }) container: ContainerDirective;
+  @ViewChild('ngScrollbar', { static: true }) ngScrollbar: NgScrollbar;
 
   constructor(
     private messengerHub: MessengerHub,
@@ -31,8 +40,14 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     private mediaService: MediaService,
     private usersService: UsersService,
     private route: ActivatedRoute,
-    private renderer: Renderer2
-    ) { }
+    private renderer: Renderer2,
+    private resolver: ComponentFactoryResolver
+    ) {
+      this.messageForm = {
+        text: '',
+        images: null
+      };
+    }
 
   ngOnInit() {
     this.messengerHub.startConnection();
@@ -51,28 +66,28 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         this.chat = chat;
         this.chat.messageDTOs.reverse();
   
-        this.clearMessagesList();
+        this.clearMessagesContainer();
+
+        this.chat.messageDTOs.forEach(m => {
+          this.renderMessage(m);
+        })
   
-        for (let m of this.chat.messageDTOs) {
-          this.renderMessageTemplate(m);
+        if (chat.messageDTOs.length > 0) {
+          this.moveMessagesDown();
         }
-  
-        this.toBottomList();
+
         this.scrollToBottom();
       }),
 
       this.messengerHub.message$.subscribe((messageDTO: Message) => {
         if (messageDTO.chatId === this.chat.id) {
-          this.renderMessageTemplate(messageDTO);
+          this.chat.messageDTOs.push(messageDTO)
+          this.renderMessage(messageDTO);
           this.scrollToBottom();
         }
       })
 
     );
-  
-    this.form = new FormGroup({
-      messageText: new FormControl(null)
-    })
   }
 
   ngOnDestroy() {
@@ -83,103 +98,120 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   submit() {
 
-    if (!this.form.get('messageText')) {
-      return
-    }
-  
-    // this.mediaService.uploadMedia().subscribe(
-    //   (mediaIds: string[]) => {
+    // let isEmpty = true;
 
-    //     const messageRequest: MessageRequest = {
-    //       authorId: this.me.id,
-    //       chatId: this.chat.id,
-    //       text: this.form.value.messageText,
-    //       messageMediaDTO: []
-    //     };
-        
-    //     this.messengerHub.sendMessage(message);
+    // for (let key in this.messageForm) {
+    //   if (this.messageForm[key]) {
+    //     isEmpty = false
     //   }
-    //)
+    // }
 
-    this.form.reset();
+    // if (isEmpty) {
+    //   return;
+    // }
+
+    const messageRequest: MessageRequest = {
+      authorId: this.me.id,
+      chatId: this.chat.id,
+      text: this.messageForm.text,
+      mediaDTOs: []
+    };
+
+    if (this.messageForm.images) {
+      const formData = new FormData();
+
+      [...this.messageForm.images].forEach((file, i) => {
+        formData.set('file' + i, file, file.name);
+      });
+
+
+      this.mediaService.uploadMedia(formData).subscribe(
+        (mediaDTOs: Media[]) => {
+          console.log(mediaDTOs);
+          messageRequest.mediaDTOs = mediaDTOs;
+          
+          this.messengerHub.sendMessage(messageRequest);
+          this.messageForm.images = null;
+        }
+      )
+    } 
+    else if (this.messageForm.text) {
+      this.messengerHub.sendMessage(messageRequest);
+      this.messageForm.text = '';
+    }
   }
 
-  private hideSameAuthors(messageDTO: Message) {
-    const lastMessage = (this.messagesList as NgScrollbar).viewport.contentWrapperElement.lastElementChild;
-    const lastAuthor = lastMessage?.querySelector('.message-author');
-    const lastAuthorId = lastAuthor?.querySelector('.author-id')?.innerHTML;
+  previewImages(files: File[]) {
+    this.previewFiles = [];
 
-    if (lastAuthorId === messageDTO.authorDTO.id) {
+    for(let file of files) {
+
+      if (file.type.match('image*')) {
+
+        const reader = new FileReader();
+          
+        reader.onload = (e: ProgressEvent) => { 
+          this.previewFiles.push({
+            id: file.name,
+            mimeType: file.type,
+            path: (e.target as FileReader).result.toString(),
+            size: file.size,
+            creationDate: new Date(file.lastModified)
+          });
+        };
+      
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  resizeTextarea(event: Event) {
+    const textarea = event.target as HTMLTextAreaElement;
+
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight * 5 / 7 + 'px';
+  }
+
+  private renderMessage(message: Message) {
+    console.log(message);
+    this.hideSameAuthors(message);
+
+    const viewContainerRef = this.container.viewContainerRef;
+    const componentFactory = this.resolver.resolveComponentFactory(MessageComponent);
+    const componentRef = viewContainerRef.createComponent<MessageComponent>(componentFactory);
+    
+    componentRef.instance.message = message;
+    componentRef.instance.mine = message.authorDTO.id === this.me.id;
+  }
+
+  private hideSameAuthors(message: Message) {
+    const index = this.chat.messageDTOs.indexOf(message);
+    const previous = this.chat.messageDTOs[index - 1];
+    const contentWrapper = this.ngScrollbar.viewport.contentWrapperElement as HTMLElement;
+    const lastMessage = contentWrapper?.lastElementChild;
+    const lastAuthor = lastMessage?.querySelector('.message-author');
+
+    if (previous?.authorDTO.id === message.authorDTO.id) {
       (lastAuthor as HTMLElement).style.visibility = 'hidden';
     }
   }
 
-  private renderMessageTemplate(messageDTO: Message) {
-    
-    this.hideSameAuthors(messageDTO);
-
-    const messageItem = this.renderer.createElement('div');
-    const messageItemClasses = messageDTO.authorDTO.id === this.me.id ? ['fd-rr'] : ['fd-r'];
-    (messageItem as HTMLElement).classList.add('message-item', 'flex', 'ai-fe', ...messageItemClasses);
-
-    const messageAuthor = this.renderer.createElement('div');
-    (messageAuthor as HTMLElement).classList.add('message-author');
-    const authorId = this.renderer.createElement('div');
-    (authorId as HTMLElement).classList.add('author-id', 'hidden');
-    const authorIdText = this.renderer.createText(messageDTO.authorDTO.id);
-    const avatarBox = this.renderer.createElement('div');
-    (avatarBox as HTMLElement).classList.add('avatar-box', 'square-32');
-    const avatarBoxImg = this.renderer.createElement('img');
-    (avatarBoxImg as HTMLImageElement).classList.add('square-32');
-    (avatarBoxImg as HTMLImageElement).src = messageDTO.authorDTO.avatarPath;
-
-    const messageBody = this.renderer.createElement('div');
-    const messageBodyClasses = messageDTO.authorDTO.id === this.me.id ? ['me'] : ['other'];
-    (messageBody as HTMLElement).classList.add('message-body', ...messageBodyClasses);
-    const messageText = this.renderer.createText(messageDTO.text);
-    const messageFooter = this.renderer.createElement('div');
-    (messageFooter as HTMLElement).classList.add('message-footer', 'flex', 'jc-fe');
-    const messageDate = this.renderer.createElement('div');
-    (messageDate as HTMLElement).classList.add('message-date');
-    const shortTimeText = formatDate(new Date(messageDTO.creationDate), 'shortTime', 'uk');
-    const messageDateText = this.renderer.createText(shortTimeText);
-    const scrollContent = (this.messagesList as NgScrollbar).viewport.contentWrapperElement;
-
-    this.renderer.appendChild(avatarBox, avatarBoxImg);
-    this.renderer.appendChild(messageAuthor, avatarBox);
-    this.renderer.appendChild(authorId, authorIdText);
-    this.renderer.appendChild(messageAuthor, authorId);
-    this.renderer.appendChild(messageItem, messageAuthor);
-
-    this.renderer.appendChild(messageDate, messageDateText);
-    this.renderer.appendChild(messageFooter, messageDate);
-    this.renderer.appendChild(messageBody, messageText);
-    this.renderer.appendChild(messageBody, messageFooter);
-    this.renderer.appendChild(messageItem, messageBody);
-    this.renderer.appendChild(scrollContent, messageItem);
-  }
-
   private scrollToBottom() {
-    console.dir((this.messagesList as NgScrollbar).viewport.contentWrapperElement);
-
-    (this.messagesList as NgScrollbar).scrollTo({ 
+    this.ngScrollbar.scrollTo({ 
       left: 0, 
-      top: (this.messagesList as NgScrollbar).viewport.contentWrapperElement.offsetHeight
+      top: (this.ngScrollbar.viewport.contentWrapperElement as HTMLElement).scrollHeight
     });
   }
 
-  private clearMessagesList() {
-    (this.messagesList as NgScrollbar).viewport.contentWrapperElement.innerHTML = "";
+  private clearMessagesContainer() {
+    this.container.viewContainerRef.clear();
   }
 
-  private toBottomList() {
-    const contentWrapper = (this.messagesList as NgScrollbar).viewport.contentWrapperElement;
-    
-    contentWrapper.style.minHeight = '100%';
-    contentWrapper.style.display = 'flex';
-    contentWrapper.style.flexDirection = 'column';
-    contentWrapper.style.justifyContent = 'flex-end';
-    (contentWrapper.lastElementChild as HTMLElement).style.marginBottom = '8px';
-
+  private moveMessagesDown() {
+    const contentWrapper = (this.ngScrollbar as NgScrollbar).viewport.contentWrapperElement;
+  
+    if (contentWrapper) {
+      contentWrapper.style.minHeight = '100%';
+    }
   }
 }

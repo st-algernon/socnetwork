@@ -44,7 +44,9 @@ namespace SocNetwork.Controllers
         [HttpGet("{username}")]
         public async Task<IActionResult> GetProfile(string username)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
             {
@@ -67,7 +69,9 @@ namespace SocNetwork.Controllers
         [HttpGet("short/{username}")]
         public async Task<IActionResult> GetShortProfile(string username)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
             {
@@ -90,7 +94,9 @@ namespace SocNetwork.Controllers
         [HttpGet("{username}/followers")]
         public async Task<IActionResult> GetFollowers(string username, [FromQuery] UsersPageParams usersPageParams)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null) {
                 return BadRequest(new ShortProfilesResponse()
@@ -125,7 +131,9 @@ namespace SocNetwork.Controllers
         [HttpGet("{username}/following")]
         public async Task<IActionResult> GetFollowing(string username, [FromQuery] UsersPageParams usersPageParams)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
                 return BadRequest(new ProfileResponse()

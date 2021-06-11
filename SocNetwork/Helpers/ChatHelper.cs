@@ -26,6 +26,7 @@ namespace SocNetwork.Helpers
        
             foreach (var chat in user.Chats)
             {
+                await LoadChatCoverAsync(chat);
                 await LoadChatUserMediaAsync(chat);
                 await LoadLastChatMessagesAsync(chat, DEFAULT_LAST_MESSAGES_NUM);
             }
@@ -46,6 +47,7 @@ namespace SocNetwork.Helpers
                 if (!chat.Members.Except(members).Any() && !members.Except(chat.Members).Any())
                 {
                     wantedChat = chat;
+                    await LoadChatCoverAsync(wantedChat);
                     await LoadChatUserMediaAsync(wantedChat);
                     await LoadLastChatMessagesAsync(wantedChat, DEFAULT_LAST_MESSAGES_NUM);
                 }
@@ -62,28 +64,18 @@ namespace SocNetwork.Helpers
                 CreationDate = DateTime.Now
             };
 
-            await db.Chats.AddAsync(chat);
-            await db.SaveChangesAsync();
-
-            return chat;
-        }
-
-        public async Task<Chat> CreateSavedMessages(User user)
-        {
-            var title = "Saved Messages";
-            var cover = new Media()
+            if (members.Distinct().Count() == 1)
             {
-                Path = SAVED_MESSAGES_PATH,
-                CreationDate = DateTime.Now
-            };
+                chat.Title = "Saved Messages";
 
-            var chat = new Chat()
-            {
-                Title = title,
-                Cover = cover,
-                Members = new List<User> { user },
-                CreationDate = DateTime.Now
-            };
+                chat.Cover = new Media()
+                {
+                    Path = SAVED_MESSAGES_PATH,
+                    CreationDate = DateTime.Now
+                };
+
+                await db.Media.AddAsync(chat.Cover);
+            }
 
             await db.Chats.AddAsync(chat);
             await db.SaveChangesAsync();
@@ -99,6 +91,12 @@ namespace SocNetwork.Helpers
             {
                 await db.Entry(member).Collection(m => m.ProfileMedia).LoadAsync();
             }
+        }
+
+        public async Task LoadChatCoverAsync(Chat chat)
+        {
+            await db.Entry(chat).Reference(c => c.Cover).LoadAsync();
+
         }
 
         public async Task LoadLastChatMessagesAsync(Chat chat, int number)
@@ -122,11 +120,11 @@ namespace SocNetwork.Helpers
             return string.Join(", ", namesOfOthers);
         }
 
-        public static ProfileMedia GenerateChatCover(Chat chat, User currentUser)
+        public static Media GenerateChatCover(Chat chat, User currentUser)
         {
             var otherMembers = chat.Members.Except(new List<User> { currentUser }).ToList();
 
-            return UsersHelper.GetCurrentAvatar(otherMembers[0]);
+            return UsersHelper.GetCurrentAvatar(otherMembers.First());
         }
     }
 }

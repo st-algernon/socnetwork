@@ -52,11 +52,15 @@ namespace SocNetwork.Helpers
                 shortChatDTO.Title = ChatHelper.GenerateChatTitle(chat, currentUser);
             }
 
-            shortChatDTO.CoverPath = chat.Cover?.Path ?? ChatHelper.GenerateChatCover(chat, currentUser).Path;
+            shortChatDTO.CoverPath = chat.Cover?.Path 
+                ?? ChatHelper.GenerateChatCover(chat, currentUser)?.Path;
 
-            var lastMessage = chat.Messages.Last();
+            if(chat.Messages.Any())
+            {
+                var lastMessage = chat.Messages.OrderBy(m => m.CreationDate).Last();
 
-            shortChatDTO.LastMessageDTO = ToMessageDTO(lastMessage);
+                shortChatDTO.LastMessageDTO = ToMessageDTO(lastMessage);
+            }
 
             return shortChatDTO;
         }
@@ -78,12 +82,53 @@ namespace SocNetwork.Helpers
 
             message.MessageMedia.ForEach(m =>
             {
-                messageDTO.MessageMediaDTOs.Add(ToMediaDTO(m));
+                messageDTO.MediaDTOs.Add(ToMediaDTO(m));
             });
 
             messageDTO.AuthorDTO = ToShortProfileDTO(message.Author);
 
             return messageDTO;
+        }
+
+        public static PostDTO ToPostDTO(Post post)
+        {
+            var postDTO = new PostDTO();
+
+            post.CopyPropertiesTo(postDTO);
+
+            post.PostMedia.ForEach(m =>
+            {
+                postDTO.MediaDTOs.Add(ToMediaDTO(m));
+            });
+
+            postDTO.UserDTO = ToUserDTO(post.User);
+
+            post.PostUsers.ForEach(pu =>
+            {
+                postDTO.PostUserDTOs.Add(ToUserPostDTO(pu));
+            });
+
+            return postDTO;
+        }
+
+        public static UserDTO ToUserDTO(User user)
+        {
+            var userDTO = new UserDTO();
+
+            user.CopyPropertiesTo(userDTO);
+
+            return userDTO;
+        }
+
+        public static UserPostDTO ToUserPostDTO(UserPost userPost)
+        {
+            var userPostDTO = new UserPostDTO();
+
+            userPost.CopyPropertiesTo(userPostDTO);
+
+            userPostDTO.UserDTO = ToShortProfileDTO(userPost.User);
+
+            return userPostDTO;
         }
 
         public static ProfileDTO ToProfileDTO(User user)
@@ -97,7 +142,8 @@ namespace SocNetwork.Helpers
                 profileDTO.ProfileMediaDTOs.Add(ToProfileMediaDTO(m));
             });
 
-            profileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path ?? UsersHelper.DEFAULT_AVATAR_PATH;
+            profileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path
+                ?? UsersHelper.DEFAULT_AVATAR_PATH;
             profileDTO.CoverPath = UsersHelper.GetCurrentCover(user)?.Path;
 
             return profileDTO;
@@ -109,7 +155,8 @@ namespace SocNetwork.Helpers
 
             user.CopyPropertiesTo(shortProfileDTO);
 
-            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path ?? UsersHelper.DEFAULT_AVATAR_PATH;
+            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path
+                ?? UsersHelper.DEFAULT_AVATAR_PATH;
 
             return shortProfileDTO;
         }

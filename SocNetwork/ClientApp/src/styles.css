@@ -238,6 +238,10 @@ textarea {
 	cursor: pointer;
 }
 
+.round.r-16 {
+	background-size: 16px;
+}
+
 .round.r-18 {
 	background-size: 18px;
 }

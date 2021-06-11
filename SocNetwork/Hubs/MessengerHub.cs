@@ -27,6 +27,7 @@ namespace SocNetwork.Hubs
         {
             var chat = await db.Chats
                 .Include(c => c.Members)
+                .ThenInclude(m => m.ProfileMedia)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == request.ChatId);
             var memberIds = chat.Members.Select(m => m.Id.ToString());
             var caller = Context.User.Identity.Name;
@@ -35,23 +36,26 @@ namespace SocNetwork.Hubs
             {
                 var message = new Message
                 {
-                    Id = Guid.NewGuid(),
                     AuthorId = Guid.Parse(request.AuthorId),
                     ChatId = Guid.Parse(request.ChatId),
                     Text = request.Text,
                     CreationDate = DateTime.Now
                 };
 
-                foreach (var mediaId in request.MediaIds)
+                await db.Messages.AddAsync(message);
+
+                foreach (var mediaDTO in request.MediaDTOs)
                 {
                     await db.MessageMedia.AddAsync(new MessageMedia
                     {
-                        Id = Guid.Parse(mediaId),
                         MessageId = message.Id,
+                        Path = mediaDTO.Path,
+                        MimeType = mediaDTO.MimeType,
+                        Size = mediaDTO.Size,
+                        CreationDate = mediaDTO.CreationDate
                     });
                 }
-   
-                await db.Messages.AddAsync(message);
+
                 await db.SaveChangesAsync();
 
                 var messageDTO = ConvertHelper.ToMessageDTO(message);

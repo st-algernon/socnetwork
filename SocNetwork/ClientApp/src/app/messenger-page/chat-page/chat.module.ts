@@ -1,6 +1,6 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MessengerHub } from 'src/app/shared/hubs/messenger.hub';
 import { ChatsService } from 'src/app/shared/services/chats.service';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -14,7 +14,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
   ],
   imports: [
     ChatRoutingModule,
-    ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     NgScrollbarModule,
     SharedModule

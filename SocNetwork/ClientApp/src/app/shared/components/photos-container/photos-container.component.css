@@ -1,0 +1,37 @@
+.photos-container {
+    height: 168px;
+    border-radius: 15px;
+    background-color: #f7f9fa;
+	overflow: hidden;
+}
+
+.photos-container .photo-item {
+	position: relative;
+}
+
+.photos-container.horizontal {
+	flex-direction: column;
+}
+
+.photos-container.horizontal .photo-item {
+	height: 50%;
+}
+
+.photos-container.vertical {
+	flex-direction: row;
+}
+
+.photos-container.vertical .photo-item {
+	width: 50%;
+}
+
+.photos-container .photo-item img {
+	position: absolute;
+	max-width: 100%;
+	min-width: 100%;
+	max-height: 100%;
+	min-height: 100%;
+	object-fit: cover;
+	padding: 0.5px;
+	box-sizing: border-box;
+}

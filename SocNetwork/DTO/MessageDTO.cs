@@ -13,12 +13,12 @@ namespace SocNetwork.DTO
         public Guid ChatId { get; set; }
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
-        public List<MediaDTO> MessageMediaDTOs { get; set; }
+        public List<MediaDTO> MediaDTOs { get; set; }
         public MessageStatus MessageStatus { get; set; }
         public MessageState MessageState { get; set; }
         public MessageDTO()
         {
-            MessageMediaDTOs = new List<MediaDTO>();
+            MediaDTOs = new List<MediaDTO>();
         }
     }
 }

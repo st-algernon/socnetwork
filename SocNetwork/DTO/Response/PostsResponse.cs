@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO.Response
 {
-    public class UploadMediaResponse
+    public class PostsResponse
     {
         public bool Result { get; set; }
-        public List<MediaDTO> MediaDTOs { get; set; }
+        public List<PostDTO> Posts { get; set; }
         public List<string> Errors { get; set; }
     }
 }

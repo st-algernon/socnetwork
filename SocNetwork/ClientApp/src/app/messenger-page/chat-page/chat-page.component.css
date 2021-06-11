@@ -80,42 +80,9 @@ ng-scrollbar {
 	background-color: #f7f9fa;
 }
 
-.chat-body .message-item {
-	margin: 0px 10px;
-	padding-top: 2px;
-	z-index: 2;
-}
-
-.message-item:focus {
-	outline: none;
-}
-
-.message-author .avatar-box {
-	background: #eee;
-}
-
-.message-item .message-body {
-	max-width: 70%;
-	border-radius: 15px;
-	color: #fff;
-	padding: 10px;
-	padding-bottom: 0px;
-	position: relative;
-}
-
-.message-item .other.message-body {
-	background-color: #999;
-	margin-left: 5px;
-}
-
-.message-item .me.message-body {
-	background-color: #36a7ee;
-	margin-right: 5px;
-}
-
-.message-footer .message-date {
-	font-size: 12px;
-	color: #d9ecf8;
+.messages-container {
+	min-height: 100%;
+	margin-bottom: 8px;
 }
 
 .chat-footer {
@@ -123,6 +90,24 @@ ng-scrollbar {
 	border-radius: 0px 0px 15px 15px;
 	padding: 10px 0px;
 	z-index: 3;
+}
+
+.preview-container {
+	position: relative;
+	margin: 0px 42px;
+	margin-bottom: 5px;
+}
+
+.preview-container .close-btn {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	background-image: url(../../../assets/images/plus-hover.png);
+	background-color: #fff;
+	transform: rotate(45deg);
+	border: 1px solid #eee;
+	outline: none;
+	z-index: 10;
 }
 
 .chat-footer .textarea-attach-wrap {
@@ -136,6 +121,7 @@ ng-scrollbar {
 	padding: 4px 10px;
 	font-size: 17px;
 	height: 20px;
+	line-height: 20px;
 }
 
 .chat-footer .submit-btn {

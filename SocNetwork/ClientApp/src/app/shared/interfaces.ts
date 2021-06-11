@@ -28,7 +28,7 @@ export interface MessageRequest {
     authorId: string,
     chatId: string,
     text: string,
-    mediaIds: string[]
+    mediaDTOs: Media[]
 }
 
 export interface AuthResponse {
@@ -72,7 +72,7 @@ export interface ShortChatsResponse {
 
 export interface UploadMediaResponse {
     result: string,
-    mediaIds: string[],
+    mediaDTOs: Media[],
     errors: string[]
 }
 
@@ -135,7 +135,7 @@ export interface Message {
     chatId: string,
     text: string,
     creationDate: string,
-    messageMediaDTOs: Media[],
+    mediaDTOs: Media[],
     messageStatus: MessageStatus,
     messageState: MessageState
 }

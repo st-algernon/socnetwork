@@ -28,12 +28,12 @@ namespace SocNetwork.Helpers
 
         public static ProfileMedia GetCurrentAvatar(User user)
         {
-            return user.ProfileMedia.FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Avatar);
+            return user?.ProfileMedia?.FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Avatar);
         }
 
         public static ProfileMedia GetCurrentCover(User user)
         {
-            return user.ProfileMedia.FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Cover);
+            return user?.ProfileMedia?.FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Cover);
         }
 
         public static ProfileMediaDTO GetCurrentAvatarDTO(User user)

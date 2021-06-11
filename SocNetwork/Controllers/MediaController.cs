@@ -59,36 +59,32 @@ namespace SocNetwork.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadMedia()
+        [HttpPost("message"), DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadMessageMedia()
         {
             var formCollection = await Request.ReadFormAsync();
             var files = formCollection.Files;
-            var mediaIds = new List<Guid>();
+            var mediaDTOs = new List<MediaDTO>();
 
             foreach(var file in files)
             {
                 var pathToFile = MediaHelper.SaveToFileSystem(file);
 
-                var media = new Media()
+                var mediaDTO = new MediaDTO()
                 {
-                    Id = Guid.NewGuid(),
                     Path = pathToFile,
                     Size = (int)file.Length,
                     MimeType = file.ContentType,
+                    CreationDate = DateTime.Now
                 };
 
-                mediaIds.Add(media.Id);
-
-                db.Media.Add(media);
+                mediaDTOs.Add(mediaDTO);
             }
-
-            await db.SaveChangesAsync();
 
             return Ok(new UploadMediaResponse()
             {
                 Result = true,
-                MediaIds = mediaIds
+                MediaDTOs = mediaDTOs
             });
         }
     }

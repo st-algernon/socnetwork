@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { Subject } from 'rxjs';
-import { Chat, Message } from '../interfaces';
+import { Chat, Message, MessageRequest } from '../interfaces';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' }) 
@@ -32,7 +32,7 @@ export class MessengerHub {
         });
     }
 
-    sendMessage(message: Message) {
-        this.hubConnection.invoke('Send', message);
+    sendMessage(request: MessageRequest) {
+        this.hubConnection.invoke('Send', request);
     }
 }

@@ -58,7 +58,7 @@ export class UsersService {
 
         return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}/following`, { params })
         .pipe(
-            map((response: ShortProfilesResponse) => response.shortProfiles )
+            map((response: ShortProfilesResponse) => response.shortProfiles)
         )
     }
 
@@ -92,8 +92,7 @@ export class UsersService {
     getMyShortProfile(): Observable<ShortProfile> {
         return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/current`)
         .pipe(
-            map((response: ShortProfilesResponse) => response.shortProfiles[0]),
-            tap(console.log)
+            map((response: ShortProfilesResponse) => response.shortProfiles[0])
         );
     }
 
@@ -107,4 +106,12 @@ export class UsersService {
     editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
         return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
     }
+
+    // private getCurrentAvatar(profile): ProfileMedia {
+    //     return profile.profileMediaDTOs.forEach(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar);
+    // }
+
+    // private getCurrentCover(profile): ProfileMedia {
+    //     return profile.profileMediaDTOs.forEach(m => m.isCurrent == true && m.mediaFor == MediaFor.Cover);
+    // }
 }

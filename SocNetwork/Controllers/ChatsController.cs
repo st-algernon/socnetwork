@@ -57,16 +57,10 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var chat = new Chat();
             var chatHelper = new ChatHelper(db);
-
-            if (withUser != currentUser)
-            {
-                var members = new List<User>() { currentUser, withUser };
-                chat = await chatHelper.GetChatByMembersAsync(members) ?? await chatHelper.CreateChatAsync(members);
-            } else {
-                chat = await chatHelper.CreateSavedMessages(currentUser);
-            }
+            var members = new List<User>() { currentUser, withUser };
+            var chat = await chatHelper.GetChatByMembersAsync(members) 
+                ?? await chatHelper.CreateChatAsync(members);
 
             var shortChatDTO = ConvertHelper.ToShortChatDTO(chat, currentUser);
 
@@ -85,7 +79,10 @@ namespace SocNetwork.Controllers
             var currentUser = HttpContext.Items["User"] as User;
             var currentUserChats = await chatHelper.GetUserChatsAsync(currentUser);
 
-            var chat = await db.Chats.FirstOrDefaultAsync(c => c.Id.ToString() == id);
+            var chat = await db.Chats
+                .Include(c => c.Messages)
+                .ThenInclude(m => m.MessageMedia)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
             if (chat == null)
             {

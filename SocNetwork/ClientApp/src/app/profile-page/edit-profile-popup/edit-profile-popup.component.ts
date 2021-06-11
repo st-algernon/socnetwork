@@ -168,7 +168,7 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     const formData = new FormData();
 
     formData.set('file', file, file.name);
-
+    
     return this.mediaService.uploadProfileMedia(formData, mediaFor);
   }
 

@@ -9,7 +9,7 @@
                 </div>
                 <div *ngIf="chat" class="flex fd-c ai-c">
                     <div class="source-name">{{ chat.title }}</div>
-                    <div class="last-visited">14 October 2019 at 09:23 am</div>
+                    <div class="last-visited">14 March 2021 at 09:23 am</div>
                 </div>
                 <form action="" method="get" class="search-message-form flex fd-c jc-c" >
                     <input type="search" name="search_field" placeholder="Search for people and groups" autocomplete="off" />
@@ -17,27 +17,60 @@
         </section>
         <section class="chat-body fg-1">
             <ng-scrollbar 
-                #messagesList 
                 visibility="hover" 
                 appearance="standard"
                 trackClass="scrollbar-track"
+                #ngScrollbar
             >
-                <app-loader *ngIf="!chat"></app-loader>
+                <div 
+                    class="messages-container flex fd-c jc-fe"
+                    container
+                >
+
+                    <app-loader *ngIf="!chat"></app-loader>
+                </div>
             </ng-scrollbar>
         </section>
         <section class="chat-footer">
+            <div class="flex jc-c">
+                <div class="preview-container fg-1">
+                    <div 
+                        *ngIf="previewFiles.length > 0"
+                        class="close-btn round r-16 square-20" 
+                        (click)="previewFiles = []"
+                    ></div>
+                    <app-photos-container 
+                        *ngIf="previewFiles.length > 0"
+                        [photos]="previewFiles"
+                    ></app-photos-container>
+                </div>
+            </div>
             <form 
-                [formGroup]="form"
                 (ngSubmit)="submit()"
                 class="flex fd-r ai-fe"
             >
                 <ul class="attach flex fd-r jc-c" data-container="attach">
-                    <li class="add-picture-btn round r-20 square-28" data-attach="picture"></li>
+                    <li class="add-picture-btn round r-20 square-28" (click)="input_image.click()" data-attach="picture">
+                        <input 
+                            type="file" 
+                            name="messageImages"
+                            class="hidden"
+                            (change)="messageForm.images = input_image.files; previewImages(input_image.files)"
+                            #input_image 
+                            multiple
+                        >
+                    </li>
                     <li class="add-music-btn round r-20 square-28" data-attach="music"></li>
                     <li class="add-video-btn round r-22 square-28" data-attach="video"></li>
                 </ul>
                 <div class="textarea-attach-wrap flex fd-r ai-fe">
-                    <textarea name="post-field" formControlName="messageText" placeholder="Write a message..." data-submit-btn="blink"></textarea>
+                    <textarea 
+                        rows="1"
+                        name="messageText"
+                        [(ngModel)]="messageForm.text"
+                        (input)="resizeTextarea($event)"
+                        placeholder="Write a message..."
+                    ></textarea>
                     <ul class="attach flex fd-r jc-sb" data-container="attach">
                         <li class="add-emoji-btn round r-22 square-28" data-attach="emoji"></li>
                     </ul>
