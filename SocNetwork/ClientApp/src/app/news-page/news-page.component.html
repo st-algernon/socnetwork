@@ -1,7 +1,16 @@
 <div class="flex jc-c">
   <main>
-    <app-post-form [me]="me"></app-post-form>
-    <app-post></app-post>
+    <app-post-maker [me]="me"></app-post-maker>
+    <ng-container *ngIf="posts; else empty_post">
+      <ng-container *ngFor="let post of posts">
+        <app-post [me]="me" [post]="post" comments="best"></app-post>
+      </ng-container>
+    </ng-container>
+    <ng-template #empty_post>
+      <app-empty-post></app-empty-post>
+      <app-empty-post withMedia="true"></app-empty-post>
+      <app-empty-post></app-empty-post>
+    </ng-template>
   </main>
 </div>
 <div class="flex jc-fe">

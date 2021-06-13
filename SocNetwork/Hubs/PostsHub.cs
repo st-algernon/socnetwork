@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SocNetwork.DTO.Request;
 using SocNetwork.Helpers;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Hubs
 {
+    [Authorize]
     public class PostsHub : Hub
     {
         private readonly SocNetworkContext db;
@@ -19,52 +21,26 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async void Publish(PostRequest request)
+        public async void Like(string postId)
         {
-            var caller = Context.User.Identity.Name;
-
-            if (caller == request.AuthorId)
+            var callerId = Context.User.Identity.Name;
+            var author = await db.UserPost
+                .Where(up => up.PostId == Guid.Parse(postId) && up.IsAuthor)
+                .Select(up => up.User)
+                .FirstOrDefaultAsync();
+            var userPost = new UserPost
             {
-                var tags = TagHelper.FindTags(request.Text);
+                UserId = Guid.Parse(callerId),
+                PostId = Guid.Parse(postId),
+                IsLiked = true
+            };
 
-                var post = new Post()
-                {
-                    UserId = Guid.Parse(request.UserId),
-                    Text = request.Text,
-                    Tags = tags,
+            await db.UserPost.AddAsync(userPost);
+            await db.SaveChangesAsync();
 
-                    DatePublished = DateTime.Now
-                };
+            var userPostDTO = ConvertHelper.ToUserPostDTO(userPost);
 
-                await db.Posts.AddAsync(post);
-
-                var userPost = new UserPost()
-                {
-                    PostId = post.Id,
-                    UserId = Guid.Parse(request.AuthorId),
-                    IsAuthor = true
-                };
-
-                await db.UserPost.AddAsync(userPost);
-
-                foreach (var mediaDTO in request.MediaDTOs)
-                {
-                    await db.PostMedia.AddAsync(new PostMedia
-                    {
-                        PostId = post.Id,
-                        Path = mediaDTO.Path,
-                        MimeType = mediaDTO.MimeType,
-                        Size = mediaDTO.Size,
-                        CreationDate = mediaDTO.CreationDate
-                    });
-                }
-
-                await db.SaveChangesAsync();
-
-                var postDTO = ConvertHelper.ToPostDTO(post);
-
-                await Clients.Users(caller).SendAsync("Receive", postDTO);
-            }
+            await Clients.Users(author.Id.ToString()).SendAsync("ReceiveLikes", userPostDTO);
         }
     }
 }

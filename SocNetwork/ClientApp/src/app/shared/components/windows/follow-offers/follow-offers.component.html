@@ -4,90 +4,34 @@
     </div>
     <ul class="follow-offers-body">
         <ng-scrollbar
+            *ngIf="users; else loading"
             visibility="hover"
             appearance="standard"
         >
-        <li>
-            <a href="#" class="follow-offer-item flex">
-                <div class="avatar-box square-40">
-                    <img 
-                        src="../../assets/images/default-avatar.jpg"
-                        alt="avatar"
-                        class="square-40"
-                    >
-                </div>
-                <div class="flex fg-1 fd-c">
-                    <div class="flex fd-r jc-sb ai-c">
-                        <div class="flex fd-c fg-1">
-                            <div class="source-name">st. Algernon</div>
-                            <div class="nick-name">@st_algernon</div>
-                        </div>
-                        <button class="btn btn-sm btn-outlined">Follow</button>
+            <li *ngFor="let user of users">
+                <a [routerLink]="user.id" class="follow-offer-item flex">
+                    <div class="avatar-box square-40">
+                        <img 
+                            [src]="user.avatarPath"
+                            alt="avatar"
+                            class="square-40"
+                        >
                     </div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="follow-offer-item flex">
-                <div class="avatar-box square-40">
-                    <img 
-                        src="../../assets/images/default-avatar.jpg"
-                        alt="avatar"
-                        class="square-40"
-                    >
-                </div>
-                <div class="flex fg-1 fd-c">
-                    <div class="flex fd-r jc-sb ai-c">
-                        <div class="flex fd-c fg-1">
-                            <div class="source-name">st. Algernon</div>
-                            <div class="nick-name">@st_algernon</div>
+                    <div class="flex fg-1 fd-c">
+                        <div class="flex fd-r jc-sb ai-c">
+                            <div class="flex fd-c fg-1">
+                                <div class="source-name">{{ user.name }}</div>
+                                <div class="nick-name">@{{ user.username }}</div>
+                            </div>
+                            <button class="btn btn-sm btn-outlined">Follow</button>
                         </div>
-                        <button class="btn btn-sm btn-outlined">Follow</button>
                     </div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="follow-offer-item flex">
-                <div class="avatar-box square-40">
-                    <img 
-                        src="../../assets/images/default-avatar.jpg"
-                        alt="avatar"
-                        class="square-40"
-                    >
-                </div>
-                <div class="flex fg-1 fd-c">
-                    <div class="flex fd-r jc-sb ai-c">
-                        <div class="flex fd-c fg-1">
-                            <div class="source-name">st. Algernon</div>
-                            <div class="nick-name">@st_algernon</div>
-                        </div>
-                        <button class="btn btn-sm btn-outlined">Follow</button>
-                    </div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#" class="follow-offer-item flex">
-                <div class="avatar-box square-40">
-                    <img 
-                        src="../../assets/images/default-avatar.jpg"
-                        alt="avatar"
-                        class="square-40"
-                    >
-                </div>
-                <div class="flex fg-1 fd-c">
-                    <div class="flex fd-r jc-sb ai-c">
-                        <div class="flex fd-c fg-1">
-                            <div class="source-name">st. Algernon</div>
-                            <div class="nick-name">@st_algernon</div>
-                        </div>
-                        <button class="btn btn-sm btn-outlined">Follow</button>
-                    </div>
-                </div>
-            </a>
-        </li>
+                </a>
+            </li>
         </ng-scrollbar>
+        <ng-template #loading>
+            <app-loader></app-loader>
+        </ng-template>
     </ul>
     <div class="follow-offers-footer">
         <!-- <a routerLink="/explore">See more</a> -->

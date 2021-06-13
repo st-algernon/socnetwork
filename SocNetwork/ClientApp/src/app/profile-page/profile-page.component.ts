@@ -4,12 +4,13 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MediaFor, UserRelationshipType } from '../shared/enums';
-import { Profile, ShortChat, ShortProfile, UserRelationship } from '../shared/interfaces';
+import { Profile, ShortChat, ShortProfile, Relationship, Post } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
 import { MessengerHub } from '../shared/hubs/messenger.hub';
 import { UsersService } from '../shared/services/users.service';
 import { RelationshipsService } from '../shared/services/relationships.service';
 import { ChatsService } from '../shared/services/chats.service';
+import { PostsService } from '../shared/services/posts.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -17,25 +18,43 @@ import { ChatsService } from '../shared/services/chats.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChecked{
-
-  user: Profile;
-  me: ShortProfile;  
-
-  editProfileFlag: boolean = false;
-  isMe: boolean = false;
-  isFollowed: boolean = false;
-  isUnFollowed: boolean = false;
+  
+  me: ShortProfile;
+  user: { 
+    profile: Profile | null,
+    posts: Post[] | null
+  };
+  relationship: {
+    isMe: boolean,
+    isUnFollowed: boolean,
+    isFollowed: boolean,
+    isBlocked: boolean
+  };
 
   subs: Subscription[] = [];
+  editProfileFlag: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private usersService: UsersService,
     private chatsService: ChatsService,
+    private postsService: PostsService,
     private relationshipsService: RelationshipsService,
     private messengerHub: MessengerHub
-    ) { }
+    ) { 
+      this.user = {
+        profile: null,
+        posts: null
+      };
+
+      this.relationship = {
+        isMe: false,
+        isUnFollowed: false,
+        isFollowed: false,
+        isBlocked: false
+      };
+    }
 
   ngOnInit(): void {
 
@@ -43,28 +62,27 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
       
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 
-      this.route.params.pipe(
-        switchMap((params: Params) => {
-          return this.usersService.getProfile(params['username']);
-        })
-      ).subscribe((profile: Profile) => { 
-        console.log(profile);
-        this.user = profile;
-      }),
-    
-      this.route.params.pipe(
-        switchMap((params: Params) => {
-          return this.relationshipsService.getRelationshipWith(params['username']);
-        })
-      ).subscribe((userRelationship: UserRelationship) => {
-        if (userRelationship.userRelationshipType == UserRelationshipType.Followed) {
-          this.isFollowed = true;
-        }
-        if (userRelationship.userRelationshipType == UserRelationshipType.UnFollowed) {
-          this.isUnFollowed = true;
-        }
+      this.route.params.subscribe((params: Params) => {
+        this.subs.push(
+          this.usersService.getProfile(params['username']).subscribe(
+            (profile: Profile) => {
+              this.user.profile = profile;
+            }
+          ),
+          this.relationshipsService.getRelationshipWith(params['username']).subscribe(
+            (relationship: Relationship) => {
+              this.defineRelationship(relationship);
+            }
+          ),
+          this.postsService.getPosts(params['username'], { number: 1, size: 15 }).subscribe(
+            (posts: Post[]) => {
+              console.log(posts);
+              this.user.posts = posts;
+            }
+          )
+        );
       })
-    
+
     );
 
     // this.messengerHub.startConnection();
@@ -78,15 +96,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   }
 
   ngAfterContentChecked(): void {
-    if (this.me?.id == this.user?.id) {
-      this.isMe = true;
+    if (this.me?.id == this.user.profile?.id) {
+      this.relationship.isMe = true;
     }
   }
 
   openChat() {
     this.subs.push(
 
-      this.chatsService.getShortChatWith(this.user.id)
+      this.chatsService.getShortChatWith(this.user.profile.id)
       .subscribe((shortChat: ShortChat) => {
         this.router.navigate(['messenger', 'chat', shortChat.id]);
       })
@@ -102,8 +120,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
           return this.relationshipsService.follow(params['username']);
         })
       ).subscribe(() => { 
-        this.isFollowed = true;
-        this.isUnFollowed = false;
+        this.relationship.isFollowed = true;
+        this.relationship.isUnFollowed = false;
       })
 
     );
@@ -117,8 +135,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
           return this.relationshipsService.unfollow(params['username']);
         })
       ).subscribe(() => { 
-        this.isUnFollowed = true;
-        this.isFollowed = false;
+        this.relationship.isUnFollowed = true;
+        this.relationship.isFollowed = false;
       })
 
     );
@@ -126,5 +144,17 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
 
   changeTitleToUnfollow($event: MouseEvent) {
     ($event.target as HTMLElement).innerText = $event.type == "mouseover" ? "Unfollow" : "Following";
+  }
+
+  defineRelationship(relationship: Relationship) {
+    if (relationship.userRelationshipType == UserRelationshipType.Followed) {
+      this.relationship.isFollowed = true;
+    }
+    if (relationship.userRelationshipType == UserRelationshipType.UnFollowed) {
+      this.relationship.isUnFollowed = true;
+    }
+    if (relationship.userRelationshipType == UserRelationshipType.Blocked) {
+      this.relationship.isBlocked = true;
+    }
   }
 }

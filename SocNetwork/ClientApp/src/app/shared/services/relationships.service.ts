@@ -1,8 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { ShortProfilesResponse, UserRelationship } from "../interfaces";
+import { ShortProfilesResponse, Relationship, RelationshipResponse } from "../interfaces";
 
 @Injectable() 
 export class RelationshipsService {
@@ -11,8 +12,11 @@ export class RelationshipsService {
         private http: HttpClient
     ) {}
 
-    getRelationshipWith(username: string): Observable<UserRelationship> {
-        return this.http.get<UserRelationship>(`${environment.apiUrl}/relationships/with/${username}`);
+    getRelationshipWith(username: string): Observable<Relationship> {
+        return this.http.get<RelationshipResponse>(`${environment.apiUrl}/relationships/with/${username}`)
+        .pipe(
+            map((response: RelationshipResponse) => response.relationship)
+        );
     }
 
     follow(username: string) {        

@@ -3,7 +3,7 @@ header {
   top: 0px;
   width: 100%;
   padding: 7px 20px;
-  background: url(../../../../assets/images/bg.png) !important;
+  background: url(../../assets/images/bg.png) !important;
   z-index: 11;
   border-bottom: 1px solid #f4f4f4;
   box-sizing: border-box;
@@ -25,7 +25,7 @@ header {
   height: 40px;
   margin-right: 10px;
   display: inline-block;
-  background: url(../../../../assets/images/logo.png) no-repeat;
+  background: url(../../assets/images/logo.png) no-repeat;
   background-size: 100%;
   vertical-align: top;
 }

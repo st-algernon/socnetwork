@@ -19,11 +19,15 @@ namespace SocNetwork.Models
         public DbSet<Media> Media { get; set; }
         public DbSet<MessageMedia> MessageMedia { get; set; }
         public DbSet<PostMedia> PostMedia { get; set; }
+        public DbSet<CommentMedia> CommentMedia { get; set; }
         public DbSet<ProfileMedia> ProfileMedia { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserPost> UserPost { get; set; }
+        public DbSet<UserComment> UserComment { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<PostNotification> PostNotifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<CommentNotification> CommentNotifications { get; set; }
         public DbSet<UserRelationship> UserRelationships { get; set; }
 
         public SocNetworkContext(DbContextOptions<SocNetworkContext> options)
@@ -58,11 +62,24 @@ namespace SocNetwork.Models
                 .WithMany(p => p.PostUsers)
                 .HasForeignKey(up => up.PostId);
 
+            modelBuilder.Entity<UserComment>()
+                .HasKey(t => new { t.UserId, t.CommentId });
+
+            modelBuilder.Entity<UserComment>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UserComments)
+                .HasForeignKey(uc => uc.UserId);
+
+            modelBuilder.Entity<UserComment>()
+                .HasOne(uc => uc.Comment)
+                .WithMany(c => c.CommentUsers)
+                .HasForeignKey(uc => uc.CommentId);
+
             modelBuilder.Entity<Notification>()
-             .HasOne(n => n.Sender)
-             .WithMany()
-             .HasForeignKey(pt => pt.SenderId)
-             .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(n => n.Sender)
+                .WithMany()
+                .HasForeignKey(pt => pt.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.Recipient)

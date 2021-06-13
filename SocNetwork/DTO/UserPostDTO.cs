@@ -8,6 +8,7 @@ namespace SocNetwork.DTO
     public class UserPostDTO
     {
         public ShortProfileDTO UserDTO { get; set; }
+        public Guid PostId { get; set; }
         public bool IsLiked { get; set; }
         public bool IsSaved { get; set; }
         public bool IsAuthor { get; set; }

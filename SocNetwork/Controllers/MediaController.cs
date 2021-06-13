@@ -87,5 +87,38 @@ namespace SocNetwork.Controllers
                 MediaDTOs = mediaDTOs
             });
         }
+
+        [HttpGet("{username}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetUserMedia(string username)
+        {
+            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                return BadRequest(new MediaResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "User not found" }
+                });
+            }
+
+            var avatars = await db.ProfileMedia
+                .Where(pm => pm.Profile.Username == username && pm.MediaFor == MediaFor.Avatar)
+                .ToListAsync();
+
+            var avatarDTOs = new List<MediaDTO>();
+
+            avatars.ForEach(m =>
+            {
+                avatarDTOs.Add(ConvertHelper.ToMediaDTO(m));
+            });
+
+            return Ok(new MediaResponse
+            {
+                Result = true,
+                Media = avatarDTOs
+            });
+        }
     }
 }

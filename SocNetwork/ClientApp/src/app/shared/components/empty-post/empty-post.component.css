@@ -1,0 +1,53 @@
+.post {
+	background: #fff;
+	border-radius: 15px;
+	padding: 12px 16px;
+	color: #272727;
+	margin-bottom: 10px;
+	cursor: wait;
+}
+
+.post .post-header .avatar-box {
+	margin-right: 10px;
+}
+
+.empty {
+    background: #eee;
+	border-radius: 10px;
+}
+
+.post-header .empty.source-name {
+    width: 150px;
+    height: 18px;
+    margin-bottom: 5px;
+}
+
+.post-header .empty.nick-name {
+    width: 80px;
+    height: 14px;
+}
+
+.post-body .empty.post-text {
+    margin-top: 10px;
+    height: 16px;
+    width: 60%;
+}
+
+.post-body .empty.photos-container {
+	height: 180px;
+    width: 100%;
+    border-radius: 15px;
+    margin-top: 8px;
+}
+
+.post-footer {
+    margin-top: 10px;
+}
+
+.post-footer .content-actions {
+	flex-basis: 200px;
+}
+
+.content-actions { 
+	list-style: none;
+}

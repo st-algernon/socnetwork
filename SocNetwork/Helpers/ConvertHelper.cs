@@ -101,23 +101,16 @@ namespace SocNetwork.Helpers
                 postDTO.MediaDTOs.Add(ToMediaDTO(m));
             });
 
-            postDTO.UserDTO = ToUserDTO(post.User);
-
             post.PostUsers.ForEach(pu =>
             {
-                postDTO.PostUserDTOs.Add(ToUserPostDTO(pu));
+                postDTO.UserPostDTOs.Add(ToUserPostDTO(pu));
             });
 
+            postDTO.BestCommentDTO = ToCommentDTO(PostHelper.GetBestComment(post));
+
+            postDTO.LikesNumber = post.PostUsers.Where(pu => pu.IsLiked).Count();
+
             return postDTO;
-        }
-
-        public static UserDTO ToUserDTO(User user)
-        {
-            var userDTO = new UserDTO();
-
-            user.CopyPropertiesTo(userDTO);
-
-            return userDTO;
         }
 
         public static UserPostDTO ToUserPostDTO(UserPost userPost)
@@ -131,6 +124,45 @@ namespace SocNetwork.Helpers
             return userPostDTO;
         }
 
+        public static CommentDTO ToCommentDTO(Comment comment)
+        {
+            var commentDTO = new CommentDTO();
+
+            comment.CopyPropertiesTo(commentDTO);
+
+            comment.CommentMedia.ForEach(m =>
+            {
+                commentDTO.MediaDTOs.Add(ToMediaDTO(m));
+            });
+
+            comment.CommentUsers.ForEach(cu =>
+            {
+                commentDTO.UserCommentDTOs.Add(ToUserCommentDTO(cu));
+            });
+
+            return commentDTO;
+        }
+
+        public static UserCommentDTO ToUserCommentDTO(UserComment userComment)
+        {
+            var userCommentDTO = new UserCommentDTO();
+
+            userComment.CopyPropertiesTo(userCommentDTO);
+
+            userCommentDTO.UserDTO = ToShortProfileDTO(userComment.User);
+
+            return userCommentDTO;
+        }
+
+        public static UserDTO ToUserDTO(User user)
+        {
+            var userDTO = new UserDTO();
+
+            user.CopyPropertiesTo(userDTO);
+
+            return userDTO;
+        }
+
         public static ProfileDTO ToProfileDTO(User user)
         {
             var profileDTO = new ProfileDTO();
@@ -139,7 +171,7 @@ namespace SocNetwork.Helpers
 
             user.ProfileMedia.ForEach(m =>
             {
-                profileDTO.ProfileMediaDTOs.Add(ToProfileMediaDTO(m));
+                profileDTO.MediaDTOs.Add(ToProfileMediaDTO(m));
             });
 
             profileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path
@@ -168,6 +200,37 @@ namespace SocNetwork.Helpers
             profileMedia.CopyPropertiesTo(profileMediaDTO);
 
             return profileMediaDTO;
+        }
+        
+        public static RelationshipDTO ToRelationshipDTO(UserRelationship relationship)
+        {
+            var relationshipDTO = new RelationshipDTO();
+
+            relationship.CopyPropertiesTo(relationshipDTO);
+            relationshipDTO.FromUserDTO = ToUserDTO(relationship.FromUser);
+            relationshipDTO.ToUserDTO = ToUserDTO(relationship.ToUser);
+            
+            return relationshipDTO;
+        }
+
+        public static PostNotifDTO ToPostNotifDTO(PostNotification postNotif)
+        {
+            var postNotifDTO = new PostNotifDTO();
+
+            postNotif.CopyPropertiesTo(postNotifDTO);
+            postNotifDTO.SenderDTO = ToShortProfileDTO(postNotif.Sender);
+
+            return postNotifDTO;
+        }
+
+        public static UserNotifDTO ToUserNotifDTO(UserNotification userNotif)
+        {
+            var userNotifDTO = new UserNotifDTO();
+
+            userNotif.CopyPropertiesTo(userNotifDTO);
+            userNotifDTO.SenderDTO = ToShortProfileDTO(userNotif.Sender);
+
+            return userNotifDTO;
         }
     }
 }

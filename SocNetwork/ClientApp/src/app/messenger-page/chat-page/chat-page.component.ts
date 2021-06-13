@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ComponentFactoryResolver, ElementRef, HostListener, ModuleWithComponentFactories, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ComponentFactoryResolver, ElementRef, HostListener, ModuleWithComponentFactories, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
@@ -40,7 +40,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     private mediaService: MediaService,
     private usersService: UsersService,
     private route: ActivatedRoute,
-    private renderer: Renderer2,
     private resolver: ComponentFactoryResolver
     ) {
       this.messageForm = {
@@ -127,11 +126,11 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
       this.mediaService.uploadMedia(formData).subscribe(
         (mediaDTOs: Media[]) => {
-          console.log(mediaDTOs);
           messageRequest.mediaDTOs = mediaDTOs;
           
           this.messengerHub.sendMessage(messageRequest);
           this.messageForm.images = null;
+          this.previewFiles = [];
         }
       )
     } 
@@ -173,7 +172,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private renderMessage(message: Message) {
-    console.log(message);
     this.hideSameAuthors(message);
 
     const viewContainerRef = this.container.viewContainerRef;
@@ -211,6 +209,10 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     const contentWrapper = (this.ngScrollbar as NgScrollbar).viewport.contentWrapperElement;
   
     if (contentWrapper) {
+      contentWrapper.style.display = 'flex';
+      contentWrapper.style.flexDirection = 'column';
+      contentWrapper.style.justifyContent = 'flex-end';
+      contentWrapper.style.paddingBottom = '8px';
       contentWrapper.style.minHeight = '100%';
     }
   }

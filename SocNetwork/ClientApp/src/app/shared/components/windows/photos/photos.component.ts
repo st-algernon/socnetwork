@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MediaFor } from '../../../enums';
-import { ProfileMedia } from '../../../interfaces';
+import { Media, ProfileMedia } from '../../../interfaces';
 
 @Component({
   selector: 'app-photos',

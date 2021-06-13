@@ -31,7 +31,7 @@
       <nav class="main-nav">
         <ul>
           <li>
-            <a [routerLink]="[me?.username]" routerLinkActive="active" class="profile flex ai-c">
+            <a [routerLink]="[me?.username]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="profile flex ai-c">
               <span class="menu-icon"></span>
               <span class="menu-title">Profile</span>
             </a>
@@ -61,7 +61,7 @@
             </a>
           </li>
           <li>
-            <a routerLink="/photos" routerLinkActive="active" class="photos flex ai-c">
+            <a [routerLink]="[me?.username, 'photos']" routerLinkActive="active" class="photos flex ai-c">
               <span class="menu-icon"></span>
               <span class="menu-title">Photos</span>
             </a>

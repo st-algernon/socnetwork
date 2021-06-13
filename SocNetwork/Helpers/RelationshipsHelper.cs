@@ -22,8 +22,8 @@ namespace SocNetwork.Helpers
                 .FirstOrDefault( ur => ur.FromUserId == fromUser.Id && ur.ToUserId == toUser.Id);
         }
         
-        public UserRelationship GetOrDefault(User fromUser, User toUser) {
-
+        public UserRelationship GetOrDefault(User fromUser, User toUser) 
+        {
             var ur = db.UserRelationships
                 .FirstOrDefault(
                     ur => ur.FromUserId == fromUser.Id && ur.ToUserId == toUser.Id

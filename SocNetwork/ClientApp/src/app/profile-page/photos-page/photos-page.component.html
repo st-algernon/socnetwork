@@ -1,0 +1,26 @@
+<div class="flex jc-c">
+    <main class="photos flex fd-c">
+      <div class="photos-header">
+        <h2>Photos</h2>
+      </div>
+      <div class="photos-body fg-1 flex fw-w">
+        <ng-container *ngIf="photos; else loading">
+          <div *ngFor="let photo of photos" class="photo-item fg-1">
+            <img [src]="photo.path" alt="photo">
+          </div>
+        </ng-container>
+        <ng-template #loading>
+          <app-loader></app-loader>
+        </ng-template>
+      </div>
+    </main>
+  </div>
+  <div class="flex jc-fe">
+    <div class="right-col">
+      <ng-scrollbar>
+        <app-trends></app-trends>
+        <app-follow-offers></app-follow-offers>
+      </ng-scrollbar>
+    </div>
+  </div>
+  

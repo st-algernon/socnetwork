@@ -22,11 +22,7 @@
                 trackClass="scrollbar-track"
                 #ngScrollbar
             >
-                <div 
-                    class="messages-container flex fd-c jc-fe"
-                    container
-                >
-
+                <div class="messages-container flex fd-c jc-fe" container>
                     <app-loader *ngIf="!chat"></app-loader>
                 </div>
             </ng-scrollbar>
@@ -49,8 +45,8 @@
                 (ngSubmit)="submit()"
                 class="flex fd-r ai-fe"
             >
-                <ul class="attach flex fd-r jc-c" data-container="attach">
-                    <li class="add-picture-btn round r-20 square-28" (click)="input_image.click()" data-attach="picture">
+                <ul class="attach flex fd-r jc-c">
+                    <li class="add-picture-btn round r-20 square-28" (click)="input_image.click()">
                         <input 
                             type="file" 
                             name="messageImages"
@@ -60,8 +56,8 @@
                             multiple
                         >
                     </li>
-                    <li class="add-music-btn round r-20 square-28" data-attach="music"></li>
-                    <li class="add-video-btn round r-22 square-28" data-attach="video"></li>
+                    <li class="add-music-btn round r-20 square-28"></li>
+                    <li class="add-video-btn round r-22 square-28"></li>
                 </ul>
                 <div class="textarea-attach-wrap flex fd-r ai-fe">
                     <textarea 
@@ -71,8 +67,8 @@
                         (input)="resizeTextarea($event)"
                         placeholder="Write a message..."
                     ></textarea>
-                    <ul class="attach flex fd-r jc-sb" data-container="attach">
-                        <li class="add-emoji-btn round r-22 square-28" data-attach="emoji"></li>
+                    <ul class="attach flex fd-r jc-sb">
+                        <li class="add-emoji-btn round r-22 square-28"></li>
                     </ul>
                 </div>
                 <button type="submit" class="submit-btn square-32 fs-0"></button>

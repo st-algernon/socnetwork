@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { PostFormComponent } from "../shared/components/post-form/post-form.component";
+import { PostMakerComponent } from "../shared/components/post-maker/post-maker.component";
 import { PostComponent } from "../shared/components/post/post.component";
 import { CommonModule } from "@angular/common";
 import { NewsPageComponent } from "./news-page.component";

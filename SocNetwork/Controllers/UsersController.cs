@@ -112,19 +112,19 @@ namespace SocNetwork.Controllers
                 .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
                 .Take(usersPageParams.Size)
                 .Include(ur => ur.FromUser)
-                .Select(ur => new { ur.FromUser })
+                .Select(ur => ur.FromUser)
                 .ToListAsync();
 
-            var followersDTO = new List<ShortProfileDTO>();
+            var followerDTOs = new List<ShortProfileDTO>();
 
-            followers.ForEach(f => {
-                followersDTO.Add(ConvertHelper.ToShortProfileDTO(f.FromUser));
+            followers.ForEach(u => {
+                followerDTOs.Add(ConvertHelper.ToShortProfileDTO(u));
             });
 
             return Ok(new ShortProfilesResponse
             { 
                 Result = true,
-                ShortProfiles = followersDTO
+                ShortProfiles = followerDTOs
             });
         }
 
@@ -142,23 +142,25 @@ namespace SocNetwork.Controllers
                     Errors = new List<string> { "Username doesn't exist" }
                 });
 
-            var following = await db.UserRelationships
+            var followings = await db.UserRelationships
                 .Where(ur => ur.FromUserId == user.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
                 .OrderBy(ur => ur.CreationDate)
                 .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
                 .Take(usersPageParams.Size)
                 .Include(ur => ur.ToUser)
-                .Select(ur => new { ur.ToUser })
+                .Select(ur => ur.ToUser)
                 .ToListAsync();
 
-            var followingDTO = new List<ShortProfileDTO>();
+            var followingDTOs = new List<ShortProfileDTO>();
 
-            following.ForEach(f => followingDTO.Add(ConvertHelper.ToShortProfileDTO(f.ToUser)));
+            followings.ForEach(u => {
+                followingDTOs.Add(ConvertHelper.ToShortProfileDTO(u));
+            });
 
             return Ok(new ShortProfilesResponse
             {
                 Result = true,
-                ShortProfiles = followingDTO
+                ShortProfiles = followingDTOs
             });
         }
 
@@ -170,18 +172,18 @@ namespace SocNetwork.Controllers
 
             var blocked = await db.UserRelationships
                 .Where(u => u.FromUserId == currentUser.Id && u.UserRelationshipType == UserRelationshipType.Blocked)
-                .Select(u => new { u.ToUser })
                 .Include(u => u.ToUser)
+                .Select(u => u.ToUser)
                 .ToListAsync();
 
-            var blockedDTO = new List<ShortProfileDTO>();
+            var blockedDTOs = new List<ShortProfileDTO>();
 
-            blocked.ForEach(f => blockedDTO.Add(ConvertHelper.ToShortProfileDTO(f.ToUser)));
+            blocked.ForEach(u => blockedDTOs.Add(ConvertHelper.ToShortProfileDTO(u)));
 
             return Ok(new ShortProfilesResponse
             {
                 Result = true,
-                ShortProfiles = blockedDTO
+                ShortProfiles = blockedDTOs
             });
         }
 
@@ -211,33 +213,32 @@ namespace SocNetwork.Controllers
             }
         }
 
-        [HttpGet("{username}/media")]
-        public async Task<IActionResult> GetProfileMedia(string username)
+        [HttpGet("suggestions")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetSuggestions([FromQuery] UsersPageParams usersPageParams)
         {
-            var user = await db.Users
-                .Include(u => u.ProfileMedia)
-                .FirstOrDefaultAsync(u => u.Username == username);
+            User currentUser = HttpContext.Items["User"] as User;
 
-            if (user == null)
-            {
-                return BadRequest(new ProfileMediaResponse()
-                {
-                    Result = false,
-                    Errors = new List<string>() { "User not found" }
-                });
-            }
+            var followings = await db.UserRelationships
+                .Where(ur => ur.FromUserId == currentUser.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
+                .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
+                .Take(usersPageParams.Size)
+                .Include(ur => ur.ToUser)
+                .Select(ur => ur.ToUser )
+                .ToListAsync();
 
-            var mediaDTOs = new List<ProfileMediaDTO>();
+            var users = await db.Users.ToListAsync();
+            var suggestions = users.Except(followings).ToList();
+            var suggestionDTOs = new List<ShortProfileDTO>();
 
-            user.ProfileMedia.ForEach(m =>
-            {
-                mediaDTOs.Add(ConvertHelper.ToProfileMediaDTO(m));
+            suggestions.ForEach(u => {
+                suggestionDTOs.Add(ConvertHelper.ToShortProfileDTO(u));
             });
 
-            return Ok(new ProfileMediaResponse
+            return Ok(new ShortProfilesResponse
             {
                 Result = true,
-                Media = mediaDTOs
+                ShortProfiles = suggestionDTOs
             });
         }
     }

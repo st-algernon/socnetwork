@@ -1,6 +1,6 @@
 import { CommonModule, registerLocaleData } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { PostFormComponent } from "./components/post-form/post-form.component";
+import { PostMakerComponent } from "./components/post-maker/post-maker.component";
 import { PostComponent } from "./components/post/post.component";
 import { TrendsComponent } from './components/windows/trends/trends.component';
 import { FollowOffersComponent } from './components/windows/follow-offers/follow-offers.component';
@@ -13,6 +13,10 @@ import { ContainerDirective } from "./directives/container.directive";
 
 import localeUk from '@angular/common/locales/uk';
 import { FormsModule } from "@angular/forms";
+import { PostsService } from "./services/posts.service";
+import { TagsService } from "./services/tags.service";
+import { RouterModule } from "@angular/router";
+import { EmptyPostComponent } from './components/empty-post/empty-post.component';
 
 registerLocaleData(localeUk, 'uk');
 
@@ -20,31 +24,37 @@ registerLocaleData(localeUk, 'uk');
   declarations: [
     ContainerDirective,
     PostComponent,
-    PostFormComponent,
+    PostMakerComponent,
     TrendsComponent,
     FollowOffersComponent,
     PhotosComponent,
     LoaderComponent,
     PhotosContainerComponent,
-    MessageComponent
+    MessageComponent,
+    EmptyPostComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     NgScrollbarModule,
+    RouterModule
   ],
   exports: [
     ContainerDirective,
     PostComponent,
-    PostFormComponent,
+    PostMakerComponent,
     TrendsComponent,
     FollowOffersComponent,
     PhotosComponent,
     LoaderComponent,
     PhotosContainerComponent,
-    MessageComponent
+    MessageComponent,
+    EmptyPostComponent
   ],
-  providers: [],
+  providers: [
+    PostsService,
+    TagsService
+  ],
   bootstrap: []
 })
 export class SharedModule { }

@@ -9,11 +9,17 @@ namespace SocNetwork.DTO
     public class PostDTO
     {
         public Guid Id { get; set; }
-        public UserDTO UserDTO { get; set; }
         public string Text { get; set; }
-        public DateTime DatePublished { get; set; }
+        public DateTime CreationDate { get; set; }
         public List<MediaDTO> MediaDTOs { get; set; }
-        public List<UserPostDTO> PostUserDTOs { get; set; }
+        public List<UserPostDTO> UserPostDTOs { get; set; }
         public PostStatus PostStatus { get; set; }
+        public CommentDTO BestCommentDTO { get; set; }
+        public int LikesNumber { get; set; }
+        public PostDTO ()
+        {
+            MediaDTOs = new List<MediaDTO>();
+            UserPostDTOs = new List<UserPostDTO>();
+        }
     }
 }

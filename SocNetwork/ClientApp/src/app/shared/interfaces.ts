@@ -1,4 +1,4 @@
-import { AccountStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, UserRelationshipType } from "./enums";
+import { AccountStatus, CommentStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, PostNotifType, PostStatus, UserRelationshipType } from "./enums";
 
 export interface AccountLoginRequest {
     email: string
@@ -31,6 +31,12 @@ export interface MessageRequest {
     mediaDTOs: Media[]
 }
 
+export interface PostRequest {
+    authorId: string,
+    text: string,
+    mediaDTOs: Media[]
+}
+
 export interface AuthResponse {
     token: string,
     expiresIn: string
@@ -52,9 +58,9 @@ export interface ShortProfilesResponse
     errors: string[]
 }
 
-export interface ProfileMediaResponse {
+export interface MediaResponse {
     result: string,
-    media: ProfileMedia[],
+    media: Media[],
     errors: string[]
 }
 
@@ -76,23 +82,68 @@ export interface UploadMediaResponse {
     errors: string[]
 }
 
-export interface Media {
-    id: string,
-    mimeType: string,
-    path: string,
-    size: number,
-    creationDate: Date,
+export interface PostsResponse {
+    result: string,
+    posts: Post[],
+    errors: string[]
 }
 
-export interface ProfileMedia {
+export interface TagsResponse {
+    result: string,
+    tags: Tag[],
+    errors: string[]
+}
+
+export interface RelationshipResponse {
+    result: string,
+    relationship: Relationship,
+    errors: string[]
+}
+
+export interface Post {
     id: string,
-    mimeType: string,
-    path: string,
-    size: number,
-    creationDate: Date,
-    profileId: string,
-    mediaFor: MediaFor,
-    isCurrent: boolean
+    text: string,
+    creationDate: string,
+    mediaDTOs: Media[],
+    userPostDTOs: UserPost[],
+    postStatus: PostStatus,
+    bestCommentDTO: Comment,
+    likesNumber: number
+}
+
+export interface UserPost {
+    userDTO: ShortProfile,
+    isLiked: boolean,
+    isSaved: boolean,
+    isAuthor: boolean
+}
+
+export interface Comment {
+    id: string,
+    postId: string
+    text: string,
+    creationDate: string,
+    mediaDTOs: Media[],
+    userCommentDTOs: UserPost[],
+    commentStatus: CommentStatus
+}
+
+export interface UserComment {
+    userDTO: ShortProfile,
+    isLiked: boolean,
+    isAuthor: boolean
+}
+
+export interface Tag {
+    id: string,
+    content: string,
+    amount: string
+}
+
+export interface User {
+    id: string,
+    name: string,
+    username: string
 }
 
 export interface Profile {
@@ -108,7 +159,7 @@ export interface Profile {
     location: string,
     gender: Gender,
     maritalStatus: MaritalStatus,
-    profileMediaDTOs: ProfileMedia[],
+    mediaDTOs: Media[],
     avatarPath: string
     coverPath: string
 }
@@ -121,10 +172,28 @@ export interface ShortProfile {
     avatarPath: string
 }
 
-export interface UserRelationship {
+export interface ProfileMedia {
     id: string,
-    fromUserId: string,
-    toUserId: string,
+    mimeType: string,
+    path: string,
+    size: number,
+    creationDate: Date,
+    profileId: string,
+    mediaFor: MediaFor,
+    isCurrent: boolean
+}
+
+export interface Media {
+    id: string,
+    mimeType: string,
+    path: string,
+    size: number,
+    creationDate: Date,
+}
+
+export interface Relationship {
+    fromUserDTO: User,
+    toUserDTO: User,
     userRelationshipType: UserRelationshipType,
     creationDate: Date,
 }
@@ -167,7 +236,29 @@ export interface SelectConfig {
     selected: Options
 }
 
-export interface UsersPageParams {
+export interface PageParams {
     number: number,
     size: number
+}
+
+export interface Notification {
+    senderDTO: ShortProfile,
+    creationDate: string,
+}
+
+export interface PostNotif extends Notification {
+    notifType: PostNotifType,
+    toString(): string {
+        switch (this.notifType as PostNotifType) {
+            case PostNotifType.Liked:
+                return `${this.senderDTO.name} вподобав(ла) Вашу публікацію`;
+                break;
+            case PostNotifType.Commented:
+                return `${this.senderDTO.name} прокоментував(ла) Вашу публікацію`;
+                break;
+            case PostNotifType.Repost:
+                return `${this.senderDTO.name} поширив(ла) Вашу публікацію`;
+                break;
+        }
+    }
 }

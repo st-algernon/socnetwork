@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Controllers
 {
+    [Authorize(Roles = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class ChatsController : ControllerBase
@@ -23,7 +24,6 @@ namespace SocNetwork.Controllers
             db = context;
         }
 
-        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> GetCurrentUserChats()
         {
@@ -42,7 +42,6 @@ namespace SocNetwork.Controllers
             });
         }
 
-        [Authorize(Roles = "User")]
         [HttpGet("with/{userId}")]
         public async Task<IActionResult> GetShortChatWith(string userId)
         {
@@ -71,7 +70,6 @@ namespace SocNetwork.Controllers
             });
         }
 
-        [Authorize(Roles = "User")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetChatById(string id)
         {
@@ -111,24 +109,6 @@ namespace SocNetwork.Controllers
                 Result = true,
                 Chat = chatDTO
             });
-        }
-
-        // POST api/<MessengerController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<MessengerController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MessengerController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

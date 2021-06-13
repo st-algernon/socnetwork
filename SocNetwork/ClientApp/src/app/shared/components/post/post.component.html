@@ -1,56 +1,63 @@
-<section class="post-wrap">
-    <div class="post">
+    <section [routerLink]="['/', author.username, 'post', post.id]" class="post">
         <div class="post-header flex ai-c">
             <div class="avatar-box square-48">
                 <img 
-                    src="../../../../assets/images/empty_photo.jpg"
+                    [src]="author.avatarPath"
                     class="square-48"
                     alt=""
                 >
             </div>
             <div class="flex fd-c">
-                <span class="source-name">Rick and Morty</span>
-                <span class="nick-name">@rickandmorty</span>
+                <span class="source-name">{{ author.name }}</span>
+                <span class="nick-name">@{{ author.username }}</span>
             </div>
         </div>
         <div class="post-body">
-            <p class="post-text">The new season is coming soon! <a href="#" class="hashtag">#rickandmorty</a></p>
-            <div class="media-box flex fd-r wrap">
-                <img src="../../../../assets/images/rick-and-morty-1.jpg" alt="">
-                <img src="../../../../assets/images/rick-and-morty-3.jpg" alt="">
-            </div>
+            <div #textContainer class="post-text"></div>
+            <app-photos-container 
+                *ngIf="post.mediaDTOs.length > 0"
+                [photos]="post.mediaDTOs"
+            ></app-photos-container>
         </div>
         <div class="post-footer flex fd-r jc-sb ai-c">
-            <ul class="content-actions flex fd-r jc-sb" data-container="content-actions">
-                <li class="flex fd-r">
-                    <span class="like-btn round r-22 square-32" data-action="like" data-state=""></span>
-                    <span class="like-count" data-state="">1</span>
+            <ul class="content-actions flex fd-r jc-sb">
+                <li class="flex ai-c">
+                    <span class="like-btn round r-20 square-32" (click)="likePost()"></span>
+                    <span 
+                        *ngIf="post.likesNumber != 0"
+                        class="count count-likes"
+                    >{{ post.likesNumber }}</span>
+                </li>
+                <li class="flex ai-c">
+                    <span class="forward-btn round r-20 square-32"></span>
+                    <!-- <span class="count count-forwards" data-state="">2</span> -->
                 </li>
                 <li class="flex fd-r">
-                    <span class="forward-btn round r-22 square-32" data-action="forward" data-state=""></span>
-                    <span class="forward-count" data-state="">2</span>
-                </li>
-                <li class="flex fd-r">
-                    <span class="comment-btn round r-22 square-32" data-action="comment" data-state=""></span>
+                    <span class="comment-btn round r-20 square-32"></span>
                 </li>
             </ul>
-            <div class="published-date">yesterday at 1:01 pm</div>
+            <div *ngIf="isToday()" class="published-date">{{ post.creationDate | date:'shortTime':'':'uk'}}</div>
+            <div *ngIf="isToday() == false" class="published-date">{{ post.creationDate | date:'mediumDate':'':'uk'}}</div>
         </div>
+
         <div class="comments-section">
-            <div class="comments-box">
+            <div 
+              *ngIf="commentsBehavior == 'best' || commentsBehavior == 'all'"
+              class="comments-container"
+            >
                 <div class="comment flex ai-fs">
                     <div class="comment-author-avatar">
-                        <div class="avatar-box square-48">
+                        <div class="avatar-box square-32">
                             <img 
                                 src="../../../../assets/images/empty_photo.jpg"
-                                class="square-48"
+                                class="square-32"
                                 alt=""
                             >
                         </div>
                     </div>
                     <div class="flex fd-c">
                         <div class="flex ai-c">
-                            <div class="wrap-comment-header-body">
+                            <div class="comment-header-body-wrapper">
                                 <div class="comment-header">
                                     <div class="flex fd-c">
                                         <span class="source-name">Mr. Algernon</span>
@@ -58,15 +65,15 @@
                                 </div>
                                 <div class="comment-body">
                                     <p class="comment-text">i'm waiting <a href="#" class="hashtag">#rickandmorty</a></p>
-                                    <!-- <div class="media-box flex fd-r wrap">
+                                    <!-- <div class="media-box flex fd-r wrapper">
                                         <img src="../../../../assets/images/zhdun.jpg" alt="">
                                     </div> -->
                                 </div>
                             </div>
                             <div class="content-actions" data-container="content-actions">
-                                <div class="flex fd-r">
+                                <div class="flex ai-c">
                                     <span class="like-btn round r-20 square-28" data-action="like" data-state=""></span>
-                                    <span class="like-count" data-state="">2</span>
+                                    <span class="count count-likes" data-state="">2</span>
                                 </div>
                             </div>
                         </div>
@@ -76,30 +83,29 @@
                         </div>
                     </div>
                 </div>
+                <!-- <div class="show-more-btn">show more comments</div> -->
             </div>
-            <div class="show-more-btn">show more comments</div>
 
-            <div class="write-comment flex fd-r">
-                <div class="avatar-box square-48">
+            <div class="comment-maker flex fd-r">
+                <div class="avatar-box square-32">
                     <img 
-                        src="../../../../assets/images/empty_photo.jpg"
-                        class="square-48"
-                        alt=""
+                        [src]="me.avatarPath"
+                        class="square-32"
                     >
                 </div>
                 <form action="" method="post" class="flex fd-r ai-c">
-                    <div class="textarea-attach-wrap flex fd-r ai-c">
+                    <div class="textarea-attach-wrapper flex fd-r ai-c">
                         <textarea name="comment-field" placeholder="Leave a comment..." data-submit-btn="blink"></textarea>
                         <ul class="attach flex fd-r jc-sb" data-container="attach">
                             <li class="add-picture-btn round r-18 square-28" data-action="picture">
                                 <input type="file" name="picture" class="hidden"/>
                             </li>
-                            <li class="add-music-btn round r-18 square-28" data-action="music">
+                            <!-- <li class="add-music-btn round r-18 square-28" data-action="music">
                                 <input type="file" name="music" class="hidden"/>
                             </li>
                             <li class="add-video-btn round r-20 square-28" data-action="video">
                                 <input type="file" name="video" class="hidden"/>
-                            </li>
+                            </li> -->
                             <li class="add-emoji-btn round r-20 square-28" data-action="emoji"></li>
                         </ul>
                     </div>
@@ -107,5 +113,4 @@
                 </form>
             </div>
         </div>
-    </div>
 </section>

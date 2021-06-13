@@ -9,5 +9,6 @@ namespace SocNetwork.DTO
     {
         public Guid Id { get; set; }
         public string Content { get; set; }
+        public int Amount { get; set; }
     }
 }

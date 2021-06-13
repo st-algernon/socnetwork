@@ -21,8 +21,8 @@ namespace SocNetwork.Helpers
                 {
                     tags.Add(new Tag()
                     {
-                        Content = match.Value
-                    });
+                        Content = match.Value.Substring(1)
+                    }) ;
                 }
             }
 

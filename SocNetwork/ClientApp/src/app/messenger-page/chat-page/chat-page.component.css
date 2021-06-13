@@ -80,11 +80,6 @@ ng-scrollbar {
 	background-color: #f7f9fa;
 }
 
-.messages-container {
-	min-height: 100%;
-	margin-bottom: 8px;
-}
-
 .chat-footer {
 	background-color: #fff;
 	border-radius: 0px 0px 15px 15px;
@@ -92,13 +87,13 @@ ng-scrollbar {
 	z-index: 3;
 }
 
-.preview-container {
+.chat-footer .preview-container {
 	position: relative;
 	margin: 0px 42px;
 	margin-bottom: 5px;
 }
 
-.preview-container .close-btn {
+.chat-footer .preview-container .close-btn {
 	position: absolute;
 	right: 5px;
 	top: 5px;

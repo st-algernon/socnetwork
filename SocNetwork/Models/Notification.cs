@@ -5,14 +5,6 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    public enum NotifType
-    {
-        Followed,
-        LikedPost,
-        RePost,
-        CommentedPost
-    }
-
     public class Notification
     {
         public Guid Id { get; set; }
@@ -20,7 +12,6 @@ namespace SocNetwork.Models
         public User Sender { get; set; }
         public Guid RecipientId { get; set; }
         public User Recipient { get; set; }
-        public NotifType NotifType { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

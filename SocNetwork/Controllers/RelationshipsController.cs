@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SocNetwork.DTO.Response;
 using SocNetwork.Helpers;
 using SocNetwork.Models;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Controllers
 {
+    [Authorize(Roles = "User")]
     [Route("api/[controller]")]
     [ApiController]
     public class RelationshipsController : ControllerBase
@@ -23,27 +25,34 @@ namespace SocNetwork.Controllers
         }
 
         [HttpGet("with/{username}")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> GetRelationshipWith(string username)
         {
             var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (toUser == null)
             {
-                return BadRequest();
+                return BadRequest(new RelationshipResponse
+                {
+                    Result = true,
+                    Errors = new List<string> { "User not found" }
+                });
             }
 
             var currentUser = HttpContext.Items["User"] as User;
 
             var relationshipsHelper = new RelationshipsHelper(db);
 
-            var ur = relationshipsHelper.GetOrDefault(currentUser, toUser);
+            var relationship = relationshipsHelper.GetOrDefault(currentUser, toUser);
+            var relationshipDTO = ConvertHelper.ToRelationshipDTO(relationship);
 
-            return Ok(ur);
+            return Ok(new RelationshipResponse
+            {
+                Result = true,
+                Relationship = relationshipDTO
+            });
         }
 
         [HttpPut("follow/{username}")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> Follow(string username)
         {
 
@@ -65,7 +74,6 @@ namespace SocNetwork.Controllers
         }
 
         [HttpPut("block/{username}")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> Block(string username)
         {
 
@@ -87,7 +95,6 @@ namespace SocNetwork.Controllers
         }
 
         [HttpDelete("unfollow/{username}")]
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> Unfollow(string username)
         {
 

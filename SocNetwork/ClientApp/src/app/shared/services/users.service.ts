@@ -5,9 +5,9 @@ import { map, switchMap, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { MediaFor } from "../enums";
 import { 
-    EditProfileInfoRequest, Media, Profile, 
-    ProfileMedia, ProfileMediaResponse, ProfileResponse,
-    ShortProfile, ShortProfilesResponse, UserRelationship, UsersPageParams 
+    EditProfileInfoRequest, ProfileMedia, Profile, 
+    Media, MediaResponse, ProfileResponse,
+    ShortProfile, ShortProfilesResponse, Relationship, PageParams 
 } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
@@ -40,10 +40,10 @@ export class UsersService {
         private http: HttpClient
     ) {}
 
-    getFollowers(username: string, usersPageParams?: UsersPageParams): Observable<ShortProfile[]> {
+    getFollowers(username: string, usersPageParams: PageParams): Observable<ShortProfile[]> {
         const params = new HttpParams()
-        .set('Number', usersPageParams?.number.toString())
-        .set('Size', usersPageParams?.size.toString());
+        .set('Number', usersPageParams.number.toString())
+        .set('Size', usersPageParams.size.toString());
 
         return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}/followers`, { params })
         .pipe(
@@ -51,10 +51,10 @@ export class UsersService {
         )
     }
 
-    getFollowing(username: string, usersPageParams?: UsersPageParams): Observable<ShortProfile[]> {
+    getFollowing(username: string, usersPageParams: PageParams): Observable<ShortProfile[]> {
         const params = new HttpParams()
-        .set('Number', usersPageParams?.number.toString())
-        .set('Size', usersPageParams?.size.toString());
+        .set('Number', usersPageParams.number.toString())
+        .set('Size', usersPageParams.size.toString());
 
         return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}/following`, { params })
         .pipe(
@@ -96,11 +96,11 @@ export class UsersService {
         );
     }
 
-    getProfileMedia(username: string): Observable<ProfileMedia[]> {
-        return this.http.get<ProfileMediaResponse>(`${environment.apiUrl}/media/profile/${username}`)
+    getFollowOffers(): Observable<ShortProfile[]> {
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/suggestions`)
         .pipe(
-          map((response: ProfileMediaResponse) => response.media)
-        )
+            map((response: ShortProfilesResponse) => response.shortProfiles)
+        );
     }
 
     editProfile(editProfileInfoRequest: EditProfileInfoRequest) {
