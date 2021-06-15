@@ -1,1 +1,24 @@
-<p>saved-page works!</p>
+<div class="flex jc-c">
+    <main class="post-container flex fd-c">
+      <div class="post-container-header">
+        <h2>Saved posts</h2>
+      </div>
+      <div class="post-container-body">
+        <ng-container *ngIf="post; else empty_post">
+          <app-post [me]="me" [post]="post" comment="all"></app-post>
+        </ng-container>
+        <ng-template #empty_post>
+          <app-empty-post withMedia="true"></app-empty-post>
+        </ng-template>
+      </div>
+    </main>
+  </div>
+  <div class="flex jc-fe">
+    <div class="right-col">
+      <ng-scrollbar>
+        <app-trends></app-trends>
+        <app-follow-offers></app-follow-offers>
+      </ng-scrollbar>
+    </div>
+  </div>
+  

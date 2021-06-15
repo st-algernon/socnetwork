@@ -109,7 +109,7 @@
       </section>
 
       <section class="user-wall">
-          <app-post-maker [me]="me"></app-post-maker>
+          <app-post-maker [me]="me" (newPostEvent)="addNewPost($event)"></app-post-maker>
           <section class="user-wall-header-wrapper">
             <div class="user-wall-header flex row jc-sb">
               <div data-container="post-switches">
@@ -135,6 +135,9 @@
             <ng-template #empty_post>
               <app-empty-post></app-empty-post>
             </ng-template>
+            <div *ngIf="user.posts?.length == 0" class="user-wall-lining flex jc-c ai-c">
+              <p class="lining-label">Тут будуть розміщуватись ваші публікації</p>
+            </div>
           </section>
       </section>
   </main>

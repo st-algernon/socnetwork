@@ -23,9 +23,9 @@
 	margin: 10px 0px 8px 0px;
 }
 
-/* .post-body .photos-container {
-	margin-top: 8px;
-} */
+.post-body .post-text {
+	margin-bottom: 5px;
+}
 
 .post .post-footer {
 	position: relative;

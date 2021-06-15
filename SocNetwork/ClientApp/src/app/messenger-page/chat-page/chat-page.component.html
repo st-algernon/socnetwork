@@ -29,15 +29,16 @@
         </section>
         <section class="chat-footer">
             <div class="flex jc-c">
-                <div class="preview-container fg-1">
+                <div 
+                  *ngIf="previewImagesData.length > 0"
+                  class="preview-container fg-1"
+                >
                     <div 
-                        *ngIf="previewFiles.length > 0"
                         class="close-btn round r-16 square-20" 
-                        (click)="previewFiles = []"
+                        (click)="previewImagesData = []"
                     ></div>
                     <app-photos-container 
-                        *ngIf="previewFiles.length > 0"
-                        [photos]="previewFiles"
+                        [photos]="previewImagesData"
                     ></app-photos-container>
                 </div>
             </div>

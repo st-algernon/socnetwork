@@ -37,12 +37,23 @@ export class PostsService {
     )
   }
 
+  getPostsForExplore(postsPageParams: PageParams): Observable<Post[]> {
+    const params = new HttpParams()
+    .set('Number', postsPageParams.number.toString())
+    .set('Size', postsPageParams.size.toString());
+
+    return this.http.get<PostsResponse>(`${environment.apiUrl}/posts/explore`, { params })
+    .pipe(
+        map((response: PostsResponse) => response.posts )
+    )
+  }
+
   getPosts(username: string, postsPageParams: PageParams): Observable<Post[]> {
     const params = new HttpParams()
     .set('Number', postsPageParams.number.toString())
     .set('Size', postsPageParams.size.toString());
 
-    return this.http.get<PostsResponse>(`${environment.apiUrl}/posts/${username}`, { params })
+    return this.http.get<PostsResponse>(`${environment.apiUrl}/posts/user/${username}`, { params })
     .pipe(
         map((response: PostsResponse) => response.posts )
     )

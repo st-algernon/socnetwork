@@ -1,8 +1,15 @@
 .photos-container {
-    height: 168px;
     border-radius: 15px;
     background-color: #f7f9fa;
 	overflow: hidden;
+}
+
+.photos-container.sm {
+	height: 168px;
+}
+
+.photos-container.lg {
+	height: 228px;
 }
 
 .photos-container .photo-item {

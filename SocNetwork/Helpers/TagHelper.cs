@@ -1,4 +1,5 @@
-﻿using SocNetwork.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SocNetwork.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,12 @@ namespace SocNetwork.Helpers
 {
     public class TagHelper
     {
-        public static List<Tag> FindTags(string text)
+        private readonly SocNetworkContext db;
+        public TagHelper(SocNetworkContext context)
+        {
+            db = context;
+        }
+        public async Task<List<Tag>> RecognizeTagsAsync(string text)
         {
             var regex = new Regex(@"#\w+");
             var collection = regex.Matches(text);
@@ -19,10 +25,19 @@ namespace SocNetwork.Helpers
             {
                 foreach (Match match in collection)
                 {
-                    tags.Add(new Tag()
+                    var content = match.Value.Substring(1);
+                    var tag = await db.Tags
+                        .FirstOrDefaultAsync(t => t.Content == content);
+
+                    if (tag == null)
                     {
-                        Content = match.Value.Substring(1)
-                    }) ;
+                        tag = new Tag()
+                        {
+                            Content = content
+                        };
+                    }
+
+                    tags.Add(tag);
                 }
             }
 

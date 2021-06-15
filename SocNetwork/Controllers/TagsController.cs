@@ -30,13 +30,10 @@ namespace SocNetwork.Controllers
         [HttpGet("{content}")]
         public async Task<IActionResult> Get(string content)
         {
-            var hashtags = await db.Tags.Where(t => t.Content == content).ToListAsync();
-            var posts = new List<Post>();
-
-            hashtags.ForEach(h =>
-            {
-                posts.AddRange(h.Posts);
-            });
+            var posts = await db.Tags
+                .Where(t => t.Content == content)
+                .SelectMany(t => t.Posts)
+                .ToListAsync();
 
             var postDTOs = new List<PostDTO>();
 
@@ -56,29 +53,23 @@ namespace SocNetwork.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Get([FromQuery] TagsPageParams tagsPageParams)
         {
-            var allTags = await db.Tags.ToListAsync();
-            var tagDTOs = new List<TagDTO>();
-
-            allTags.ForEach(t =>
-            {
-                tagDTOs.Add(new TagDTO
+            var tagDTOs = await db.Tags
+                .Select(t => new TagDTO
                 {
                     Id = t.Id,
-                    Content = t.Content,
-                    Amount = t.Posts.Where(p => p.CreationDate.AddDays(EXPIRATION_DAYS) > DateTime.UtcNow).Count()
-                });
-            });
-
-            var topTagDTOs = tagDTOs
-                .OrderByDescending(t => t.Amount)
+                    Content = t.Content,                      
+                    Amount = t.Posts.Count    
+                                    
+                })
+                .OrderByDescending(x => x.Amount)
                 .Skip((tagsPageParams.Number - 1) * tagsPageParams.Size)
                 .Take(tagsPageParams.Size)
-                .ToList();
+                .ToListAsync();
 
             return Ok(new TagsResponse
             {
                 Result = true,
-                Tags = topTagDTOs
+                Tags = tagDTOs
             });
         }
     }

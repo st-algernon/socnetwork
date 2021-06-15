@@ -1,0 +1,89 @@
+:host {
+	display: block;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+}
+
+ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
+}
+
+.posts-container {
+	width: 612px;
+	margin: 69px 60px 0px 0px;
+	box-sizing: border-box;
+    border-radius: 15px;
+    background-color: #fff;
+    position: absolute;
+}
+
+.posts-container-header {
+    padding: 8px 16px;
+}
+
+.posts-container-body {
+    background-color: rgb(230, 236, 240);
+    border-radius: 15px;
+}
+
+.explore-lining {
+	border-radius: 15px;
+	height: 120px;
+	margin-bottom: 15px;
+	padding: 0px 10px; 
+	background-color: #fff;
+	z-index: 0;
+}
+
+.explore-lining .lining-label {
+	padding: 8px 12px;
+	background-color: #f0f4f7;
+	color: #1da1f2;
+	border-radius: 20px;
+}
+
+.right-col {
+	position: fixed;
+	top: 69px;
+	bottom: 0px;
+	width: 320px;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
+	z-index: 9;
+	box-sizing: border-box;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1224px) {
+	main {
+		width: 50%;
+		margin-right: 6%;
+	}
+
+	.right-col {
+		width: 27%;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	main {
+		width: 56%;
+		margin-right: 25%;
+	}
+
+	.right-col {
+		width: 33%;
+	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	main {
+		width: 87%;
+		margin-right: 0px;
+		margin-left: 73px;
+	}
+
+	.right-col {
+		display: none;
+	}
+}

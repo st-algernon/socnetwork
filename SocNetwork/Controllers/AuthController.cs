@@ -76,9 +76,19 @@ namespace SocNetwork.Controllers
                 Password = HashHelper.ComputeSha256Hash(request.Password),
                 CreationDate = DateTime.UtcNow,
                 ProfileMedia = new List<ProfileMedia> {  }
+
             };
 
             db.Users.Add(user);
+
+            db.UserRelationships.Add(new UserRelationship
+            {
+                FromUser = user,
+                ToUser = user,
+                UserRelationshipType = UserRelationshipType.Followed,
+                CreationDate = DateTime.UtcNow
+            });
+
             db.SaveChanges();
 
             string token = GenerateJwt(user);

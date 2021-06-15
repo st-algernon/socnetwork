@@ -31,7 +31,7 @@ namespace SocNetwork.Hubs
                 RecipientId = Guid.Parse(request.RecipientId),
                 PostId = Guid.Parse(request.PostId),
                 NotifType = (PostNotifType)Enum.Parse(typeof(PostNotifType), request.NotifType),
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
 
             await db.PostNotifications.AddAsync(postNotif);
@@ -50,7 +50,7 @@ namespace SocNetwork.Hubs
                 SenderId = Guid.Parse(callerId),
                 RecipientId = Guid.Parse(request.RecipientId),
                 NotifType = (UserNotifType)Enum.Parse(typeof(UserNotifType), request.NotifType),
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
 
             await db.UserNotifications.AddAsync(userNotif);

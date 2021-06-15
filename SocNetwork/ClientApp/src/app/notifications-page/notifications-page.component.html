@@ -1,1 +1,41 @@
-<p>notifications-page works!</p>
+<div class="flex jc-c">
+    <main class="notifs-container flex fd-c">
+      <div class="notifs-container-header">
+        <h2>Оповіщення</h2>
+      </div>
+      <div class="notifs-container-body fg-1">
+        <ng-container *ngFor="let notif of notifs">
+            <a [routerLink]="['/']" class="follow-offer-item flex">
+                <div class="avatar-box square-40">
+                    <img 
+                        [src]="notif.senderDTO.avatarPath"
+                        alt="avatar"
+                        class="square-40"
+                    >
+                </div>
+                <div class="flex fd-c">
+                    <div class="flex">
+                        <div class="source-name">{{ notif.senderDTO.name }}</div>
+                        <div class="nick-name"> @{{ notif.senderDTO.username }}</div>
+                    </div>
+                    <!-- <div class="notif-text">{{ noti }}</div> -->
+                    <div class="notif-date">{{ notif.creationDate | date: 'medium':'':'uk' }}</div>
+                </div>
+            </a>
+        </ng-container>
+        
+        <div *ngIf="notifs"class="notifs-lining flex jc-c ai-c">
+          <p class="lining-label">Тут будуть розміщуватись оповіщення про підписки, вподобайки, та інше</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="flex jc-fe">
+    <div class="right-col">
+      <ng-scrollbar>
+        <app-trends></app-trends>
+        <app-follow-offers></app-follow-offers>
+      </ng-scrollbar>
+    </div>
+  </div>
+  

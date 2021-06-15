@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { PostComponent } from '../shared/components/post/post.component';
+import { ContainerDirective } from '../shared/directives/container.directive';
 import { Post, ShortProfile } from '../shared/interfaces';
 import { PostsService } from '../shared/services/posts.service';
 import { UsersService } from '../shared/services/users.service';
@@ -16,7 +18,7 @@ export class NewsPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private usersService: UsersService,
-    private postsService: PostsService
+    private postsService: PostsService,
   ) { }
 
   ngOnInit() {
@@ -33,5 +35,9 @@ export class NewsPageComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => {
       s.unsubscribe();
     });
+  }
+
+  addNewPost($event: Post) {
+    this.posts.push($event);
   }
 }

@@ -232,5 +232,15 @@ namespace SocNetwork.Helpers
 
             return userNotifDTO;
         }
+
+        public static CommentNotifDTO ToCommentNotifDTO(CommentNotification commentNotif)
+        {
+            var commentNotifDTO = new CommentNotifDTO();
+
+            commentNotif.CopyPropertiesTo(commentNotifDTO);
+            commentNotifDTO.SenderDTO = ToShortProfileDTO(commentNotif.Sender);
+
+            return commentNotifDTO;
+        }
     }
 }

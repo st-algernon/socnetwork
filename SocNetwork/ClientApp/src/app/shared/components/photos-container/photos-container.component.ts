@@ -9,7 +9,8 @@ import { Media } from '../../interfaces';
 export class PhotosContainerComponent implements OnInit {
 
   @Input() photos: Media[] = [];
-
+  @Input() size: 'large' | 'small' = 'small';
+  
   constructor() { }
 
   ngOnInit(): void {

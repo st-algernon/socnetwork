@@ -25,6 +25,7 @@ header {
 	font-size: 30px;
 	text-align: right;
 	line-height: 35px;
+	cursor: pointer;
 }
 
 .logo::before {

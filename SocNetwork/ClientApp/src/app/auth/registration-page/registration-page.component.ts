@@ -41,7 +41,7 @@ export class RegistrationPageComponent implements OnInit {
       email: new FormControl(null, [Validators.email, Validators.required]),
       name: new FormControl(null, [
         Validators.required,
-        Validators.pattern('^[A-Za-zА-Яа-я ]*$'), 
+        Validators.pattern(/(?:[^\x00-\x7F]|\w)+/g), 
         Validators.minLength(3),
         Validators.maxLength(35)]
       ),

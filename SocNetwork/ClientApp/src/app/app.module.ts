@@ -13,6 +13,7 @@ import { AccountMenuPopupComponent } from './shared/components/user-layout/accou
 import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { AuthInterceptor } from './shared/auth.interceptor';
+import { SharedModule } from './shared/shared.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -35,7 +36,8 @@ const INTERCEPTOR_PROVIDER: Provider = {
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
-    NgScrollbarModule
+    NgScrollbarModule,
+    SharedModule
   ],
   providers: [INTERCEPTOR_PROVIDER, AuthGuard],
   bootstrap: [AppComponent]

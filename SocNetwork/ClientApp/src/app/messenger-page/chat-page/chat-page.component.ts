@@ -29,9 +29,9 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     images: File[] | null
   }
 
-  previewFiles: Media[] = [];
+  previewImagesData: Media[] = [];
 
-  @ViewChild(ContainerDirective, { static: true }) container: ContainerDirective;
+  @ViewChild(ContainerDirective, { static: true }) messagesContainer: ContainerDirective;
   @ViewChild('ngScrollbar', { static: true }) ngScrollbar: NgScrollbar;
 
   constructor(
@@ -49,8 +49,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    this.messengerHub.startConnection();
-    this.messengerHub.addReceivedMessageListener();
 
     this.subs.push(
 
@@ -71,10 +69,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
           this.renderMessage(m);
         })
   
-        if (chat.messageDTOs.length > 0) {
-          this.moveMessagesDown();
-        }
-
+        this.moveMessagesDown();
         this.scrollToBottom();
       }),
 
@@ -82,6 +77,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         if (messageDTO.chatId === this.chat.id) {
           this.chat.messageDTOs.push(messageDTO)
           this.renderMessage(messageDTO);
+          this.moveMessagesDown();
           this.scrollToBottom();
         }
       })
@@ -96,18 +92,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-
-    // let isEmpty = true;
-
-    // for (let key in this.messageForm) {
-    //   if (this.messageForm[key]) {
-    //     isEmpty = false
-    //   }
-    // }
-
-    // if (isEmpty) {
-    //   return;
-    // }
 
     const messageRequest: MessageRequest = {
       authorId: this.me.id,
@@ -130,7 +114,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
           
           this.messengerHub.sendMessage(messageRequest);
           this.messageForm.images = null;
-          this.previewFiles = [];
+          this.previewImagesData = [];
         }
       )
     } 
@@ -141,7 +125,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   previewImages(files: File[]) {
-    this.previewFiles = [];
+    this.previewImagesData = [];
 
     for(let file of files) {
 
@@ -150,7 +134,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         const reader = new FileReader();
           
         reader.onload = (e: ProgressEvent) => { 
-          this.previewFiles.push({
+          this.previewImagesData.push({
             id: file.name,
             mimeType: file.type,
             path: (e.target as FileReader).result.toString(),
@@ -174,7 +158,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   private renderMessage(message: Message) {
     this.hideSameAuthors(message);
 
-    const viewContainerRef = this.container.viewContainerRef;
+    const viewContainerRef = this.messagesContainer.viewContainerRef;
     const componentFactory = this.resolver.resolveComponentFactory(MessageComponent);
     const componentRef = viewContainerRef.createComponent<MessageComponent>(componentFactory);
     
@@ -202,7 +186,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private clearMessagesContainer() {
-    this.container.viewContainerRef.clear();
+    this.messagesContainer.viewContainerRef.clear();
   }
 
   private moveMessagesDown() {

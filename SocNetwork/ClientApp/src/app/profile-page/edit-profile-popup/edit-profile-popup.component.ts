@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { EditProfileInfoRequest, Options, Profile, SelectConfig } from 'src/app/shared/interfaces';
+import { EditProfileInfoRequest, Media, Options, Profile, SelectConfig } from 'src/app/shared/interfaces';
 import { GenderOptions, MaritalStatusOptions } from 'src/app/shared/enums-options';
 import { UsersService } from 'src/app/shared/services/users.service';
 import { HttpClient, HttpEventType } from '@angular/common/http';
@@ -16,25 +16,25 @@ import { forkJoin, Observable, Subject, Subscription } from 'rxjs';
 })
 export class EditProfilePopupComponent implements OnInit, OnDestroy {
 
-  form: FormGroup;
-
   @Input() user: Profile;
 
   @Output() onClose = new EventEmitter<boolean>();
 
-  genderSelect: SelectConfig;
+  form: FormGroup;
 
+  genderSelect: SelectConfig;
   maritalStatusSelect: SelectConfig;
 
   selectedGender: Options;
-
   selectedMaritalStatus: Options;
 
   coverFile: File;
+  previewCoverData: Media
 
   avatarFile: File;
+  previewAvatarData: Media
 
-  editProfileSub: Subscription;
+  subs: Subscription[] = [];
 
   get name() {
     return this.form.get('name');
@@ -67,7 +67,9 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     ) { }
 
   ngOnDestroy(): void {
-    this.editProfileSub?.unsubscribe();
+    this.subs.forEach(s => {
+      s.unsubscribe()
+    });
   }
 
   ngOnInit() {
@@ -140,22 +142,49 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
 
     profileObservables.push(this.usersService.editProfile(request))
 
-    this.editProfileSub = forkJoin({...profileObservables}).subscribe(() => {
-      this.reloadCurrentRoute();
-    });
+    this.subs.push(
+      forkJoin({...profileObservables}).subscribe(() => {
+        localStorage.removeItem('me');
+        this.reloadCurrentRoute();
+      })
+    );
   }
 
-  previewImage(file: File, previewImageBox: HTMLImageElement) {
+  previewCover(file: File) {
+    this.previewImage(file, MediaFor.Cover);
+  }
+
+  previewAvatar(file: File) {
+    this.previewImage(file, MediaFor.Avatar);
+  }
+
+  previewImage(file: File, mediaFor: MediaFor) {
 
     if (file.type.match('image*')) {
       
       const reader = new FileReader();
-      
-      reader.onload = function(e: ProgressEvent) {     
-        previewImageBox.src = (e.target as FileReader).result.toString();
+
+      reader.onload = (e: ProgressEvent) => {   
+
+        const previewImage: Media = {
+          id: file.name,
+          mimeType: file.type,
+          path: (e.target as FileReader).result.toString(),
+          size: file.size,
+          creationDate: new Date(file.lastModified)
+        };
+
+        if (mediaFor == MediaFor.Avatar) {
+          this.previewAvatarData = previewImage; 
+        }
+
+        if (mediaFor == MediaFor.Cover) {
+          this.previewCoverData = previewImage; 
+        }
+
       };
-   
-      reader.readAsDataURL(file);
+
+      reader.readAsDataURL(file); 
     }
   }
 

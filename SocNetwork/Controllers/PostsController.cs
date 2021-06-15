@@ -54,7 +54,7 @@ namespace SocNetwork.Controllers
             });
         }
 
-        [HttpGet("{username}")]
+        [HttpGet("user/{username}")]
         public async Task<IActionResult> GetPosts(string username, [FromQuery] PostsPageParams postsPageParams)
         {
             var user = await db.Users
@@ -70,9 +70,28 @@ namespace SocNetwork.Controllers
                 });
             }
 
+            //var user2 = await db.Users
+            //    .SelectMany(u => u.UserPosts)
+            //    .Where(up => up.User.Username == username && up.IsAuthor)
+                
+            //    .Select(up => up.Post)
+            //    .OrderByDescending(p => p.CreationDate)
+            //    .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
+            //    .Take(postsPageParams.Size)
+            //    .ToListAsync();
+
             var posts = await db.UserPost
                 .Where(up => up.User == user && up.IsAuthor)
                 .Select(up => up.Post)
+                .OrderByDescending(p => p.CreationDate)
+                .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
+                .Take(postsPageParams.Size)
+                .ToListAsync();
+
+            var posts2 = await db.UserPost
+                .Where(up => up.User == user && up.IsAuthor)
+                .Select(up => up.Post)
+                .Include(p => p.PostUsers)
                 .OrderByDescending(p => p.CreationDate)
                 .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
                 .Take(postsPageParams.Size)
@@ -106,31 +125,15 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var tags = TagHelper.FindTags(request.Text);
+            var tagHelper = new TagHelper(db);
+            var tags = await tagHelper.RecognizeTagsAsync(request.Text);
 
-            var post = new Post()
-            {
-                Text = request.Text,
-                CreationDate = DateTime.Now,
-                Tags = tags
-            };
-
-            await db.Posts.AddAsync(post);
-
-            var userPost = new UserPost()
-            {
-                PostId = post.Id,
-                UserId = Guid.Parse(request.AuthorId),
-                IsAuthor = true
-            };
-
-            await db.UserPost.AddAsync(userPost);
+            var postMedia = new List<PostMedia>();
 
             foreach (var mediaDTO in request.MediaDTOs)
             {
-                await db.PostMedia.AddAsync(new PostMedia
+                postMedia.Add(new PostMedia
                 {
-                    PostId = post.Id,
                     Path = mediaDTO.Path,
                     MimeType = mediaDTO.MimeType,
                     Size = mediaDTO.Size,
@@ -138,6 +141,23 @@ namespace SocNetwork.Controllers
                 });
             }
 
+            var userPost = new UserPost()
+            {
+                UserId = Guid.Parse(request.AuthorId),
+                IsAuthor = true
+            };
+            var postUsers = new List<UserPost> { userPost };
+
+            var post = new Post()
+            {
+                Text = request.Text,
+                CreationDate = DateTime.Now,
+                PostUsers = postUsers,
+                PostMedia = postMedia,
+                Tags = tags
+            };
+
+            await db.Posts.AddAsync(post);
             await db.SaveChangesAsync();
 
             var postDTO = ConvertHelper.ToPostDTO(post);
@@ -155,29 +175,21 @@ namespace SocNetwork.Controllers
         public async Task<IActionResult> GetPostsForFeed([FromQuery] PostsPageParams postsPageParams)
         {
             var currentUser = HttpContext.Items["User"] as User;
-            var fullFeed = new List<Post>();
-            var followings = await db.UserRelationships
+
+            var feed = await db.UserRelationships
                 .Where(ur => ur.FromUserId == currentUser.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
                 .Select(ur => ur.ToUser)
-                .Include(u => u.Posts)
+                .SelectMany(u => u.UserPosts)
+                .Where(up => up.IsAuthor)
+                .Select(up => up.Post)
                 .ToListAsync();
 
-            followings.ForEach(f =>
-            {
-                fullFeed.AddRange(f.Posts);
-            });
-
-            var partOfFeed = fullFeed
+            var partOfFeedDTO = feed
+                .OrderByDescending(p => p.CreationDate)
                 .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
                 .Take(postsPageParams.Size)
+                .Select(p => ConvertHelper.ToPostDTO(p))
                 .ToList();
-
-            var partOfFeedDTO = new List<PostDTO>();
-
-            partOfFeed.ForEach(pof =>
-            {
-                partOfFeedDTO.Add(ConvertHelper.ToPostDTO(pof));
-            });
 
             return Ok(new PostsResponse
             {
@@ -191,30 +203,24 @@ namespace SocNetwork.Controllers
         public async Task<IActionResult> GetPostsForExplore([FromQuery] PostsPageParams postsPageParams)
         {
             var currentUser = HttpContext.Items["User"] as User;
-            var followingsPosts = new List<Post>();
-            var followings = await db.UserRelationships
+
+            var followingsPosts = await db.UserRelationships
                 .Where(ur => ur.FromUserId == currentUser.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
                 .Select(ur => ur.ToUser)
-                .Include(u => u.Posts)
+                .SelectMany(u => u.UserPosts)
+                .Where(up => up.IsAuthor)
+                .Select(up => up.Post)
                 .ToListAsync();
 
-            followings.ForEach(f =>
-            {
-                followingsPosts.AddRange(f.Posts);
-            });
-
-            var explorePosts = await db.Posts
+            var recentPosts = await db.Posts
                 .Where(p => p.CreationDate.AddDays(EXPIRATION_DAYS) > DateTime.UtcNow)
-                .Except(followingsPosts)
                 .Include(p => p.PostUsers)
                 .ToListAsync();
 
-            var explorePostDTOs = new List<PostDTO>();
-
-            explorePosts.ForEach(p =>
-            {
-                explorePostDTOs.Add(ConvertHelper.ToPostDTO(p));
-            });
+            var explorePostDTOs = recentPosts
+                .Except(followingsPosts)
+                .Select(p => ConvertHelper.ToPostDTO(p))
+                .ToList();
 
             var partOfExplorePostDTOs = explorePostDTOs
                 .OrderByDescending(p => p.LikesNumber)

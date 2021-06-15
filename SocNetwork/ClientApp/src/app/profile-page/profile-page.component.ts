@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { MediaFor, UserRelationshipType } from '../shared/enums';
-import { Profile, ShortChat, ShortProfile, Relationship, Post } from '../shared/interfaces';
+import { MediaFor, UserNotifType, UserRelationshipType } from '../shared/enums';
+import { Profile, ShortChat, ShortProfile, Relationship, Post, UserNotifRequest } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
-import { MessengerHub } from '../shared/hubs/messenger.hub';
 import { UsersService } from '../shared/services/users.service';
 import { RelationshipsService } from '../shared/services/relationships.service';
 import { ChatsService } from '../shared/services/chats.service';
 import { PostsService } from '../shared/services/posts.service';
+import { NotificationsHub } from '../shared/hubs/notifications.hub';
 
 @Component({
   selector: 'app-profile-page',
@@ -30,7 +30,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     isFollowed: boolean,
     isBlocked: boolean
   };
-
   subs: Subscription[] = [];
   editProfileFlag: boolean = false;
 
@@ -41,7 +40,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     private chatsService: ChatsService,
     private postsService: PostsService,
     private relationshipsService: RelationshipsService,
-    private messengerHub: MessengerHub
+    private notifHub: NotificationsHub
     ) { 
       this.user = {
         profile: null,
@@ -84,9 +83,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
       })
 
     );
-
-    // this.messengerHub.startConnection();
-    // this.messengerHub.addReceivedMessageListener();
   }
 
   ngOnDestroy() {
@@ -115,11 +111,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   follow() {
     this.subs.push( 
 
-      this.route.params.pipe(
-        switchMap((params: Params) => {
-          return this.relationshipsService.follow(params['username']);
-        })
-      ).subscribe(() => { 
+      this.relationshipsService.follow(this.user.profile.username).subscribe(() => { 
+        const request: UserNotifRequest = { 
+          recipientId: this.user.profile.id,
+          notifType: UserNotifType.Followed
+        };
+        this.notifHub.userNotify(request)
         this.relationship.isFollowed = true;
         this.relationship.isUnFollowed = false;
       })
@@ -140,6 +137,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
       })
 
     );
+  }
+
+  addNewPost($event: Post) {
+    this.user.posts.unshift($event);
   }
 
   changeTitleToUnfollow($event: MouseEvent) {

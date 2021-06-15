@@ -9,7 +9,7 @@
             appearance="standard"
         >
             <li *ngFor="let user of users">
-                <a [routerLink]="user.id" class="follow-offer-item flex">
+                <a [routerLink]="['/', user.username]" class="follow-offer-item flex">
                     <div class="avatar-box square-40">
                         <img 
                             [src]="user.avatarPath"

@@ -1,6 +1,6 @@
 <div class="flex jc-c">
   <main>
-    <app-post-maker [me]="me"></app-post-maker>
+    <app-post-maker [me]="me" (newPostEvent)="addNewPost($event)"></app-post-maker>
     <ng-container *ngIf="posts; else empty_post">
       <ng-container *ngFor="let post of posts">
         <app-post [me]="me" [post]="post" comments="best"></app-post>
@@ -11,6 +11,12 @@
       <app-empty-post withMedia="true"></app-empty-post>
       <app-empty-post></app-empty-post>
     </ng-template>
+    <div 
+      *ngIf="posts?.length == 0"
+      class="news-lining flex jc-c ai-c"
+    >
+      <p class="lining-label">Тут будуть розміщуватись публікації користувачів, на яких Ви підписані</p>
+    </div>
   </main>
 </div>
 <div class="flex jc-fe">

@@ -57,24 +57,6 @@ export class AuthService {
     return !!this.token;
   }
 
-  // private handleError(error: HttpErrorResponse) {
-  //     const message = error.error.error.message
-
-  //     switch(message) {
-  //         case 'INVALID_EMAIL':
-  //             this.error$.next('Invalid email')
-  //         break
-  //         case 'INVALID_PASSWORD':
-  //             this.error$.next('Invalid password')
-  //         break
-  //         case 'EMAIL_NOT_FOUND':
-  //             this.error$.next('Email not found')
-  //         break
-  //     }
-
-  //     return throwError(error)
-  // }
-
   private setToken(response: AuthResponse) {
     if (response) {
       const expDate = new Date(

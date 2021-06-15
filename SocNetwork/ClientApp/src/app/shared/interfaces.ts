@@ -1,4 +1,4 @@
-import { AccountStatus, CommentStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, PostNotifType, PostStatus, UserRelationshipType } from "./enums";
+import { AccountStatus, CommentNotifType, CommentStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, PostNotifType, PostStatus, UserNotifType, UserRelationshipType } from "./enums";
 
 export interface AccountLoginRequest {
     email: string
@@ -29,6 +29,23 @@ export interface MessageRequest {
     chatId: string,
     text: string,
     mediaDTOs: Media[]
+}
+
+export interface PostNotifRequest {
+    recipientId: string,
+    postId: string,
+    notifType: number
+}
+
+export interface CommentNotifRequest {
+    recipientId: string,
+    commentId: string,
+    notifType: number
+}
+
+export interface UserNotifRequest {
+    recipientId: string,
+    notifType: number
 }
 
 export interface PostRequest {
@@ -97,6 +114,14 @@ export interface TagsResponse {
 export interface RelationshipResponse {
     result: string,
     relationship: Relationship,
+    errors: string[]
+}
+
+export interface NotificationsResponse {
+    result: string,
+    postNotifDTOs: PostNotif[],
+    userNotifDTOs: Notification[],
+    commentNotifDTOs: CommentNotif[],
     errors: string[]
 }
 
@@ -209,6 +234,11 @@ export interface Message {
     messageState: MessageState
 }
 
+export interface MessageAlert {
+    message: Message,
+    messagesNumber: number
+}
+
 export interface Chat {
     id: string,
     title: string,
@@ -244,21 +274,13 @@ export interface PageParams {
 export interface Notification {
     senderDTO: ShortProfile,
     creationDate: string,
+    notifType: PostNotifType | UserNotifType | CommentNotifType
 }
 
 export interface PostNotif extends Notification {
-    notifType: PostNotifType,
-    toString(): string {
-        switch (this.notifType as PostNotifType) {
-            case PostNotifType.Liked:
-                return `${this.senderDTO.name} вподобав(ла) Вашу публікацію`;
-                break;
-            case PostNotifType.Commented:
-                return `${this.senderDTO.name} прокоментував(ла) Вашу публікацію`;
-                break;
-            case PostNotifType.Repost:
-                return `${this.senderDTO.name} поширив(ла) Вашу публікацію`;
-                break;
-        }
-    }
+    postId: string
+}
+
+export interface CommentNotif extends Notification {
+    commentId: string
 }

@@ -48,6 +48,7 @@ ng-scrollbar {
 
 .trend-item-body {
     color: #222;
+    font-weight: bold;
 }
 
 .trend-item-footer {

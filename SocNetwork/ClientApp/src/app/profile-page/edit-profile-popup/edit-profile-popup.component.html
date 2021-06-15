@@ -12,9 +12,14 @@
       >
         <div class="photo-cover" data-container="image-box">
           <img
+            *ngIf="user && !previewCoverData"
             [src]="user.coverPath"
             alt="photo-cover"
-            #cover_preview_img
+          />
+          <img
+            *ngIf="previewCoverData"
+            [src]="previewCoverData.path"
+            alt="photo-cover"
           />
           <div class="photo-upload-wrap">
             <div class="upload-btn flex jc-c ai-c">
@@ -26,8 +31,7 @@
             </div>
             <input
               type="file"
-              (change)="coverFile = cover_input.files[0]; 
-                previewImage(cover_input.files[0], cover_preview_img)"
+              (change)="previewCover(cover_input.files[0])"
               #cover_input
               class="hidden"
             />
@@ -36,8 +40,13 @@
         <div class="user-avatar-back">
           <div class="user-avatar" data-container="image-box">
             <img
+              *ngIf="user && !previewAvatarData"
               [src]="user.avatarPath"
-              #avatar_preview_img
+              alt="avatar"
+            />
+            <img
+              *ngIf="previewAvatarData"
+              [src]="previewAvatarData.path"
               alt="avatar"
             />
             <div class="photo-upload-wrap">
@@ -50,8 +59,7 @@
               </div>
               <input
                 type="file"
-                (change)="avatarFile = avatar_input.files[0];
-                  previewImage(avatar_input.files[0], avatar_preview_img)"
+                (change)="previewAvatar(avatar_input.files[0])"
                 #avatar_input
                 class="hidden"
               />

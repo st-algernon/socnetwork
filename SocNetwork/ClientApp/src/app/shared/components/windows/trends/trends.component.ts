@@ -19,6 +19,7 @@ export class TrendsComponent implements OnInit, OnDestroy {
     this.subs.push(
 
       this.tagsService.getTrends().subscribe((tags: Tag[]) => {
+        console.log(tags);
         this.tags = tags;
       })
 

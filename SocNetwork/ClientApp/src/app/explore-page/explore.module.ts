@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExplorePageComponent } from './explore-page.component';
-
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { SharedModule } from '../shared/shared.module';
+import { NgModule } from '@angular/core';
+import { ExploreRoutingModule } from './explore-routing.module';
 
 @NgModule({
   declarations: [
@@ -10,8 +11,9 @@ import { ExplorePageComponent } from './explore-page.component';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
+    NgScrollbarModule,
+    ExploreRoutingModule,
+    SharedModule
   ]
 })
-export class ExploreModule { }
+export class ExploreModule {}

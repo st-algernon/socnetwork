@@ -17,6 +17,7 @@ import { PostsService } from "./services/posts.service";
 import { TagsService } from "./services/tags.service";
 import { RouterModule } from "@angular/router";
 import { EmptyPostComponent } from './components/empty-post/empty-post.component';
+import { AlertComponent } from './components/alert/alert.component';
 
 registerLocaleData(localeUk, 'uk');
 
@@ -31,7 +32,8 @@ registerLocaleData(localeUk, 'uk');
     LoaderComponent,
     PhotosContainerComponent,
     MessageComponent,
-    EmptyPostComponent
+    EmptyPostComponent,
+    AlertComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ registerLocaleData(localeUk, 'uk');
     LoaderComponent,
     PhotosContainerComponent,
     MessageComponent,
-    EmptyPostComponent
+    EmptyPostComponent,
+    AlertComponent
   ],
   providers: [
     PostsService,

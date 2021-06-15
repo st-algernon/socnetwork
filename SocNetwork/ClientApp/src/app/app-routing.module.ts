@@ -11,6 +11,7 @@ const routes : Routes = [
         { path: '', redirectTo: 'news', pathMatch: 'full' },
         { path: 'news', loadChildren: () => import('./news-page/news.module').then(m => m.NewsModule), canActivate: [AuthGuard] },
         { path: 'messenger', loadChildren: () => import('./messenger-page/messenger.module').then(m => m.MessengerModule), canActivate: [AuthGuard] },
+        { path: 'notifications', loadChildren: () => import('./notifications-page/notifications.module').then(m => m.NotificationsModule), canActivate: [AuthGuard] },
         { path: 'explore', loadChildren: () => import('./explore-page/explore.module').then(m => m.ExploreModule), canActivate: [AuthGuard] },
         { path: 'search', loadChildren: () => import('./search/search.module').then(m => m.SearchModule), canActivate: [AuthGuard] },
         { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] },

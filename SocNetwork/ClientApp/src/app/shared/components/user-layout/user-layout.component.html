@@ -28,66 +28,67 @@
         trackClass="scrollbar-track"
         visibility="hover"
       >
-      <nav class="main-nav">
-        <ul>
-          <li>
-            <a [routerLink]="[me?.username]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="profile flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Profile</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/news" routerLinkActive="active" class="news flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">News</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/explore" routerLinkActive="active" class="explore flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Explore</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/messenger" routerLinkActive="active" class="messages flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Messenger</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/notifications" routerLinkActive="active" class="notifications flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Notifications</span>
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="[me?.username, 'photos']" routerLinkActive="active" class="photos flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Photos</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/music" routerLinkActive="active" class="music flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Music</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/videos" routerLinkActive="active" class="video flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Videos</span>
-            </a>
-          </li>
-          <li>
-            <a routerLink="/saved" routerLinkActive="active" class="saved flex ai-c">
-              <span class="menu-icon"></span>
-              <span class="menu-title">Saved</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </ng-scrollbar>
+        <nav class="main-nav">
+          <ul>
+            <li>
+              <a [routerLink]="[me?.username]" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="profile flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Profile</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/news" routerLinkActive="active" class="news flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">News</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/explore" routerLinkActive="active" class="explore flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Explore</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/messenger" routerLinkActive="active" class="messages flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Messenger</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/notifications" routerLinkActive="active" class="notifications flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Notifications</span>
+              </a>
+            </li>
+            <li>
+              <a [routerLink]="[me?.username, 'photos']" routerLinkActive="active" class="photos flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Photos</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/music" routerLinkActive="active" class="music flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Music</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/videos" routerLinkActive="active" class="video flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Videos</span>
+              </a>
+            </li>
+            <li>
+              <a routerLink="/saved" routerLinkActive="active" class="saved flex ai-c">
+                <span class="menu-icon"></span>
+                <span class="menu-title">Saved</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </ng-scrollbar>
     </aside>
     <router-outlet></router-outlet>
   </div>
 </div>
+<app-alert [me]="me"></app-alert>

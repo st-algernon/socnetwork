@@ -3,16 +3,20 @@
         <h2>Trends for you</h2>
     </div>
     <ul class="trends-body">
-        <ng-scrollbar visibility="hover" appearance="standard">
+        <ng-scrollbar *ngIf="tags; else loading" visibility="hover" appearance="standard">
             <li *ngFor="let tag of tags">
                 <a href="#" class="trend-item">
-                    <div class="trend-item-body">
-                        <a [routerLink]="['/hashtag', tag.content]">#{{ tag.content }}</a>
-                    </div>
+                    <div 
+                      class="trend-item-body"
+                      [routerLink]="['/hashtag', tag.content]"
+                    >#{{ tag.content }}</div>
                     <div class="trend-item-footer"><span class="count-posts">{{ tag.amount }}</span> posts</div>
                 </a>
             </li>
         </ng-scrollbar>
+        <ng-template #loading>
+            <app-loader></app-loader>
+        </ng-template>
     </ul>
     <div class="trends-footer">
     </div>

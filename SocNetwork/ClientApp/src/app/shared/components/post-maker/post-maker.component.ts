@@ -1,4 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Media, Post, PostRequest, ShortProfile } from '../../interfaces';
 import { MediaService } from '../../services/media.service';
@@ -12,6 +13,7 @@ import { PostsService } from '../../services/posts.service';
 export class PostMakerComponent implements OnInit, OnDestroy {
 
   @Input() me: ShortProfile;
+  @Output() newPostEvent = new EventEmitter<Post>();
 
   postForm: {
     text: string,
@@ -25,7 +27,8 @@ export class PostMakerComponent implements OnInit, OnDestroy {
 
   constructor(
     private postsService: PostsService,
-    private mediaService: MediaService
+    private mediaService: MediaService,
+    private router: Router
   ) { 
     this.postForm = {
       text: '',
@@ -77,7 +80,7 @@ export class PostMakerComponent implements OnInit, OnDestroy {
           
           this.subs.push(
             this.postsService.savePost(postRequest).subscribe((post: Post) => {
-              console.log(post);
+              this.newPostEvent.emit(post);
             })
           );
 
@@ -92,7 +95,7 @@ export class PostMakerComponent implements OnInit, OnDestroy {
     else if (this.postForm.text) {
       this.subs.push(
         this.postsService.savePost(postRequest).subscribe((post: Post) => {
-          console.log(post);
+          this.newPostEvent.emit(post);
         })
       );
       

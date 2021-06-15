@@ -1,1 +1,32 @@
-<p>explore-page works!</p>
+<div class="flex jc-c">
+    <main class="posts-container flex fd-c">
+      <div class="posts-container-header">
+        <h2>Рекомендовані публікації</h2>
+      </div>
+      <div class="posts-container-body">
+        <ng-container *ngIf="posts; else empty_posts">
+          <app-post *ngFor="let post of posts" [me]="me" [post]="post" comment="best"></app-post>
+        </ng-container>
+        <ng-template #empty_posts>
+          <app-empty-post></app-empty-post>
+          <app-empty-post withMedia="true"></app-empty-post>
+          <app-empty-post></app-empty-post>
+        </ng-template>
+      </div>
+      <div 
+        *ngIf="posts?.length == 0"
+        class="explore-lining flex jc-c ai-c"
+      >
+        <p class="lining-label">Не знайдено публікацій для показу</p>
+      </div>
+    </main>
+  </div>
+  <div class="flex jc-fe">
+    <div class="right-col">
+      <ng-scrollbar>
+        <app-trends></app-trends>
+        <app-follow-offers></app-follow-offers>
+      </ng-scrollbar>
+    </div>
+  </div>
+  

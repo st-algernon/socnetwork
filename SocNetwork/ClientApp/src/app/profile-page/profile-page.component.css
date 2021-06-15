@@ -285,6 +285,21 @@ main .user-info {
 	background-image: url(../../assets/images/search-hover.png);
 }
 
+.user-wall-lining {
+	border-radius: 15px;
+	background-color: #fff;
+	padding: 0px 10px; 
+	z-index: 0;
+	height: 120px;
+}
+
+.user-wall-lining .lining-label {
+	padding: 8px 12px;
+	background-color: #f0f4f7;
+	color: #1da1f2;
+	border-radius: 20px;
+}
+
 .right-col {
 	position: fixed;
 	top: 69px;
