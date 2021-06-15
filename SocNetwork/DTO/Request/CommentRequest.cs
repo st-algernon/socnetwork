@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO.Request
 {
-    public class PostRequest
+    public class CommentRequest
     {
+        public string PostId { get; set; }
         public string Text { get; set; }
         public List<MediaDTO> MediaDTOs { get; set; }
     }

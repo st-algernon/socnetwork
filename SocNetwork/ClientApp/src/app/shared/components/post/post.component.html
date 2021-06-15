@@ -13,7 +13,9 @@
             </div>
         </div>
         <div class="post-body">
-            <div #textContainer class="post-text"></div>
+            <div #post_text_container class="post-text">
+                {{ renderTextWithHashtags(post.text, post_text_container) }}
+            </div>
             <app-photos-container 
                 *ngIf="post.mediaDTOs.length > 0"
                 [photos]="post.mediaDTOs"
@@ -42,15 +44,12 @@
         </div>
 
         <div class="comments-section">
-            <div 
-              *ngIf="commentsBehavior == 'best' || commentsBehavior == 'all'"
-              class="comments-container"
-            >
-                <div class="comment flex ai-fs">
+            <div class="comments-container">
+                <div *ngFor="let comment of comments" class="comment flex ai-fs">
                     <div class="comment-author-avatar">
                         <div class="avatar-box square-32">
                             <img 
-                                src="../../../../assets/images/empty_photo.jpg"
+                                [src]="getCommentAuthor(comment).avatarPath"
                                 class="square-32"
                                 alt=""
                             >
@@ -61,14 +60,13 @@
                             <div class="comment-header-body-wrapper">
                                 <div class="comment-header">
                                     <div class="flex fd-c">
-                                        <span class="source-name">Mr. Algernon</span>
+                                        <span class="source-name">{{ getCommentAuthor(comment).name }}</span>
                                     </div>
                                 </div>
                                 <div class="comment-body">
-                                    <p class="comment-text">i'm waiting <a href="#" class="hashtag">#rickandmorty</a></p>
-                                    <!-- <div class="media-box flex fd-r wrapper">
-                                        <img src="../../../../assets/images/zhdun.jpg" alt="">
-                                    </div> -->
+                                    <div comment_text_container class="comment-text">
+                                        {{ renderTextWithHashtags(comment.text, comment_text_container) }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="content-actions" data-container="content-actions">
@@ -80,7 +78,8 @@
                         </div>
                         <div class="comment-footer flex jc-sb">
                             <span class="replay-btn">Replay</span>
-                            <span class="published-date">yesterday at 5:07 pm</span>
+                            <div *ngIf="isToday()" class="published-date">{{ comment.creationDate | date:'shortTime':'':'uk'}}</div>
+                            <div *ngIf="isToday() == false" class="published-date">{{ comment.creationDate | date:'mediumDate':'':'uk'}}</div>
                         </div>
                     </div>
                 </div>

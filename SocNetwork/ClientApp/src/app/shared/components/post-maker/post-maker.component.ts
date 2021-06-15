@@ -61,7 +61,6 @@ export class PostMakerComponent implements OnInit, OnDestroy {
 
   submit() {
     const postRequest: PostRequest = {
-      authorId: this.me.id,
       text: this.postForm.text,
       mediaDTOs: []
     };

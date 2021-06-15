@@ -107,6 +107,13 @@ export class UsersService {
         return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
     }
 
+    searchUser(query: string) {
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/search/${query}`)
+        .pipe(
+            map((response: ShortProfilesResponse) => response.shortProfiles)
+        );
+    }
+
     // private getCurrentAvatar(profile): ProfileMedia {
     //     return profile.profileMediaDTOs.forEach(m => m.isCurrent == true && m.mediaFor == MediaFor.Avatar);
     // }

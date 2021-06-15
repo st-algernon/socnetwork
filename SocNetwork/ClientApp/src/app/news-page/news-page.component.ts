@@ -26,6 +26,7 @@ export class NewsPageComponent implements OnInit, OnDestroy {
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 
       this.postsService.getFeed({ number: 1, size: 15 }).subscribe((posts: Post[]) => {
+        console.log(posts);
         this.posts = posts;
       })
     );

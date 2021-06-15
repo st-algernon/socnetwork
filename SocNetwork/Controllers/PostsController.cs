@@ -59,6 +59,7 @@ namespace SocNetwork.Controllers
         {
             var user = await db.Users
                 .Include(u => u.ProfileMedia)
+                .Include(u => u.UserPosts)
                 .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
@@ -66,32 +67,13 @@ namespace SocNetwork.Controllers
                 return BadRequest(new ShortProfilesResponse()
                 {
                     Result = false,
-                    Errors = new List<string> { "Users doesn't exist" }
+                    Errors = new List<string> { "User doesn't exist" }
                 });
             }
-
-            //var user2 = await db.Users
-            //    .SelectMany(u => u.UserPosts)
-            //    .Where(up => up.User.Username == username && up.IsAuthor)
-                
-            //    .Select(up => up.Post)
-            //    .OrderByDescending(p => p.CreationDate)
-            //    .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
-            //    .Take(postsPageParams.Size)
-            //    .ToListAsync();
 
             var posts = await db.UserPost
                 .Where(up => up.User == user && up.IsAuthor)
                 .Select(up => up.Post)
-                .OrderByDescending(p => p.CreationDate)
-                .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
-                .Take(postsPageParams.Size)
-                .ToListAsync();
-
-            var posts2 = await db.UserPost
-                .Where(up => up.User == user && up.IsAuthor)
-                .Select(up => up.Post)
-                .Include(p => p.PostUsers)
                 .OrderByDescending(p => p.CreationDate)
                 .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
                 .Take(postsPageParams.Size)
@@ -116,15 +98,6 @@ namespace SocNetwork.Controllers
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            if (currentUser.Id != Guid.Parse(request.AuthorId))
-            {
-                return BadRequest(new PostsResponse
-                {
-                    Result = true,
-                    Errors = new List<string> { "The user has no authority" }
-                });
-            }
-
             var tagHelper = new TagHelper(db);
             var tags = await tagHelper.RecognizeTagsAsync(request.Text);
 
@@ -141,12 +114,14 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var userPost = new UserPost()
+            var postUsers = new List<UserPost>
             {
-                UserId = Guid.Parse(request.AuthorId),
-                IsAuthor = true
+                new UserPost()
+                {
+                    User = currentUser,
+                    IsAuthor = true
+                }
             };
-            var postUsers = new List<UserPost> { userPost };
 
             var post = new Post()
             {
@@ -176,13 +151,26 @@ namespace SocNetwork.Controllers
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            var feed = await db.UserRelationships
-                .Where(ur => ur.FromUserId == currentUser.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
+            var feed2 = await db.UserRelationships
+                .Where(ur => ur.FromUser == currentUser && ur.UserRelationshipType == UserRelationshipType.Followed)
                 .Select(ur => ur.ToUser)
                 .SelectMany(u => u.UserPosts)
                 .Where(up => up.IsAuthor)
-                .Select(up => up.Post)
+                .Include(up => up.Post)
+                .Include(up => up.User)
                 .ToListAsync();
+
+            var feed3 = await db.UserRelationships
+                .Include(ur => ur.ToUser)
+                .ThenInclude(u => u.UserPosts)
+                .Where(ur => ur.FromUser == currentUser && ur.UserRelationshipType == UserRelationshipType.Followed)
+                .Select(ur => ur.ToUser)
+                .SelectMany(u => u.UserPosts)
+                .Where(up => up.IsAuthor)
+                .Include(up => up.Post)
+                .ToListAsync();
+
+            var feed = feed2.Select(up => up.Post).ToList();
 
             var partOfFeedDTO = feed
                 .OrderByDescending(p => p.CreationDate)
@@ -232,6 +220,120 @@ namespace SocNetwork.Controllers
             {
                 Result = true,
                 Posts = partOfExplorePostDTOs
+            });
+        }
+
+        [HttpGet("tag/{content}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetPostsByTag(string content)
+        {
+            //var postDTOs = await db.Tags
+            //   .Include(t => t.Posts)
+            //   .ThenInclude(p => p.PostUsers)
+            //   .Where(t => t.Content == content)
+            //   .SelectMany(t => t.Posts)
+            //   .Select(p => ConvertHelper.ToPostDTO(p))
+            //   .ToListAsync();
+
+            var p = await db.UserPost
+                .Include(up => up.User)
+                .Select(u => u.Post)
+                .SelectMany(p => p.Tags)
+                .Where(t => t.Content == content)
+                .Include(t => t.Posts)
+                .ToListAsync();
+
+            var postDTOs = p
+                .SelectMany(t => t.Posts)
+                .Select(p => ConvertHelper.ToPostDTO(p))
+                .ToList();
+
+            return Ok(new PostsResponse
+            {
+                Result = true,
+                Posts = postDTOs
+            });
+        }
+
+        [HttpPost("comment")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> AddCommentToPost([FromBody] CommentRequest request)
+        {
+            var currentUser = HttpContext.Items["User"] as User;
+
+            var tagHelper = new TagHelper(db);
+            var tags = await tagHelper.RecognizeTagsAsync(request.Text);
+
+            var commentMedia = new List<CommentMedia>();
+
+            foreach (var mediaDTO in request.MediaDTOs)
+            {
+                commentMedia.Add(new CommentMedia
+                {
+                    Path = mediaDTO.Path,
+                    MimeType = mediaDTO.MimeType,
+                    Size = mediaDTO.Size,
+                    CreationDate = mediaDTO.CreationDate
+                });
+            }
+
+            var userComments = new List<UserComment>
+            {
+                new UserComment()
+                {
+                    User = currentUser,
+                    IsAuthor = true
+                }
+            };
+
+            var comment = new Comment()
+            {
+                Text = request.Text,
+                CreationDate = DateTime.UtcNow,
+                CommentUsers = userComments,
+                CommentMedia = commentMedia,
+                Tags = tags
+            };
+
+            await db.Comments.AddAsync(comment);
+            await db.SaveChangesAsync();
+
+            var commentDTO = ConvertHelper.ToCommentDTO(comment);
+
+            return Ok(new CommentsResponse
+            {
+                Result = true,
+                Comments = new List<CommentDTO>() { commentDTO }
+            });
+        }
+
+        [HttpGet("{id}/comments")]
+        public async Task<IActionResult> GetComments(string id, [FromQuery] PostsPageParams postsPageParams)
+        {
+            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == Guid.Parse(id));
+
+            if (post == null)
+            {
+                return BadRequest(new ShortProfilesResponse()
+                {
+                    Result = false,
+                    Errors = new List<string> { "Post doesn't exist" }
+                });
+            }
+
+            var commentDTOs = await db.Posts
+                .Where(p => p.Id == Guid.Parse(id))
+                .SelectMany(p => p.Comments)
+                .OrderByDescending(p => p.CreationDate)
+                .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
+                .Take(postsPageParams.Size)
+                .Select(c => ConvertHelper.ToCommentDTO(c))
+                .ToListAsync();
+
+            return Ok(new CommentsResponse
+            {
+                Result = true,
+                Comments = commentDTOs
             });
         }
     }

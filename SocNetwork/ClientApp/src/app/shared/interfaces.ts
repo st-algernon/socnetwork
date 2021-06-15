@@ -49,7 +49,12 @@ export interface UserNotifRequest {
 }
 
 export interface PostRequest {
-    authorId: string,
+    text: string,
+    mediaDTOs: Media[]
+}
+
+export interface CommentRequest {
+    postId: string,
     text: string,
     mediaDTOs: Media[]
 }
@@ -102,6 +107,12 @@ export interface UploadMediaResponse {
 export interface PostsResponse {
     result: string,
     posts: Post[],
+    errors: string[]
+}
+
+export interface CommentsResponse {
+    result: string,
+    comments: Comment[],
     errors: string[]
 }
 

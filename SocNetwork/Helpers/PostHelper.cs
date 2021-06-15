@@ -20,7 +20,7 @@ namespace SocNetwork.Helpers
             var comments = post.Comments;
 
             var maxCount = 0;
-            var bestComment = new Comment();
+            Comment bestComment = null;
 
             foreach (var comment in comments)
             {

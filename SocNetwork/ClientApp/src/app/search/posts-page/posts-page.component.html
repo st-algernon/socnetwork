@@ -1,8 +1,32 @@
-<ng-container *ngIf="searchedPosts; else loading">
-    <ng-container *ngFor="let post of searchedPosts">
-        <app-post [me]="me" [post]="post" comments="none"></app-post>
-    </ng-container>
-</ng-container>
-<ng-template #loading>
-    <app-loader></app-loader>
-</ng-template>
+<div class="flex jc-c">
+    <main class="search flex fd-c">
+        <div class="search-header flex jc-sb ai-c">
+            <h2>Пошук публікацій</h2>
+            <form class="search-form">
+                <input type="search" 
+                  (input)="search($event)" 
+                  placeholder="Search" 
+               />
+            </form>
+        </div>
+        <div class="search-body">
+            <ng-container *ngIf="searchedPosts; else loading">
+                <ng-container *ngFor="let post of searchedPosts">
+                    <app-post [me]="me" [post]="post" comments="none"></app-post>
+                </ng-container>
+            </ng-container>
+            <ng-template #loading>
+                <app-loader></app-loader>
+            </ng-template>
+        </div>
+    </main>
+</div>
+<div class="flex jc-fe">
+   <div class="right-col">
+      <ng-scrollbar>
+        <app-trends></app-trends>
+        <app-follow-offers></app-follow-offers>
+      </ng-scrollbar>
+    </div>
+  </div>
+  

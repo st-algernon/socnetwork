@@ -1,0 +1,95 @@
+:host {
+	display: block;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+}
+
+.search {
+	width: 612px;
+	margin: 69px 60px 0px 0px;
+	box-sizing: border-box;
+    border-radius: 15px;
+    background-color: #fff;
+    height: calc(100% - 69px);
+    position: absolute;
+}
+
+.search-header {
+    padding: 8px 24px;
+}
+
+.search-header .search-form {
+	position: relative;
+}
+
+.search-header .search-form input {
+	width: 100%;
+	background: url(../../../assets/images/search.png) 10px center no-repeat;
+	background-color: rgb(230, 236, 240);
+	background-size: 20px 20px;
+	border-radius: 20px;
+	padding: 10px 15px 10px 40px;
+	border: 1px solid transparent;
+}
+
+.search-header .search-form input:focus {
+	background: url(../../../assets/images/search-hover.png) 10px center no-repeat;
+	border: 1px solid #1da1f2;
+	outline: none;
+	background-color: #fff;
+	background-size: 20px 20px;
+}
+
+.search-body {
+    border-radius: 15px;
+}
+
+.right-col ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
+}
+
+.right-col {
+	position: fixed;
+	top: 69px;
+	bottom: 0px;
+	width: 320px;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
+	z-index: 9;
+	box-sizing: border-box;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1224px) {
+	main {
+		width: 50%;
+		margin-right: 6%;
+	}
+
+	.right-col {
+		width: 27%;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	main {
+		width: 56%;
+		margin-right: 25%;
+	}
+
+	.right-col {
+		width: 33%;
+	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	main {
+		width: 87%;
+		margin-right: 0px;
+		margin-left: 73px;
+	}
+
+	.right-col {
+		display: none;
+	}
+}

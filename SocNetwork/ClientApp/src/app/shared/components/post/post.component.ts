@@ -1,6 +1,7 @@
 import { HashLocationStrategy } from '@angular/common';
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Post, ShortProfile } from '../../interfaces';
+import { Comment, Post, ShortProfile } from '../../interfaces';
+import { PostsService } from '../../services/posts.service';
 
 @Component({
   selector: 'app-post',
@@ -14,27 +15,42 @@ export class PostComponent implements OnInit {
   @Input() commentsBehavior: 'all' | 'best' | 'none' = 'best';
 
   author: ShortProfile;
+  comments: Comment[] = [];
 
-  @ViewChild('textContainer', { static: true }) textContainer: ElementRef;
-
-  constructor(private renderer: Renderer2) { }
+  constructor(
+    private renderer: Renderer2,
+    private postsService: PostsService
+  ) { }
 
   ngOnInit() {
     this.author = this.post.userPostDTOs.find(up => up.isAuthor).userDTO;
 
-    this.renderText();
+    if (this.commentsBehavior == 'all') {
+      this.postsService.getComments(this.post.id).subscribe((comments: Comment[]) => {
+        this.comments = comments;
+      })
+    }
+    else if (this.commentsBehavior == 'best') {
+      this.comments.push(this.post.bestCommentDTO);
+    }
+    else {
+      this.comments = [];
+    }
+
+  }
+
+  getCommentAuthor(comment: Comment) {
+    comment.userCommentDTOs.find(uc => uc.isAuthor).userDTO;
   }
 
   likePost() {
     this.post.likesNumber++;
   }
 
-  renderText () {
-    const hashtags = this.post.text.match(/(#(?:[^\x00-\x7F]|\w)+)/g);
+  renderTextWithHashtags (text: string, textContainer: HTMLElement) {
+    const hashtags = text.match(/(#(?:[^\x00-\x7F]|\w)+)/g);
 
     if (hashtags) {
-      let text = this.post.text;
-
       for (let hashtag of hashtags) {
         const s = text.slice(0, text.indexOf(hashtag));
         const textPiece = this.renderer.createText(s);
@@ -43,14 +59,14 @@ export class PostComponent implements OnInit {
         this.renderer.setAttribute(a, 'href', `/search/hashtag/${hashtag.slice(1)}`);
         const aText = this.renderer.createText(hashtag);
   
-        this.renderer.appendChild(this.textContainer.nativeElement, textPiece);
+        this.renderer.appendChild(textContainer, textPiece);
         this.renderer.appendChild(a, aText);
-        this.renderer.appendChild(this.textContainer.nativeElement, a);
+        this.renderer.appendChild(textContainer, a);
   
         text = text.slice(text.indexOf(hashtag) + hashtag.length);
       }
     } else {
-      (this.textContainer.nativeElement as HTMLElement).innerText = this.post.text;
+      (textContainer as HTMLElement).innerText = text;
     }
   }
 

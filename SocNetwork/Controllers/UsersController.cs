@@ -102,7 +102,7 @@ namespace SocNetwork.Controllers
                 return BadRequest(new ShortProfilesResponse()
                 {
                     Result = false,
-                    Errors = new List<string> { "Users doesn't exist" }
+                    Errors = new List<string> { "User doesn't exist" }
                 });
             }
 
@@ -213,6 +213,38 @@ namespace SocNetwork.Controllers
             }
         }
 
+        [HttpGet("search/{query}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetSearchResults(string query, [FromQuery] UsersPageParams usersPageParams)
+        {
+            var searchResults = new List<ShortProfileDTO>();
+
+            if (query.StartsWith('@'))
+            {
+                var username = query.Substring(1);
+
+                searchResults = await db.Users
+                    .Where(u => EF.Functions.Like(u.Username, $"%${username}%"))
+                    .Include(u => u.ProfileMedia)
+                    .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                    .ToListAsync();
+            } 
+            else
+            {
+                searchResults = await db.Users
+                .Where(u => EF.Functions.Like(u.Name, $"%${query}%"))
+                .Include(u => u.ProfileMedia)
+                .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                .ToListAsync();
+            }
+
+            return Ok(new ShortProfilesResponse
+            {
+                Result = true,
+                ShortProfiles = searchResults
+            });
+        }
+
         [HttpGet("suggestions")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> GetSuggestions([FromQuery] UsersPageParams usersPageParams)
@@ -221,19 +253,18 @@ namespace SocNetwork.Controllers
 
             var followings = await db.UserRelationships
                 .Where(ur => ur.FromUserId == currentUser.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
-                .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
-                .Take(usersPageParams.Size)
-                .Include(ur => ur.ToUser)
                 .Select(ur => ur.ToUser )
                 .ToListAsync();
 
             var users = await db.Users.ToListAsync();
-            var suggestions = users.Except(followings).ToList();
-            var suggestionDTOs = new List<ShortProfileDTO>();
 
-            suggestions.ForEach(u => {
-                suggestionDTOs.Add(ConvertHelper.ToShortProfileDTO(u));
-            });
+            var suggestionDTOs = users
+                .Except(followings)
+                .OrderBy(ur => ur.CreationDate)
+                .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
+                .Take(usersPageParams.Size)
+                .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                .ToList();
 
             return Ok(new ShortProfilesResponse
             {

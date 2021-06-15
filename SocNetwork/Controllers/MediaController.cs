@@ -103,16 +103,10 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var avatars = await db.ProfileMedia
+            var avatarDTOs = await db.ProfileMedia
                 .Where(pm => pm.Profile.Username == username && pm.MediaFor == MediaFor.Avatar)
+                .Select(pm => ConvertHelper.ToMediaDTO(pm))
                 .ToListAsync();
-
-            var avatarDTOs = new List<MediaDTO>();
-
-            avatars.ForEach(m =>
-            {
-                avatarDTOs.Add(ConvertHelper.ToMediaDTO(m));
-            });
 
             return Ok(new MediaResponse
             {

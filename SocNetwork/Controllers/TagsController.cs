@@ -25,29 +25,6 @@ namespace SocNetwork.Controllers
         {
             db = context;
         }
-        
-        [Authorize(Roles = "User")]
-        [HttpGet("{content}")]
-        public async Task<IActionResult> Get(string content)
-        {
-            var posts = await db.Tags
-                .Where(t => t.Content == content)
-                .SelectMany(t => t.Posts)
-                .ToListAsync();
-
-            var postDTOs = new List<PostDTO>();
-
-            posts.ForEach(p =>
-            {
-                postDTOs.Add(ConvertHelper.ToPostDTO(p));
-            });
-
-            return Ok(new PostsResponse
-            {
-                Result = true,
-                Posts = postDTOs
-            });
-        }
 
         [HttpGet("trends")]
         [Authorize(Roles = "User")]
