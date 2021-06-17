@@ -125,7 +125,7 @@ ng-scrollbar {
 	cursor: pointer;
 }
 
-.chat-footer .submit-btn-disable {
+.chat-footer .submit-btn:disabled {
 	background: url(../../../assets/images/send-disable.png) no-repeat;
 	background-size: contain;
 }

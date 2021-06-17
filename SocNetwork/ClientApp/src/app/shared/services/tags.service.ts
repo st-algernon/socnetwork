@@ -18,4 +18,11 @@ export class TagsService {
     );
   }
 
+  getWantedTags(content: string): Observable<Tag[]> {
+    return this.http.get<TagsResponse>(`${environment.apiUrl}/tags/search/${content}`)
+    .pipe(
+        map((response: TagsResponse) => response.tags)
+    );
+  }
+
 }

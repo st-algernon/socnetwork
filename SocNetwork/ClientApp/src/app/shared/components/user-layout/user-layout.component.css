@@ -45,42 +45,20 @@ header {
 		outline: none;
 	}
 
-.search-profile-wrap {
+.search-menu-wrapper {
 	width: 320px;
 }
 
-.search-form {
-	position: relative;
-}
-
-.search-form input {
-	background: url(../../../../assets/images/search.png) 10px center no-repeat;
-	background-color: rgb(230, 236, 240);
-	background-size: 20px 20px;
-	border-radius: 20px;
-	padding: 10px 15px 10px 40px;
-	border: none;
-	width: 100%;
-}
-
-.search-form input:focus {
-	background: url(../../../../assets/images/search-hover.png) 10px center no-repeat;
-	border: 1px solid #1da1f2;
-	outline: none;
-	background-color: #fff;
-	background-size: 20px 20px;
-}
-
-.top-profile-menu {
+.account-menu-wrapper {
 	position: relative;
 	margin-left: 10px;
 }
 
-.top-profile-menu > .avatar-box {
+.account-menu-wrapper > .avatar-box {
 	background: #eee;
 }
 
-.top-profile-menu > .avatar-box:hover {
+.account-menu-wrapper > .avatar-box:hover {
 	opacity: 0.8;
 	cursor: pointer;
 }

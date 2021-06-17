@@ -35,15 +35,18 @@
                 >
                     <div 
                         class="close-btn round r-16 square-20" 
-                        (click)="previewImagesData = []"
+                        (click)="unPreviewImages()"
                     ></div>
                     <app-photos-container 
                         [photos]="previewImagesData"
                     ></app-photos-container>
                 </div>
             </div>
+
             <form 
-                (ngSubmit)="submit()"
+                #form="ngForm"
+                (ngSubmit)="onSubmit(form)"
+                novalidate
                 class="flex fd-r ai-fe"
             >
                 <ul class="attach flex fd-r jc-c">
@@ -52,8 +55,9 @@
                             type="file" 
                             name="messageImages"
                             class="hidden"
-                            (change)="messageForm.images = input_image.files; previewImages(input_image.files)"
+                            (change)="previewImages(input_image.files)"
                             #input_image 
+                            ngModel
                             multiple
                         >
                     </li>
@@ -65,6 +69,7 @@
                         rows="1"
                         name="messageText"
                         [(ngModel)]="messageForm.text"
+                        (keydown)="onEnterSubmit(form, $event)"
                         (input)="resizeTextarea($event)"
                         placeholder="Write a message..."
                     ></textarea>
@@ -72,7 +77,11 @@
                         <li class="add-emoji-btn round r-22 square-28"></li>
                     </ul>
                 </div>
-                <button type="submit" class="submit-btn square-32 fs-0"></button>
+                <button 
+                    type="submit" 
+                    [disabled]="!messageForm.text && messageForm.images.length == 0" 
+                    class="submit-btn square-32 fs-0"
+                ></button>
             </form>
         </section>
     </main>

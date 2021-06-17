@@ -26,11 +26,11 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   
   messageForm: {
     text: string,
-    images: File[] | null
+    images: File[]
   }
 
   previewImagesData: Media[] = [];
-
+  
   @ViewChild(ContainerDirective, { static: true }) messagesContainer: ContainerDirective;
   @ViewChild('ngScrollbar', { static: true }) ngScrollbar: NgScrollbar;
 
@@ -44,7 +44,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     ) {
       this.messageForm = {
         text: '',
-        images: null
+        images: []
       };
     }
 
@@ -91,8 +91,12 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  submit() {
+  onSubmit(form: NgForm) {
 
+    if (!this.messageForm.text && this.messageForm.images.length == 0) {
+      return;
+    }
+    
     const messageRequest: MessageRequest = {
       authorId: this.me.id,
       chatId: this.chat.id,
@@ -100,7 +104,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       mediaDTOs: []
     };
 
-    if (this.messageForm.images) {
+    if (this.messageForm.images.length != 0) {
       const formData = new FormData();
 
       [...this.messageForm.images].forEach((file, i) => {
@@ -111,20 +115,30 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       this.mediaService.uploadMedia(formData).subscribe(
         (mediaDTOs: Media[]) => {
           messageRequest.mediaDTOs = mediaDTOs;
-          
+
           this.messengerHub.sendMessage(messageRequest);
-          this.messageForm.images = null;
           this.previewImagesData = [];
         }
       )
-    } 
-    else if (this.messageForm.text) {
+    } else if (this.messageForm.text) {
       this.messengerHub.sendMessage(messageRequest);
-      this.messageForm.text = '';
+    }
+
+    this.messageForm = {
+      text: '',
+      images: []
+    };
+  }
+
+  onEnterSubmit(form: NgForm, event: KeyboardEvent): void {
+    if (event.key == 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.onSubmit(form);
     }
   }
 
   previewImages(files: File[]) {
+    this.messageForm.images = files;
     this.previewImagesData = [];
 
     for(let file of files) {
@@ -146,6 +160,11 @@ export class ChatPageComponent implements OnInit, OnDestroy {
         reader.readAsDataURL(file);
       }
     }
+  }
+
+  unPreviewImages() {
+    this.messageForm.images = [];
+    this.previewImagesData = [];
   }
 
   resizeTextarea(event: Event) {

@@ -126,6 +126,8 @@ namespace SocNetwork
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<MessengerHub>("/hubs/messenger");
+                endpoints.MapHub<MessengerHub>("/hubs/notifications");
+                endpoints.MapHub<MessengerHub>("/hubs/posts");
             });
 
             app.UseSpa(spa =>

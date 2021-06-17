@@ -10,39 +10,22 @@
 	margin: 69px 60px 0px 0px;
 	box-sizing: border-box;
     border-radius: 15px;
-    background-color: #fff;
     height: calc(100% - 69px);
     position: absolute;
+    background-color: #fff;
 }
 
 .search-header {
     padding: 8px 24px;
 }
 
-.search-header .search-form {
-	position: relative;
-}
-
-.search-header .search-form input {
-	width: 100%;
-	background: url(../../../assets/images/search.png) 10px center no-repeat;
-	background-color: rgb(230, 236, 240);
-	background-size: 20px 20px;
-	border-radius: 20px;
-	padding: 10px 15px 10px 40px;
-	border: 1px solid transparent;
-}
-
-.search-header .search-form input:focus {
-	background: url(../../../assets/images/search-hover.png) 10px center no-repeat;
-	border: 1px solid #1da1f2;
-	outline: none;
-	background-color: #fff;
-	background-size: 20px 20px;
+.search-header .search-maker-wrapper {
+	width: 50%;
 }
 
 .search-body {
     border-radius: 15px;
+    background-color: rgb(230, 236, 240);
 }
 
 .right-col ng-scrollbar {

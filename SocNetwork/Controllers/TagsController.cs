@@ -49,5 +49,29 @@ namespace SocNetwork.Controllers
                 Tags = tagDTOs
             });
         }
+
+        [HttpGet("search/{content}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Search(string content, [FromQuery] TagsPageParams tagsPageParams)
+        {
+            var tagDTOs = await db.Tags
+                .Where(t => EF.Functions.Like(t.Content, $"%{content}%"))
+                .Select(t => new TagDTO
+                {
+                    Id = t.Id,
+                    Content = t.Content,
+                    Amount = t.Posts.Count
+                })
+                .OrderByDescending(x => x.Amount)
+                .Skip((tagsPageParams.Number - 1) * tagsPageParams.Size)
+                .Take(tagsPageParams.Size)
+                .ToListAsync();
+
+            return Ok(new TagsResponse
+            {
+                Result = true,
+                Tags = tagDTOs
+            });
+        }
     }
 }

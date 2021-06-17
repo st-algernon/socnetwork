@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { PostComponent } from '../shared/components/post/post.component';
 import { ContainerDirective } from '../shared/directives/container.directive';
+import { PostsHub } from '../shared/hubs/posts.hub';
 import { Post, ShortProfile } from '../shared/interfaces';
 import { PostsService } from '../shared/services/posts.service';
 import { UsersService } from '../shared/services/users.service';
@@ -19,9 +20,13 @@ export class NewsPageComponent implements OnInit, OnDestroy {
   constructor(
     private usersService: UsersService,
     private postsService: PostsService,
+    private postsHub: PostsHub
   ) { }
 
   ngOnInit() {
+    this.postsHub.startConnection();
+    this.postsHub.addReceivedPostLikesListener();
+
     this.subs.push(
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 

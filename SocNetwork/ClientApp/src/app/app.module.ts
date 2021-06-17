@@ -10,7 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './shared/services/auth.guard';
 import { UserLayoutComponent } from './shared/components/user-layout/user-layout.component';
 import { AccountMenuPopupComponent } from './shared/components/user-layout/account-menu-popup/account-menu-popup.component';
-import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { AuthInterceptor } from './shared/auth.interceptor';
 import { SharedModule } from './shared/shared.module';
@@ -26,7 +25,6 @@ const INTERCEPTOR_PROVIDER: Provider = {
     AppComponent,
     UserLayoutComponent,
     AccountMenuPopupComponent,
-    SearchResultPopupComponent,
     NotFoundPageComponent,
   ],
   imports: [

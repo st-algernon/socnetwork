@@ -126,6 +126,11 @@ namespace SocNetwork.Helpers
 
         public static CommentDTO ToCommentDTO(Comment comment)
         {
+            if (comment == null)
+            {
+                return null;
+            }
+
             var commentDTO = new CommentDTO();
 
             comment.CopyPropertiesTo(commentDTO);

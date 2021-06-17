@@ -1,22 +1,21 @@
 <div class="flex jc-c">
     <main class="search flex fd-c">
         <div class="search-header flex jc-sb ai-c">
-            <h2>Пошук публікацій</h2>
-            <form class="search-form">
-                <input type="search" 
-                  (input)="search($event)" 
-                  placeholder="Search" 
-               />
-            </form>
+            <h2 class="fs-0">Пошук публікацій</h2>
+            <div class="search-maker-wrapper">
+                <app-search-maker [seed]="searchSeed"></app-search-maker>
+            </div>
         </div>
         <div class="search-body">
-            <ng-container *ngIf="searchedPosts; else loading">
-                <ng-container *ngFor="let post of searchedPosts">
+            <ng-container *ngIf="wantedPosts; else loading">
+                <ng-container *ngFor="let post of wantedPosts">
                     <app-post [me]="me" [post]="post" comments="none"></app-post>
                 </ng-container>
             </ng-container>
             <ng-template #loading>
-                <app-loader></app-loader>
+                <app-empty-post></app-empty-post>
+                <app-empty-post withMedia="true"></app-empty-post>
+                <app-empty-post></app-empty-post>
             </ng-template>
         </div>
     </main>

@@ -24,7 +24,9 @@
 }
 
 .post-body .post-text {
+	word-wrap: break-word;
 	margin-bottom: 5px;
+	cursor: pointer;
 }
 
 .post .post-footer {
@@ -52,6 +54,7 @@
 
 .comments-container .comment {
 	margin-bottom: 5px;
+	font-size: 14px;
 }
 
 .comment .comment-header-body-wrapper {
@@ -59,6 +62,10 @@
 	border-radius: 15px;
 	padding: 8px 12px;
 	margin: 0px 6px 0px 10px;
+}
+
+.comment .comment-header {
+	font-family: 'Deezer', 'Open Sans', sans-serif;
 }
 
 /* .comment .comment-body .media-box {
@@ -106,7 +113,25 @@
 	text-decoration: underline;
 }
 
-.comment-maker form {
+.comments-footer .preview-container {
+	position: relative;
+	margin: 0px 42px;
+	margin-bottom: 5px;
+}
+
+.comments-footer .preview-container .close-btn {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	background-image: url(../../../../assets/images/plus-hover.png);
+	background-color: #fff;
+	transform: rotate(45deg);
+	border: 1px solid #eee;
+	outline: none;
+	z-index: 10;
+}
+
+.comments-footer .comment-maker form {
 	width: 100%;
 }
 
@@ -119,8 +144,9 @@
 
 .comment-maker textarea {
 	font-size: 16px;
-	height: 22px;
-	padding: 0px 10px;
+	height: 18px;
+	line-height: 20px;
+	padding: 4px 10px;
 }
 
 .comment-maker .attach .add-picture-btn {
@@ -142,7 +168,7 @@
 
 
 .comment-maker .submit-btn {
-	background-image: url(../../../../assets/images/send-disable.png);
+	background-image: url(../../../../assets/images/send.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-size: contain;
@@ -151,8 +177,9 @@
 	cursor: pointer;
 }
 
-.comment-maker .submit-btn.active {
-	background-image: url(../../../../assets/images/send.png);
+.comment-maker .submit-btn:disabled {
+	background-image: url(../../../../assets/images/send-disable.png);
+	cursor: auto;
 }
 
 .content-actions {

@@ -7,7 +7,10 @@
             alt="photo"
         >
     </span>
-    <form (ngSubmit)="submit()">
+    <form 
+        #form="ngForm"
+        (ngSubmit)="onSubmit(form)"
+    >
         <textarea 
             rows="1"
             name="postText"
@@ -19,7 +22,7 @@
             <div class="preview-container fg-1">
                 <div 
                     class="close-btn round r-16 square-20" 
-                    (click)="previewFiles = []"
+                    (click)="unPreviewImages()"
                 ></div>
                 <app-photos-container [photos]="previewFiles"></app-photos-container>
             </div>
@@ -31,8 +34,9 @@
                         type="file" 
                         name="postImages"
                         class="hidden"
-                        (change)="postForm.images = input_image.files; previewImages(input_image.files)"
+                        (change)="previewImages(input_image.files)"
                         #input_image
+                        ngModel
                         multiple
                     >
                 </li>
@@ -53,7 +57,11 @@
                     ></emoji-mart> -->
                 </li>
             </ul>
-            <button type="submit" class="submit-btn active">Post</button>
+            <button 
+                type="submit" 
+                [disabled]="!postForm.text && postForm.images.length == 0" 
+                class="submit-btn"
+            >Post</button>
         </div>
     </form>
 </section>

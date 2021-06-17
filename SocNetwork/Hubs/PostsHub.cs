@@ -21,7 +21,7 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async void Like(string postId)
+        public async void LikePost(string postId)
         {
             var callerId = Context.User.Identity.Name;
             var author = await db.UserPost
@@ -40,7 +40,7 @@ namespace SocNetwork.Hubs
 
             var userPostDTO = ConvertHelper.ToUserPostDTO(userPost);
 
-            await Clients.Users(author.Id.ToString()).SendAsync("ReceiveLikes", userPostDTO);
+            await Clients.Users(author.Id.ToString()).SendAsync("ReceivePostLikes", userPostDTO);
         }
     }
 }

@@ -21,13 +21,11 @@ namespace SocNetwork.Models
         public Post Post { get; set; }
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
-        public List<Tag> Tags { get; set; }
         public List<UserComment> CommentUsers { get; set; }
         public List<CommentMedia> CommentMedia { get; set; }
         public CommentStatus CommentStatus { get; set; }
         public Comment()
         {
-            Tags = new List<Tag>();
             CommentUsers = new List<UserComment>();
             CommentMedia = new List<CommentMedia>();
         }

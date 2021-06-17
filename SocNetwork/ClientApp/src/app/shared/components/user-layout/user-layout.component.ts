@@ -17,14 +17,17 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
 
   me: ShortProfile;
   subs: Subscription[] = [];
-  profileMenuIsOpened = false;
+  profileMenuIsOpened: boolean = false;
+  searchResultIsOpened: boolean = false;
 
   constructor(
     private usersService: UsersService,
     private messengerHub: MessengerHub,
     private notifsHub: NotificationsHub
   ) { }
-
+clicked() {
+  console.log('click')
+}
   ngOnInit(): void {
     this.messengerHub.startConnection();
     this.messengerHub.addReceivedMessageListener();

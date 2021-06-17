@@ -107,7 +107,7 @@ export class UsersService {
         return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
     }
 
-    searchUser(query: string) {
+    getWantedhUsers(query: string) {
         return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/search/${query}`)
         .pipe(
             map((response: ShortProfilesResponse) => response.shortProfiles)

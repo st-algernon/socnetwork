@@ -50,15 +50,16 @@
 	color: #fff;
 	padding: 8px 14px;
 	border-radius: 20px;
-	background-color: #A7D9F8;
 	font-weight: bold;
 	font-size: 16px;
 	outline: none;
 	cursor: pointer;
+	background-color: #3eb2fa;
 }
 
-.post-maker .post-maker-footer .submit-btn.active {
-	background-color: #3eb2fa;
+.post-maker .post-maker-footer .submit-btn:disabled {
+	background-color: #A7D9F8;
+	cursor: auto;
 }
 
 .attach {

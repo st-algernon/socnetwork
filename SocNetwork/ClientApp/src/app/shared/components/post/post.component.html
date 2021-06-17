@@ -1,20 +1,23 @@
-    <section [routerLink]="['/', author.username, 'post', post.id]" class="post">
-        <div class="post-header flex ai-c">
-            <div class="avatar-box square-48">
-                <img 
-                    [src]="author.avatarPath"
-                    class="square-48"
-                    alt=""
-                >
-            </div>
-            <div class="flex fd-c">
-                <span class="source-name">{{ author.name }}</span>
-                <span class="nick-name">@{{ author.username }}</span>
-            </div>
+    <section class="post">
+        <!-- [routerLink]="['/', author.username, 'post', post.id]" -->
+        <div class="post-header">
+            <a [routerLink]="['/', author.username]" class="flex ai-c">
+                <div class="avatar-box square-48">
+                    <img 
+                        [src]="author.avatarPath"
+                        class="square-48"
+                        alt=""
+                    >
+                </div>
+                <div class="flex fd-c">
+                    <span class="source-name">{{ author.name }}</span>
+                    <span class="nick-name">@{{ author.username }}</span>
+                </div>
+            </a>
         </div>
         <div class="post-body">
             <div #post_text_container class="post-text">
-                {{ renderTextWithHashtags(post.text, post_text_container) }}
+               
             </div>
             <app-photos-container 
                 *ngIf="post.mediaDTOs.length > 0"
@@ -44,7 +47,7 @@
         </div>
 
         <div class="comments-section">
-            <div class="comments-container">
+            <div *ngIf="commentsBehavior == 'all' || commentsBehavior == 'best'" class="comments-container">
                 <div *ngFor="let comment of comments" class="comment flex ai-fs">
                     <div class="comment-author-avatar">
                         <div class="avatar-box square-32">
@@ -64,15 +67,15 @@
                                     </div>
                                 </div>
                                 <div class="comment-body">
-                                    <div comment_text_container class="comment-text">
-                                        {{ renderTextWithHashtags(comment.text, comment_text_container) }}
+                                    <div class="comment-text">
+                                        {{ comment.text }}
                                     </div>
                                 </div>
                             </div>
                             <div class="content-actions" data-container="content-actions">
                                 <div class="flex ai-c">
                                     <span class="like-btn round r-20 square-28" data-action="like" data-state=""></span>
-                                    <span class="count count-likes" data-state="">2</span>
+                                    <span class="count count-likes" data-state=""></span>
                                 </div>
                             </div>
                         </div>
@@ -83,34 +86,73 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="show-more-btn">show more comments</div> -->
+                <div class="show-more-btn" (click)="loadComments">show more comments</div>
             </div>
-
-            <div class="comment-maker flex fd-r">
-                <div class="avatar-box square-32">
-                    <img 
-                        [src]="me.avatarPath"
-                        class="square-32"
+            <div *ngIf="commentMaker" class="comments-footer">
+                <div class="flex jc-c">
+                    <div 
+                    *ngIf="previewImagesData.length > 0"
+                    class="preview-container fg-1"
                     >
-                </div>
-                <form action="" method="post" class="flex fd-r ai-c">
-                    <div class="textarea-attach-wrapper flex fd-r ai-c">
-                        <textarea name="comment-field" placeholder="Leave a comment..." data-submit-btn="blink"></textarea>
-                        <ul class="attach flex fd-r jc-sb" data-container="attach">
-                            <li class="add-picture-btn round r-18 square-28" data-action="picture">
-                                <input type="file" name="picture" class="hidden"/>
-                            </li>
-                            <!-- <li class="add-music-btn round r-18 square-28" data-action="music">
-                                <input type="file" name="music" class="hidden"/>
-                            </li>
-                            <li class="add-video-btn round r-20 square-28" data-action="video">
-                                <input type="file" name="video" class="hidden"/>
-                            </li> -->
-                            <li class="add-emoji-btn round r-20 square-28" data-action="emoji"></li>
-                        </ul>
+                        <div 
+                            class="close-btn round r-16 square-20" 
+                            (click)="unPreviewImages()"
+                        ></div>
+                        <app-photos-container 
+                            [photos]="previewImagesData"
+                        ></app-photos-container>
                     </div>
-                    <button type="submit" class="submit-btn square-32" data-state="unable"></button>
-                </form>
+                </div>
+                <div class="comment-maker flex fd-r">
+                    <div class="avatar-box square-32">
+                        <img 
+                            [src]="me.avatarPath"
+                            class="square-32"
+                        >
+                    </div>
+                    <form 
+                        #form="ngForm"
+                        (ngSubmit)="onSubmit(form)"
+                        novalidate
+                        class="flex fd-r ai-c"
+                    >
+                        <div class="textarea-attach-wrapper flex fd-r ai-c">
+                            <textarea 
+                                rows="1"
+                                name="commentText"
+                                [(ngModel)]="commentForm.text"
+                                (keydown)="onEnterSubmit(form, $event)"
+                                (input)="resizeTextarea($event)"
+                                placeholder="Leave a comment..."
+                            ></textarea>
+                            <ul class="attach flex fd-r jc-sb" data-container="attach">
+                                <li class="add-picture-btn round r-18 square-28" (click)="input_image.click()">
+                                    <input 
+                                        type="file" 
+                                        name="commentImages" 
+                                        class="hidden"
+                                        (change)="previewImages(input_image.files)"
+                                        #input_image
+                                        ngModel
+                                        multiple
+                                    />
+                                </li>
+                                <!-- <li class="add-music-btn round r-18 square-28" data-action="music">
+                                    <input type="file" name="music" class="hidden"/>
+                                </li>
+                                <li class="add-video-btn round r-20 square-28" data-action="video">
+                                    <input type="file" name="video" class="hidden"/>
+                                </li> -->
+                                <li class="add-emoji-btn round r-20 square-28"></li>
+                            </ul>
+                        </div>
+                        <button 
+                            type="submit"
+                            [disabled]="!commentForm.text && commentForm.images.length == 0" 
+                            class="submit-btn square-32"
+                        ></button>
+                    </form>
+                </div>
             </div>
         </div>
 </section>

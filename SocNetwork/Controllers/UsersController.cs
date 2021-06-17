@@ -223,16 +223,19 @@ namespace SocNetwork.Controllers
             {
                 var username = query.Substring(1);
 
-                searchResults = await db.Users
-                    .Where(u => EF.Functions.Like(u.Username, $"%${username}%"))
-                    .Include(u => u.ProfileMedia)
-                    .Select(u => ConvertHelper.ToShortProfileDTO(u))
-                    .ToListAsync();
+                if (username.Length != 0)
+                {
+                    searchResults = await db.Users
+                        .Where(u => EF.Functions.Like(u.Username, $"%{username}%"))
+                        .Include(u => u.ProfileMedia)
+                        .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                        .ToListAsync();
+                }
             } 
             else
             {
                 searchResults = await db.Users
-                .Where(u => EF.Functions.Like(u.Name, $"%${query}%"))
+                .Where(u => EF.Functions.Like(u.Name, $"%{query}%"))
                 .Include(u => u.ProfileMedia)
                 .Select(u => ConvertHelper.ToShortProfileDTO(u))
                 .ToListAsync();

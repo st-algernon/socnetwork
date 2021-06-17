@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { Comment, CommentsResponse, PageParams, Post, PostRequest, PostsResponse, Tag, TagsResponse } from "../interfaces";
+import { Comment, CommentRequest, CommentsResponse, PageParams, Post, PostRequest, PostsResponse, Tag, TagsResponse } from "../interfaces";
 
 
 @Injectable()
@@ -64,6 +64,13 @@ export class PostsService {
     .pipe(
         map((response: PostsResponse) => response.posts)
     );
+  }
+
+  saveComment(request: CommentRequest): Observable<Comment> {
+    return this.http.post<CommentsResponse>(`${environment.apiUrl}/posts/comment`, request)
+    .pipe(
+      map((response: CommentsResponse) => response.comments[0])
+    )
   }
 
   getComments(postId: string): Observable<Comment[]> {

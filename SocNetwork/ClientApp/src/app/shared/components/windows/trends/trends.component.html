@@ -5,10 +5,9 @@
     <ul class="trends-body">
         <ng-scrollbar *ngIf="tags; else loading" visibility="hover" appearance="standard">
             <li *ngFor="let tag of tags">
-                <a href="#" class="trend-item">
+                <a [routerLink]="['/search', 'hashtag', tag.content]" class="trend-item">
                     <div 
                       class="trend-item-body"
-                      [routerLink]="['/hashtag', tag.content]"
                     >#{{ tag.content }}</div>
                     <div class="trend-item-footer"><span class="count-posts">{{ tag.amount }}</span> posts</div>
                 </a>

@@ -42,7 +42,7 @@ namespace SocNetwork.Hubs
             await Clients.Users(request.RecipientId).SendAsync("ReceivePostNotif", postNotifDTO);
         }
 
-        public async void UserNotify(PostNotifRequest request)
+        public async void UserNotify(UserNotifRequest request)
         {
             var callerId = Context.User.Identity.Name;
             var userNotif = new UserNotification

@@ -149,6 +149,7 @@ export interface Post {
 
 export interface UserPost {
     userDTO: ShortProfile,
+    postId: string,
     isLiked: boolean,
     isSaved: boolean,
     isAuthor: boolean
@@ -161,7 +162,8 @@ export interface Comment {
     creationDate: string,
     mediaDTOs: Media[],
     userCommentDTOs: UserPost[],
-    commentStatus: CommentStatus
+    commentStatus: CommentStatus,
+    author?: ShortProfile
 }
 
 export interface UserComment {

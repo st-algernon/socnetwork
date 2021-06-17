@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Media, Post, PostRequest, ShortProfile } from '../../interfaces';
@@ -17,10 +18,9 @@ export class PostMakerComponent implements OnInit, OnDestroy {
 
   postForm: {
     text: string,
-    images: File[] | null
+    images: File[]
   };
   isValid: boolean = false;
-  text: string = '';
   previewFiles: Media[] = [];
   subs: Subscription[] = [];
   // isEmojiPickerVisible: boolean = false;
@@ -32,7 +32,7 @@ export class PostMakerComponent implements OnInit, OnDestroy {
   ) { 
     this.postForm = {
       text: '',
-      images: null
+      images: []
     };
   }
 
@@ -59,7 +59,14 @@ export class PostMakerComponent implements OnInit, OnDestroy {
   //   this.isEmojiPickerVisible = false;
   // }
 
-  submit() {
+  onEnterSubmit(form: NgForm, event: KeyboardEvent): void {
+    if (event.key == 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.onSubmit(form);
+    }
+  }
+
+  onSubmit(form: NgForm) {
     const postRequest: PostRequest = {
       text: this.postForm.text,
       mediaDTOs: []
@@ -83,10 +90,6 @@ export class PostMakerComponent implements OnInit, OnDestroy {
             })
           );
 
-          this.postForm = {
-            text: '',
-            images: null
-          };
           this.previewFiles = [];
         }
       )
@@ -97,15 +100,16 @@ export class PostMakerComponent implements OnInit, OnDestroy {
           this.newPostEvent.emit(post);
         })
       );
-      
-      this.postForm = {
-        text: '',
-        images: null
-      };
     }
+
+    this.postForm = {
+      text: '',
+      images: []
+    };
   }
 
   previewImages(files: File[]) {
+    this.postForm.images = files;
     this.previewFiles = [];
 
     for(let file of files) {
@@ -127,5 +131,10 @@ export class PostMakerComponent implements OnInit, OnDestroy {
         reader.readAsDataURL(file);
       }
     }
+  }
+
+  unPreviewImages(files: File[]) {
+    this.postForm.images = [];
+    this.previewFiles = [];
   }
 }

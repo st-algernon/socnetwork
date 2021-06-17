@@ -31,10 +31,7 @@ namespace SocNetwork.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPostById(string id)
         {
-            var post = await db.Posts
-                .Include(p => p.PostMedia)
-                .Include(p => p.PostUsers)
-                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
+            var post = await db.Posts.FirstOrDefaultAsync(u => u.Id == Guid.Parse(id));
 
             if (post == null)
             {
@@ -45,7 +42,9 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var postDTO = ConvertHelper.ToPostDTO(post);
+            var loadHelper = new LoadHelper(db);
+            var p = await loadHelper.ForPostAsync(post);
+            var postDTO = ConvertHelper.ToPostDTO(p);
 
             return Ok(new PostsResponse()
             {
@@ -57,10 +56,7 @@ namespace SocNetwork.Controllers
         [HttpGet("user/{username}")]
         public async Task<IActionResult> GetPosts(string username, [FromQuery] PostsPageParams postsPageParams)
         {
-            var user = await db.Users
-                .Include(u => u.ProfileMedia)
-                .Include(u => u.UserPosts)
-                .FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
             {
@@ -78,12 +74,15 @@ namespace SocNetwork.Controllers
                 .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
                 .Take(postsPageParams.Size)
                 .ToListAsync();
-
+            
+            var loadHelper = new LoadHelper(db);
             var postDTOs = new List<PostDTO>();
 
-            posts.ForEach(p => {
+            foreach (var post in posts)
+            {
+                var p = await loadHelper.ForPostAsync(post);
                 postDTOs.Add(ConvertHelper.ToPostDTO(p));
-            });
+            }
 
             return Ok(new PostsResponse
             {
@@ -151,33 +150,28 @@ namespace SocNetwork.Controllers
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            var feed2 = await db.UserRelationships
+            var feed = await db.UserRelationships
                 .Where(ur => ur.FromUser == currentUser && ur.UserRelationshipType == UserRelationshipType.Followed)
                 .Select(ur => ur.ToUser)
                 .SelectMany(u => u.UserPosts)
                 .Where(up => up.IsAuthor)
-                .Include(up => up.Post)
-                .Include(up => up.User)
+                .Select(up => up.Post)
                 .ToListAsync();
 
-            var feed3 = await db.UserRelationships
-                .Include(ur => ur.ToUser)
-                .ThenInclude(u => u.UserPosts)
-                .Where(ur => ur.FromUser == currentUser && ur.UserRelationshipType == UserRelationshipType.Followed)
-                .Select(ur => ur.ToUser)
-                .SelectMany(u => u.UserPosts)
-                .Where(up => up.IsAuthor)
-                .Include(up => up.Post)
-                .ToListAsync();
-
-            var feed = feed2.Select(up => up.Post).ToList();
-
-            var partOfFeedDTO = feed
+            var partOfFeed = feed
                 .OrderByDescending(p => p.CreationDate)
                 .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
                 .Take(postsPageParams.Size)
-                .Select(p => ConvertHelper.ToPostDTO(p))
                 .ToList();
+
+            var loadHelper = new LoadHelper(db);
+            var partOfFeedDTO = new List<PostDTO>();
+
+            foreach (var post in partOfFeed)
+            {
+                var p = await loadHelper.ForPostAsync(post);
+                partOfFeedDTO.Add(ConvertHelper.ToPostDTO(p));
+            }
 
             return Ok(new PostsResponse
             {
@@ -205,10 +199,18 @@ namespace SocNetwork.Controllers
                 .Include(p => p.PostUsers)
                 .ToListAsync();
 
-            var explorePostDTOs = recentPosts
+            var explorePosts = recentPosts
                 .Except(followingsPosts)
-                .Select(p => ConvertHelper.ToPostDTO(p))
                 .ToList();
+
+            var loadHelper = new LoadHelper(db);
+            var explorePostDTOs = new List<PostDTO>();
+
+            foreach (var post in explorePosts)
+            {
+                var p = await loadHelper.ForPostAsync(post);
+                explorePostDTOs.Add(ConvertHelper.ToPostDTO(p));
+            }
 
             var partOfExplorePostDTOs = explorePostDTOs
                 .OrderByDescending(p => p.LikesNumber)
@@ -227,26 +229,18 @@ namespace SocNetwork.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> GetPostsByTag(string content)
         {
-            //var postDTOs = await db.Tags
-            //   .Include(t => t.Posts)
-            //   .ThenInclude(p => p.PostUsers)
-            //   .Where(t => t.Content == content)
-            //   .SelectMany(t => t.Posts)
-            //   .Select(p => ConvertHelper.ToPostDTO(p))
-            //   .ToListAsync();
+            var posts = await db.Tags
+               .Where(t => t.Content == content)
+               .SelectMany(t => t.Posts)
+               .ToListAsync();
+            var loadHelper = new LoadHelper(db);
+            var postDTOs = new List<PostDTO>();
 
-            var p = await db.UserPost
-                .Include(up => up.User)
-                .Select(u => u.Post)
-                .SelectMany(p => p.Tags)
-                .Where(t => t.Content == content)
-                .Include(t => t.Posts)
-                .ToListAsync();
-
-            var postDTOs = p
-                .SelectMany(t => t.Posts)
-                .Select(p => ConvertHelper.ToPostDTO(p))
-                .ToList();
+            foreach (var post in posts)
+            {
+                var p = await loadHelper.ForPostAsync(post);
+                postDTOs.Add(ConvertHelper.ToPostDTO(p));
+            }
 
             return Ok(new PostsResponse
             {
@@ -260,9 +254,16 @@ namespace SocNetwork.Controllers
         public async Task<IActionResult> AddCommentToPost([FromBody] CommentRequest request)
         {
             var currentUser = HttpContext.Items["User"] as User;
+            var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == Guid.Parse(request.PostId));
 
-            var tagHelper = new TagHelper(db);
-            var tags = await tagHelper.RecognizeTagsAsync(request.Text);
+            if (post == null)
+            {
+                return BadRequest(new ShortProfilesResponse()
+                {
+                    Result = false,
+                    Errors = new List<string> { "Post doesn't exist" }
+                });
+            }
 
             var commentMedia = new List<CommentMedia>();
 
@@ -288,11 +289,11 @@ namespace SocNetwork.Controllers
 
             var comment = new Comment()
             {
+                PostId = Guid.Parse(request.PostId),
                 Text = request.Text,
                 CreationDate = DateTime.UtcNow,
                 CommentUsers = userComments,
-                CommentMedia = commentMedia,
-                Tags = tags
+                CommentMedia = commentMedia
             };
 
             await db.Comments.AddAsync(comment);
@@ -321,14 +322,22 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var commentDTOs = await db.Posts
+            var comments = await db.Posts
                 .Where(p => p.Id == Guid.Parse(id))
                 .SelectMany(p => p.Comments)
                 .OrderByDescending(p => p.CreationDate)
                 .Skip((postsPageParams.Number - 1) * postsPageParams.Size)
                 .Take(postsPageParams.Size)
-                .Select(c => ConvertHelper.ToCommentDTO(c))
                 .ToListAsync();
+
+            var loadHelper = new LoadHelper(db);
+            var commentDTOs = new List<CommentDTO>();
+
+            foreach (var comment in comments)
+            {
+                var c = await loadHelper.ForCommentAsync(comment);
+                commentDTOs.Add(ConvertHelper.ToCommentDTO(c));
+            }
 
             return Ok(new CommentsResponse
             {

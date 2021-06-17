@@ -1,12 +1,9 @@
 <header class="flex jc-c">
   <div class="wrapper flex ai-c jc-sb">
     <div routerLink="/news" class="logo"><a>algernon</a></div>
-    <div class="search-profile-wrap flex fd-r ai-c jc-sb">
-      <form action="" method="get" class="search-form fg-1">
-        <input type="search" name="search" placeholder="Search" />
-        <app-search-result-popup *ngIf="false"></app-search-result-popup>
-      </form>
-      <div class="top-profile-menu flex fd-c ai-fe">
+    <div class="search-menu-wrapper flex fd-r ai-c jc-sb">
+      <app-search-maker></app-search-maker>
+      <div class="account-menu-wrapper flex fd-c ai-fe">
         <div class="avatar-box square-32" (click)="profileMenuIsOpened = !profileMenuIsOpened">
           <img 
             *ngIf="me"

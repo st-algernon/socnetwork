@@ -17,7 +17,8 @@ namespace SocNetwork.DTO
         public CommentStatus CommentStatus { get; set; }
         public CommentDTO()
         {
-
+            MediaDTOs = new List<MediaDTO>();
+            UserCommentDTOs = new List<UserCommentDTO>();
         }
     }
 }
