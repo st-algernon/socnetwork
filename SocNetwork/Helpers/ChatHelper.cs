@@ -105,7 +105,7 @@ namespace SocNetwork.Helpers
                 .Collection(c => c.Messages)
                 .Query()
                 .Where(m => m.MessageStatus != MessageStatus.IsDeleted)
-                .OrderByDescending(m => m.CreationDate)
+                .OrderBy(m => m.CreationDate)
                 .Take(number)
                 .ToListAsync();
         }

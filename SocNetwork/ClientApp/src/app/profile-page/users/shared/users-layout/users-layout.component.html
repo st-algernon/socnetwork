@@ -1,11 +1,11 @@
 <div class="flex jc-c">
     <main class="users flex fd-c">
         <section class="users-header flex fd-c ai-s jc-sb">
-            <div *ngIf="user" class="flex fd-c ai-c">
-                <div class="source-name">{{ user.name }}</div>
-                <div class="nick-name">@{{ user.username }}</div>
+            <div class="flex fd-c ai-c">
+                <div *ngIf="user" class="source-name">{{ user.name }}</div>
+                <div *ngIf="user" class="nick-name">@{{ user.username }}</div>
             </div>
-            <div *ngIf="user" class="user-switches flex fd-r" data-container="user-switches">
+            <div class="user-switches flex fd-r" data-container="user-switches">
                 <button 
                     [routerLink]="['/', user.username, 'followers']"
                     routerLinkActive="active"

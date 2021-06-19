@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Text;  
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace SocNetwork.Controllers
 {
@@ -21,16 +22,18 @@ namespace SocNetwork.Controllers
     public class AuthController : ControllerBase
     {
         private readonly SocNetworkContext db;
+        private readonly TokenValidationParameters tokenValidationParameters;
 
-        public AuthController(SocNetworkContext context)
+        public AuthController(SocNetworkContext context, TokenValidationParameters validationParams)
         {
             db = context;
+            tokenValidationParameters = validationParams;
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            Account account = db.Accounts.FirstOrDefault(a => a.Email == request.Email
+            Account account = await db.Accounts.FirstOrDefaultAsync(a => a.Email == request.Email
                  && a.Password == HashHelper.ComputeSha256Hash(request.Password));
 
             if (account == null)
@@ -40,20 +43,15 @@ namespace SocNetwork.Controllers
                     Result = false,
                     Errors = new List<string>() { "Account doesn't exist" }
                 });
-            } 
+            }
 
-            string token = GenerateJwt(account);
+            var tokenHelper = new TokenHelper(db);
 
-            return Ok(new AuthResponse()
-            {
-                Result = true,
-                ExpiresIn = JwtConfig.LIFETIME,
-                Token = token
-            });
+            return Ok(await tokenHelper.GenerateJwtAsync(account));
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegistrationRequest request)
+        public async Task<IActionResult> Register(RegistrationRequest request)
         {
             User user = db.Users.FirstOrDefault(
                 u => u.Email == request.Email || u.Username == request.Username
@@ -79,9 +77,9 @@ namespace SocNetwork.Controllers
 
             };
 
-            db.Users.Add(user);
+            await db.Users.AddAsync(user);
 
-            db.UserRelationships.Add(new UserRelationship
+            await db.UserRelationships.AddAsync(new UserRelationship
             {
                 FromUser = user,
                 ToUser = user,
@@ -89,38 +87,59 @@ namespace SocNetwork.Controllers
                 CreationDate = DateTime.UtcNow
             });
 
-            db.SaveChanges();
+            await db.SaveChangesAsync();
+            var tokenHelper = new TokenHelper(db);
 
-            string token = GenerateJwt(user);
+            return Ok(await tokenHelper.GenerateJwtAsync(user));
+        }
 
-            return Ok(new AuthResponse()
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] TokenRequest tokenRequest)
+        {
+            if (ModelState.IsValid)
             {
-                Result = true,
-                ExpiresIn = JwtConfig.LIFETIME,
-                Token = token
+                var tokenHelper = new TokenHelper(db);
+                var res = await tokenHelper.VerifyToken(tokenRequest, tokenValidationParameters);
+
+                if (res == null)
+                {
+                    return BadRequest(new AuthResponse()
+                    {
+                        Result = false,
+                        Errors = new List<string>() { "Invalid tokens" }
+                    });
+                }
+
+                return Ok(res);
+            }
+
+            return BadRequest(new AuthResponse()
+            {
+                Result = false,
+                Errors = new List<string>() { "Invalid payload" }
             });
         }
 
-        private string GenerateJwt(Account account)
+        [HttpGet("verification/username/{username}")]
+        public async Task<IActionResult> VerificationUsername(string username)
         {
-            var jwtHandler = new JwtSecurityTokenHandler();
-            var now = DateTime.UtcNow;
+            var result = await db.Users.AnyAsync(u => u.Username == username);
 
-            var jwt = new JwtSecurityToken(
-                    issuer: JwtConfig.ISSUER,
-                    audience: JwtConfig.AUDIENCE,
-                    notBefore: now,
-                    claims: new List<Claim>
-                    {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, account.Id.ToString()),
-                        new Claim(ClaimsIdentity.DefaultRoleClaimType, account.AccountType.ToString())
-                    },
-                    expires: now.Add(TimeSpan.FromMinutes(JwtConfig.LIFETIME)),
-                    signingCredentials: new SigningCredentials(JwtConfig.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            return Ok(new VerificationResponse
+            {
+                Result = result
+            });
+        }
 
-            var encodedJwt = jwtHandler.WriteToken(jwt);
+        [HttpGet("verification/email/{email}")]
+        public async Task<IActionResult> VerificationEmail(string email)
+        {
+            var result = await db.Users.AnyAsync(u => u.Email == email);
 
-            return encodedJwt;
+            return Ok(new VerificationResponse
+            {
+                Result = result
+            });
         }
     }
 }

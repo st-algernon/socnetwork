@@ -12,11 +12,14 @@
     border-radius: 15px;
     height: calc(100% - 69px);
     position: absolute;
-    background-color: #fff;
 }
 
 .search-header {
     padding: 8px 24px;
+    background-color: #fff;
+	padding-bottom: 15px;
+	margin-bottom: -15px;
+	border-radius: 15px 15px 0px 0px;
 }
 
 .search-header .search-maker-wrapper {

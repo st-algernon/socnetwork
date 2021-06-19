@@ -25,9 +25,11 @@ export class UsersLayoutComponent implements OnInit {
 
       this.route.params.pipe(
         switchMap((params: Params) => {
+          console.log(params['username']);
           return this.usersService.getShortProfile(params['username']);
         })
       ).subscribe((shortProfile: ShortProfile) => {
+        console.log(shortProfile);
         this.user = shortProfile;
       })
 

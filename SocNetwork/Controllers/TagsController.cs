@@ -28,7 +28,7 @@ namespace SocNetwork.Controllers
 
         [HttpGet("trends")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Get([FromQuery] TagsPageParams tagsPageParams)
+        public async Task<IActionResult> GetTrends([FromQuery] TagsPageParams tagsPageParams)
         {
             var tagDTOs = await db.Tags
                 .Select(t => new TagDTO
@@ -52,7 +52,7 @@ namespace SocNetwork.Controllers
 
         [HttpGet("search/{content}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Search(string content, [FromQuery] TagsPageParams tagsPageParams)
+        public async Task<IActionResult> SearchTags(string content, [FromQuery] TagsPageParams tagsPageParams)
         {
             var tagDTOs = await db.Tags
                 .Where(t => EF.Functions.Like(t.Content, $"%{content}%"))

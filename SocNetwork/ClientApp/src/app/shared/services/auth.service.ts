@@ -1,26 +1,39 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Subject, throwError } from "rxjs";
-import { catchError, tap } from "rxjs/operators";
+import { Observable, Subject, throwError } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import {
   AccountLoginRequest,
   AccountRegistrationRequest,
   AuthResponse,
+  TokenRequest,
+  VerificationResponse,
 } from "../interfaces";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
 
-  get token(): string | null {
-    const expDate = new Date(localStorage.getItem("token-exp"));
+  get token(): string {
+    // const expDate = new Date(localStorage.getItem("token-exp"));
 
-    if (new Date() > expDate) {
-      this.logout();
-      return null;
-    }
+    // if (new Date() > expDate) {
+    //   this.logout();
+    //   return null;
+    // }
 
-    return localStorage.getItem("token");
+    return localStorage.getItem('token');
+  }
+
+  get refreshToken(): string {
+    // const expDate = new Date(localStorage.getItem("token-exp"));
+
+    // if (new Date() > expDate) {
+    //   this.logout();
+    //   return null;
+    // }
+
+    return localStorage.getItem('refresh-token');
   }
 
   constructor(private http: HttpClient) {}
@@ -29,7 +42,7 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/login`, loginRequest)
       .pipe(
-        tap(this.setToken),
+        tap(this.setTokens),
         catchError((error) => {
           console.log(error);
           return throwError(error);
@@ -41,7 +54,7 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(`${environment.apiUrl}/auth/register`, registrationRequest)
       .pipe(
-        tap(this.setToken),
+        tap(this.setTokens),
         catchError((error) => {
           console.log(error);
           return throwError(error);
@@ -49,20 +62,51 @@ export class AuthService {
       );
   }
 
+  updateToken() {
+    const request: TokenRequest = {
+      token: this.token,
+      refreshToken: this.refreshToken
+    }
+
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/refresh`, request)
+      .pipe(
+        tap(this.setTokens),
+        catchError((error) => {
+          console.log(error);
+          return throwError(error);
+        })
+      );
+  }
+
+  verificationEmail(email: string): Observable<boolean> {
+    return this.http.get<VerificationResponse>(`${environment.apiUrl}/auth/verification/email/${email}`)
+    .pipe(
+        map((response: VerificationResponse) => response.result)
+    );
+}
+
+  verificationUsername(username: string): Observable<boolean> {
+      return this.http.get<VerificationResponse>(`${environment.apiUrl}/auth/verification/username/${username}`)
+      .pipe(
+          map((response: VerificationResponse) => response.result)
+      );
+  }
+
   logout() {
-    this.setToken(null);
+    this.setTokens(null);
   }
 
   isAuthenticated(): boolean {
     return !!this.token;
   }
 
-  private setToken(response: AuthResponse) {
+  private setTokens(response: AuthResponse) {
     if (response) {
       const expDate = new Date(
         new Date().getTime() + +response.expiresIn * 60 * 1000
       );
       localStorage.setItem("token", response.token);
+      localStorage.setItem("refresh-token", response.refreshToken);
       localStorage.setItem("token-exp", expDate.toString());
     } else {
       localStorage.clear();

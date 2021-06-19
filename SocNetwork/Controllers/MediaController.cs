@@ -59,8 +59,8 @@ namespace SocNetwork.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpPost("message"), DisableRequestSizeLimit]
-        public async Task<IActionResult> UploadMessageMedia()
+        [HttpPost, DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadMedia()
         {
             var formCollection = await Request.ReadFormAsync();
             var files = formCollection.Files;
@@ -81,16 +81,16 @@ namespace SocNetwork.Controllers
                 mediaDTOs.Add(mediaDTO);
             }
 
-            return Ok(new UploadMediaResponse()
+            return Ok(new MediaResponse()
             {
                 Result = true,
-                MediaDTOs = mediaDTOs
+                Media = mediaDTOs
             });
         }
 
         [HttpGet("{username}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> GetUserMedia(string username)
+        public async Task<IActionResult> GetProfileMedia(string username)
         {
             var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
 

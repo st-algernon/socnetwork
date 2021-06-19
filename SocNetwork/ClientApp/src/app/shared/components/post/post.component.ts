@@ -2,10 +2,10 @@ import { HashLocationStrategy } from '@angular/common';
 import { Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { PostNotifType } from '../../enums';
+import { NotificType, SubjectType } from '../../enums';
 import { NotificationsHub } from '../../hubs/notifications.hub';
 import { PostsHub } from '../../hubs/posts.hub';
-import { Comment, CommentRequest, Media, Post, PostNotifRequest, ShortProfile, UserPost } from '../../interfaces';
+import { Comment, CommentRequest, Media, Post, NotificRequest, ShortProfile, UserPost, UserComment } from '../../interfaces';
 import { MediaService } from '../../services/media.service';
 import { PostsService } from '../../services/posts.service';
 
@@ -18,15 +18,15 @@ export class PostComponent implements OnInit, OnDestroy {
 
   @Input() post: Post;
   @Input() me: ShortProfile;
-  @Input() commentsBehavior: 'all' | 'best' | 'none' = 'all';
+  @Input() commentsBehavior: 'all' | 'best' | 'none' = 'best';
   @Input() commentMaker: boolean = true;
 
   commentForm: {
     text: string,
     images: File[]
   }
-  author: ShortProfile;
   comments: Comment[] = [];
+  commentsLoaded: boolean = false;
   previewImagesData: Media[] = [];
   subs: Subscription[] = [];
 
@@ -37,7 +37,7 @@ export class PostComponent implements OnInit, OnDestroy {
     private postsService: PostsService,
     private mediaService: MediaService,
     private postsHub: PostsHub,
-    private notificationsHub: NotificationsHub
+    private notificsHub: NotificationsHub
   ) {
     this.commentForm = {
       text: '',
@@ -46,19 +46,70 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    this.author = this.post.userPostDTOs.find(up => up.isAuthor).userDTO;
     this.renderTextWithHashtags(this.post.text, this.postTextContainer.nativeElement);
     
     if (this.commentsBehavior == 'all') {
       this.loadComments();
     }
-    else if (this.commentsBehavior == 'best') {
+    else if (this.commentsBehavior == 'best' && this.post.bestCommentDTO) {
       this.comments.push(this.post.bestCommentDTO);
     }
     else {
       this.comments = [];
     }
+
+    this.subs.push(
+
+      this.postsHub.postLikes$.subscribe((userPost: UserPost) => {
+        
+        if (this.post.id == userPost.postId) {
+          let index = this.post.userPostDTOs.findIndex(up => up.userDTO.id === this.me.id);
+          this.post.userPostDTOs.splice(index, 1, userPost);
+
+          console.log('from callback', this.post.userPostDTOs.find(up => up.userDTO.id === this.me.id))
+          console.log(userPost);
+          if (userPost.isLiked) {
+            this.post.likesNumber++;
+
+            const request: NotificRequest = {
+              recipientId: this.post.authorDTO.id,
+              subjectId: this.post.id,
+              subjectType: SubjectType.Post,
+              notificType: NotificType.Liked
+            };
+            
+            this.notificsHub.notify(request);
+          } else {
+            this.post.likesNumber--;
+          }
+        }
+      }),
+
+      this.postsHub.commentLikes$.subscribe((userComment: UserComment) => {
+        let comment = this.comments.find(c => c.id === userComment.commentId);
+        console.log(userComment);
+        if (comment) {
+          let index = comment.userCommentDTOs.findIndex(uc => uc.userDTO.id === this.me.id);
+          comment.userCommentDTOs.splice(index, 1, userComment);
+
+          if (userComment.isLiked) {
+            const request: NotificRequest = {
+              recipientId: this.getCommentAuthorById(userComment.commentId).id,
+              subjectId: userComment.commentId,
+              subjectType: SubjectType.Comment,
+              notificType: NotificType.Liked
+            };
+            
+            this.notificsHub.notify(request);
+
+            comment.likesNumber++;
+          } else {
+            comment.likesNumber--;
+          }
+        }
+      })
+
+    );
   }
 
   ngOnDestroy() {
@@ -67,20 +118,36 @@ export class PostComponent implements OnInit, OnDestroy {
     })
   }
   
-  likePost() {
-    this.subs.push(
+  toggleLikePost(likeBtn: HTMLElement) {
+    let up = this.post.userPostDTOs.find(up => up.userDTO.id == this.me.id && up.isLiked);
+    console.log('from toggle like post', up);
+    if(up) {
+      this.postsHub.unlikePost(this.post.id);
+      likeBtn.classList.remove('clicked');
+    } else {
+      this.postsHub.likePost(this.post.id);
+      likeBtn.classList.add('clicked');
+    }
+  }
 
-      this.postsHub.posts$.subscribe((userPost: UserPost) => {
-        const request: PostNotifRequest = {
-          recipientId: this.author.id,
-          postId: this.post.id,
-          notifType: PostNotifType.Liked
-        }
-        
-        this.notificationsHub.postNotify(request);
-      })
+  postLiked() {
+    return this.post.userPostDTOs.some(up => up.userDTO.id == this.me.id && up.isLiked);
+  }
 
-    );
+  commentLiked(comment: Comment) {
+    return comment.userCommentDTOs.some(up => up.userDTO.id == this.me.id && up.isLiked);
+  }
+
+  likeComment(comment: Comment, likeBtn: HTMLElement) {
+    let uc = comment.userCommentDTOs.find(uc => uc.userDTO.id == this.me.id && uc.isLiked);
+    console.log('from toggle like comment', uc);
+    if(uc) {
+      this.postsHub.unlikeComment(comment.id);
+      likeBtn.classList.remove('clicked');
+    } else {
+      this.postsHub.likeComment(comment.id);
+      likeBtn.classList.add('clicked');
+    }
   }
 
   loadComments() {
@@ -88,21 +155,15 @@ export class PostComponent implements OnInit, OnDestroy {
 
       this.postsService.getComments(this.post.id).subscribe((comments: Comment[]) => {
         console.log(comments);
+        this.commentsLoaded = true;
         this.comments = comments;
       })
 
     )
   }
 
-  likeComment(commentId: string) {
-    this.subs.push(
-
-
-    );
-  }
-
-  getCommentAuthor(comment: Comment) {
-    return comment.userCommentDTOs.find(uc => uc.isAuthor).userDTO;
+  getCommentAuthorById(commentId: string): ShortProfile {
+    return this.comments.find(c => c.id = commentId).authorDTO;
   }
 
   renderTextWithHashtags (text: string, textContainer: HTMLElement) {
@@ -132,7 +193,7 @@ export class PostComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitComment(form: NgForm) {
 
     if (!this.commentForm.text && this.commentForm.images.length == 0) {
       return;
@@ -160,6 +221,15 @@ export class PostComponent implements OnInit, OnDestroy {
               this.postsService.saveComment(commentRequest).subscribe((comment: Comment) => {
                 console.log(comment);
                 this.comments.push(comment);
+
+                const request: NotificRequest = {
+                  recipientId: this.post.authorDTO.id,
+                  subjectId: this.post.id,
+                  subjectType: SubjectType.Post,
+                  notificType: NotificType.Commented
+                }
+                
+                this.notificsHub.notify(request);
               })
             );
             this.previewImagesData = [];
@@ -171,6 +241,15 @@ export class PostComponent implements OnInit, OnDestroy {
         this.postsService.saveComment(commentRequest).subscribe((comment: Comment) => {
           console.log(comment);
           this.comments.push(comment);
+
+          const request: NotificRequest = {
+            recipientId: this.post.authorDTO.id,
+            subjectId: this.post.id,
+            subjectType: SubjectType.Post,
+            notificType: NotificType.Commented
+          }
+          
+          this.notificsHub.notify(request);
         })
       );
     }
@@ -184,7 +263,7 @@ export class PostComponent implements OnInit, OnDestroy {
   onEnterSubmit(form: NgForm, event: KeyboardEvent): void {
     if (event.key == 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      this.onSubmit(form);
+      this.onSubmitComment(form);
     }
   }
 

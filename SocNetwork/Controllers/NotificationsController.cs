@@ -30,25 +30,18 @@ namespace SocNetwork.Controllers
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            var postNotifDTOs = await db.PostNotifications
-                .Where(pn => pn.Recipient == currentUser)
-                .Select(pn => ConvertHelper.ToPostNotifDTO(pn))
-                .ToListAsync();
-            var userNotifDTOs = await db.UserNotifications
-                .Where(pn => pn.Recipient == currentUser)
-                .Select(pn => ConvertHelper.ToUserNotifDTO(pn))
-                .ToListAsync();
-            var commentNotifDTOs = await db.CommentNotifications
-                .Where(pn => pn.Recipient == currentUser)
-                .Select(pn => ConvertHelper.ToCommentNotifDTO(pn))
+            var postNotifDTOs = await db.Notifications
+                .Where(n => n.Recipient == currentUser)
+                .Include(n => n.Sender)
+                .ThenInclude(u => u.ProfileMedia)
+                .OrderByDescending(n => n.CreationDate)
+                .Select(n => ConvertHelper.ToNotificationDTO(n))
                 .ToListAsync();
 
             return Ok(new NotifsResponse
             {
                 Result = true,
-                PostNotifDTOs = postNotifDTOs,
-                UserNotifDTOs = userNotifDTOs,
-                CommentNotifDTOs = commentNotifDTOs
+                NotificDTOs = postNotifDTOs
             });
         }
     }

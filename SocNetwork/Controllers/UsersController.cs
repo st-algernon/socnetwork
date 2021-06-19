@@ -129,7 +129,7 @@ namespace SocNetwork.Controllers
         }
 
         [HttpGet("{username}/following")]
-        public async Task<IActionResult> GetFollowing(string username, [FromQuery] UsersPageParams usersPageParams)
+        public async Task<IActionResult> GetFollowings(string username, [FromQuery] UsersPageParams usersPageParams)
         {
             var user = await db.Users
                 .Include(u => u.ProfileMedia)
@@ -215,7 +215,7 @@ namespace SocNetwork.Controllers
 
         [HttpGet("search/{query}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> GetSearchResults(string query, [FromQuery] UsersPageParams usersPageParams)
+        public async Task<IActionResult> SearchUsers(string query, [FromQuery] UsersPageParams usersPageParams)
         {
             var searchResults = new List<ShortProfileDTO>();
 

@@ -127,11 +127,17 @@
             </div>
           </section>
           <section class="user-wall-body">
-            <ng-container *ngIf="user.posts; else empty_post">
+            <div 
+              *ngIf="user.posts; else empty_post"
+              infinite-scroll
+              infiniteScrollDistance="2"
+              infiniteScrollThrottle="500"
+              (scrolled)="onScroll()"
+            >
               <ng-container *ngFor="let post of user.posts">
                 <app-post [post]="post" [me]="me" commentsBehavior="none"></app-post>
               </ng-container>
-            </ng-container>
+            </div>
             <ng-template #empty_post>
               <app-empty-post></app-empty-post>
             </ng-template>

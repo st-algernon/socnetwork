@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { MediaFor } from '../../enums';
 import { MessengerHub } from '../../hubs/messenger.hub';
 import { NotificationsHub } from '../../hubs/notifications.hub';
-import { ShortProfile } from '../../interfaces';
+import { Notification, ShortProfile } from '../../interfaces';
 import { AuthService } from '../../services/auth.service';
 import { UsersService } from '../../services/users.service';
 
@@ -25,16 +25,17 @@ export class UserLayoutComponent implements OnInit, OnDestroy {
     private messengerHub: MessengerHub,
     private notifsHub: NotificationsHub
   ) { }
-clicked() {
-  console.log('click')
-}
+
   ngOnInit(): void {
     this.messengerHub.startConnection();
     this.messengerHub.addReceivedMessageListener();
 
     this.notifsHub.startConnection();
-    this.notifsHub.addReceivedPostNotifsListener();
-    this.notifsHub.addReceivedUserNotifsListener();
+    this.notifsHub.addReceivedNotificListener();
+
+    this.notifsHub.notif$.subscribe((notific: Notification) => {
+      console.log(notific);
+    });
 
     this.subs.push(
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => { this.me = shortProfile })

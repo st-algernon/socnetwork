@@ -1,9 +1,9 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { Chat, ShortChatsResponse, Message, Profile, ChatResponse, ShortChat } from "../interfaces";
+import { Chat, ShortChatsResponse, Message, Profile, ChatResponse, ShortChat, MessagesResponse } from "../interfaces";
 import { UsersService } from "./users.service";
 
 @Injectable()
@@ -32,5 +32,16 @@ export class ChatsService {
     .pipe(
       map((response: ShortChatsResponse) => response.shortChats)
     );
+  }
+
+  getChatMessages(chatId: string, page: number, size?: number): Observable<Message[]> {
+    const params = new HttpParams()
+    .set('Number', page.toString())
+    .set('Size', size ? size.toString() : '25');
+
+    return this.http.get<MessagesResponse>(`${environment.apiUrl}/chats/${chatId}/messages`, { params })
+    .pipe(
+      map((response: MessagesResponse) => response.messages)
+    )
   }
 }

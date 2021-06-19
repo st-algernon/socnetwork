@@ -63,20 +63,17 @@ export enum CommentStatus {
     IsDeleted
 }
 
-export enum PostNotifType
+export enum NotificType
 {
+    Followed,
     Liked,
-    Repost,
+    Reposted,
     Commented
 }
 
-export enum UserNotifType
+export enum SubjectType
 {
-    Followed
-}
-
-export enum CommentNotifType
-{
-    Liked,
-    Replied
+    None,
+    Post,
+    Comment
 }

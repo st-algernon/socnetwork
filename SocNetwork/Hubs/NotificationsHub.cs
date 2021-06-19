@@ -22,43 +22,44 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async void PostNotify(PostNotifRequest request)
+        public async Task Notify(NotificRequest request)
         {
             var callerId = Context.User.Identity.Name;
-            var postNotif = new PostNotification
+            var caller = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Id == Guid.Parse(callerId));
+
+            if (callerId != request.RecipientId)
             {
-                SenderId = Guid.Parse(callerId),
-                RecipientId = Guid.Parse(request.RecipientId),
-                PostId = Guid.Parse(request.PostId),
-                NotifType = (PostNotifType)Enum.Parse(typeof(PostNotifType), request.NotifType),
-                CreationDate = DateTime.UtcNow
-            };
+                var notific = await db.Notifications.FirstOrDefaultAsync(n =>
+                    n.SenderId == caller.Id &&
+                    n.RecipientId == Guid.Parse(request.RecipientId) &&
+                    n.SubjectId == Guid.Parse(request.SubjectId) &&
+                    n.SubjectType == (SubjectType)request.SubjectType &&
+                    n.NotificType == (NotificType)request.NotificType
+                );
 
-            await db.PostNotifications.AddAsync(postNotif);
-            await db.SaveChangesAsync();
+                if (notific == null)
+                {
+                    notific = new Notification
+                    {
+                        SenderId = caller.Id,
+                        RecipientId = Guid.Parse(request.RecipientId),
+                        SubjectId = Guid.Parse(request.SubjectId),
+                        SubjectType = (SubjectType)request.SubjectType,
+                        NotificType = (NotificType)request.NotificType,
+                        CreationDate = DateTime.UtcNow
+                    };
 
-            var postNotifDTO = ConvertHelper.ToPostNotifDTO(postNotif);
+                    await db.Notifications.AddAsync(notific);
+                }
 
-            await Clients.Users(request.RecipientId).SendAsync("ReceivePostNotif", postNotifDTO);
-        }
+                await db.SaveChangesAsync();
 
-        public async void UserNotify(UserNotifRequest request)
-        {
-            var callerId = Context.User.Identity.Name;
-            var userNotif = new UserNotification
-            {
-                SenderId = Guid.Parse(callerId),
-                RecipientId = Guid.Parse(request.RecipientId),
-                NotifType = (UserNotifType)Enum.Parse(typeof(UserNotifType), request.NotifType),
-                CreationDate = DateTime.UtcNow
-            };
+                var notificDTO = ConvertHelper.ToNotificationDTO(notific);
 
-            await db.UserNotifications.AddAsync(userNotif);
-            await db.SaveChangesAsync();
-
-            var userNotifDTO = ConvertHelper.ToUserNotifDTO(userNotif);
-
-            await Clients.Users(request.RecipientId).SendAsync("ReceiveUserNotif", userNotifDTO);
+                await Clients.Users(request.RecipientId).SendAsync("ReceiveNotific", notificDTO);
+            }
         }
     }
 }

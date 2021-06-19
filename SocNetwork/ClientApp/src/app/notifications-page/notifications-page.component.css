@@ -5,7 +5,7 @@
 	position: relative;
 }
 
-.notifs-container {
+.notifs {
     position: absolute;
 	width: 612px;
     height: 90.2%;
@@ -16,14 +16,36 @@
     background-color: #fff;
 }
 
-.notifs-container-header {
+.notifs-header {
     padding: 8px 16px;
 }
 
-.notifs-container-body {
+.notifs-body {
     margin-bottom: 10px;
     background-color: #f7f9fa;
     border-radius: 15px;
+}
+
+.notifs-body .notif-item {
+	padding: 6px 12px;
+	border-radius: 15px;
+}
+
+.notifs-body .notif-item:hover {
+	background-color: #e5f2fc;
+}
+
+.notif-item .avatar-box {
+	margin-right: 8px;
+}
+
+.notif-item .source-name {
+	margin-right: 4px;
+}
+
+.notif-item .notif-date {
+	font-size: 13px;
+	color: #7a8b9b;
 }
 
 .notifs-lining {

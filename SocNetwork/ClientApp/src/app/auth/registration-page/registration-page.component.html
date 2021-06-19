@@ -9,6 +9,7 @@
           {{ name?.errors?.minlength?.requiredLength }} characters long.</small
         >
         <small *ngIf="name?.errors?.pattern">The name can only contain letters and a space.</small>
+        <small *ngIf="name?.errors?.forbiddenEmail">Користувач з таким e-mail вже існує</small>
         <small *ngIf="name?.errors?.maxlength">
           Name must be at least
           {{ name?.errors?.maxlength?.requiredLength }} characters long
@@ -17,6 +18,7 @@
       <div class="validation" *ngIf="username?.invalid && username?.touched">
         <small *ngIf="username?.errors?.required">Username is required</small>
         <small *ngIf="username?.errors?.pattern">The username can only contain Latin letters, numbers, and underscores</small>
+        <small *ngIf="username?.errors?.forbiddenUsername">Користувач з таким username вже існує</small>
       </div>
       <div class="validation" *ngIf="email?.invalid && email?.touched">
         <small *ngIf="email?.errors?.required">Email is required</small>
@@ -60,8 +62,15 @@
           />
         </div>
         <p class="sign-box-btn">
-          <button type="submit" [disabled]="form.invalid || submitted" class="sign-btn">Sign up</button>
+          <span *ngIf="submitted" class="loader">
+            <app-loader></app-loader>
+          </span>
+          <button type="submit" [disabled]="form.invalid || form.pending || submitted" class="sign-btn">Sign up</button>
         </p>
+        <!-- <re-captcha
+          (resolved)="resolved($event)"
+          siteKey="YOUR_SITE_KEY"
+        ></re-captcha> -->
         <p class="form-footer">
           By clicking “Sign up”, you agree to our
           <a href="#">terms of service</a> and

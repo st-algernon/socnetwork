@@ -1,18 +1,20 @@
-<div *ngFor="let user of followers" class="user">
-  <div class="flex fd-r jc-sb ai-c">
-      <div class="avatar-box square-40">
-          <img 
-              [src]="user.avatarPath"
-              alt="avatar"
-              class="square-40"
-          >
-      </div>
-      <div class="flex fd-c fg-1">
-          <div class="source-name">{{ user.name }}</div>
-          <div class="nick-name">@{{ user.username }}</div>
-      </div>
-      <button class="btn btn-lg btn-outlined">Follow</button>
-  </div>
+<div *ngFor="let user of followers" class="user-item">
+    <div class="user-wrapper">
+        <div class="flex fd-r jc-sb ai-c">
+            <div class="avatar-box square-40">
+                <img 
+                    [src]="user.avatarPath"
+                    alt="avatar"
+                    class="square-40"
+                >
+            </div>
+            <div class="flex fd-c fg-1">
+                <div class="source-name">{{ user.name }}</div>
+                <div class="nick-name">@{{ user.username }}</div>
+            </div>
+            <button class="btn btn-sm btn-outlined">Follow</button>
+        </div>
+    </div>
 </div>
 
 <app-loader *ngIf="!followers"></app-loader>

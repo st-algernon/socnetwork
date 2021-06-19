@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { Notification, NotificationsResponse } from "../interfaces";
+import { Notification, NotifsResponse } from "../interfaces";
 
 
 @Injectable()
@@ -12,10 +12,10 @@ export class NotificationsService {
     private http: HttpClient
   ) {}
   
-  getCurrentUserNotifs(): Observable<NotificationsResponse> {
-    return this.http.get<NotificationsResponse>(`${environment.apiUrl}/notifications`)
-    // .pipe(
-    //     map((response: NotificationsResponse) => response.posts )
-    // )
+  getCurrentUserNotifs(): Observable<Notification[]> {
+    return this.http.get<NotifsResponse>(`${environment.apiUrl}/notifications`)
+    .pipe(
+        map((response: NotifsResponse) => response.notificDTOs )
+    )
   }
 }

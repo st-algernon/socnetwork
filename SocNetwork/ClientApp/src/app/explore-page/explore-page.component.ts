@@ -13,6 +13,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy {
 
   me: ShortProfile;
   posts: Post[];
+  page: number = 1;
   subs: Subscription[] = [];
 
   constructor(
@@ -27,7 +28,7 @@ export class ExplorePageComponent implements OnInit, OnDestroy {
         this.me = user;
       }),
 
-      this.postsService.getPostsForExplore({ number: 1, size: 15 })
+      this.postsService.getPostsForExplore(this.page)
         .subscribe((posts: Post[]) => {
           this.posts = posts;
         }
@@ -40,5 +41,16 @@ export class ExplorePageComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => {
       s.unsubscribe();
     });
+  }
+
+  onScroll() {
+    this.subs.push(
+
+      this.postsService.getPostsForExplore(++this.page).subscribe((posts: Post[]) => {
+        console.log(posts);
+        this.posts.push(...posts);
+      })
+
+    );
   }
 }

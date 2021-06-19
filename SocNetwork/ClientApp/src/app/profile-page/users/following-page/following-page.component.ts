@@ -41,4 +41,8 @@ export class FollowingPageComponent implements OnInit, OnDestroy {
       s.unsubscribe();
     });
   }
+  
+  changeTitleToUnfollow($event: MouseEvent) {
+    ($event.target as HTMLElement).innerText = $event.type == "mouseover" ? "Unfollow" : "Following";
+  }
 }

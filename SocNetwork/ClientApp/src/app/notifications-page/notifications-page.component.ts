@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Notification } from '../shared/interfaces';
+import { SubjectType } from '../shared/enums';
+import { TranslatorNotifics } from '../shared/enums-options';
+import { Notification, ShortProfile } from '../shared/interfaces';
 import { NotificationsService } from '../shared/services/notifications.service';
+import { UsersService } from '../shared/services/users.service';
 
 @Component({
   selector: 'app-notifications-page',
@@ -10,18 +13,25 @@ import { NotificationsService } from '../shared/services/notifications.service';
 })
 export class NotificationsPageComponent implements OnInit, OnDestroy {
 
-  notifs: Notification[];
+  me: ShortProfile;
+  notifs: Notification[] = [];
+  loaded: boolean = false;
   subs: Subscription[] = [];
 
   constructor(
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private usersService: UsersService
   ) { }
 
   ngOnInit() {
     this.subs.push(
+      this.usersService.me$.subscribe((me: ShortProfile) => this.me = me),
+
       this.notificationsService.getCurrentUserNotifs().subscribe(
-        (response) => {
+        (response: Notification[]) => {
           console.log(response);
+          this.loaded = true;
+          this.notifs = response;
         }
       )
     );
@@ -31,5 +41,27 @@ export class NotificationsPageComponent implements OnInit, OnDestroy {
     this.subs.forEach(s => {
       s.unsubscribe();
     })
+  }
+
+  getLinkToSubject(notif: Notification): string {
+    if (notif.subjectType == SubjectType.Post) {
+      return '/' + this.me.username + '/post/' + notif.subjectId;
+    }
+
+    if (notif.subjectType == SubjectType.Comment) {
+      return '/' + this.me.username + '/post/' + notif.subjectId;
+    }
+
+    if (notif.subjectType == SubjectType.None) {
+      return '/' + notif.senderDTO.username;
+    }
+  }
+
+  
+  translateNotific(notific: Notification): string {
+    return TranslatorNotifics.find(t => 
+      t.key == notific.notificType &&
+      t.subject == notific.subjectType
+    ).value;
   }
 }

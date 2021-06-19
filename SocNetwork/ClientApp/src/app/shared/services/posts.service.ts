@@ -26,10 +26,10 @@ export class PostsService {
     );
   }
 
-  getFeed(postsPageParams: PageParams): Observable<Post[]> {
+  getFeed(page: number, size?: number): Observable<Post[]> {
     const params = new HttpParams()
-    .set('Number', postsPageParams.number.toString())
-    .set('Size', postsPageParams.size.toString());
+    .set('Number', page.toString())
+    .set('Size', size ? size.toString() : '15');
 
     return this.http.get<PostsResponse>(`${environment.apiUrl}/posts/feed`, { params })
     .pipe(
@@ -37,10 +37,10 @@ export class PostsService {
     )
   }
 
-  getPostsForExplore(postsPageParams: PageParams): Observable<Post[]> {
+  getPostsForExplore(page: number, size?: number): Observable<Post[]> {
     const params = new HttpParams()
-    .set('Number', postsPageParams.number.toString())
-    .set('Size', postsPageParams.size.toString());
+    .set('Number', page.toString())
+    .set('Size', size ? size.toString() : '15');
 
     return this.http.get<PostsResponse>(`${environment.apiUrl}/posts/explore`, { params })
     .pipe(
@@ -48,10 +48,10 @@ export class PostsService {
     )
   }
 
-  getPosts(username: string, postsPageParams: PageParams): Observable<Post[]> {
+  getPosts(username: string, page: number, size?: number): Observable<Post[]> {
     const params = new HttpParams()
-    .set('Number', postsPageParams.number.toString())
-    .set('Size', postsPageParams.size.toString());
+    .set('Number', page.toString())
+    .set('Size', size ? size.toString() : '15');
 
     return this.http.get<PostsResponse>(`${environment.apiUrl}/posts/user/${username}`, { params })
     .pipe(

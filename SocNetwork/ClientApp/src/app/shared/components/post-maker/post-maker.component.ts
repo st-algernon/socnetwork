@@ -72,7 +72,7 @@ export class PostMakerComponent implements OnInit, OnDestroy {
       mediaDTOs: []
     };
 
-    if (this.postForm.images) {
+    if (this.postForm.images.length != 0) {
       const formData = new FormData();
 
       [...this.postForm.images].forEach((file, i) => {
@@ -83,7 +83,7 @@ export class PostMakerComponent implements OnInit, OnDestroy {
       this.mediaService.uploadMedia(formData).subscribe(
         (mediaDTOs: Media[]) => {
           postRequest.mediaDTOs = mediaDTOs;
-          
+          console.log(mediaDTOs);
           this.subs.push(
             this.postsService.savePost(postRequest).subscribe((post: Post) => {
               this.newPostEvent.emit(post);

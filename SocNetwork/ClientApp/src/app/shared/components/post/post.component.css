@@ -48,13 +48,10 @@
 	padding-top: 10px;
 }
 
-.comment-section .comments-container {
-
-}
-
 .comments-container .comment {
 	margin-bottom: 5px;
-	font-size: 14px;
+	font-size: 15px;
+	max-width: 75%;
 }
 
 .comment .comment-header-body-wrapper {
@@ -62,10 +59,15 @@
 	border-radius: 15px;
 	padding: 8px 12px;
 	margin: 0px 6px 0px 10px;
+	width: 100%;
 }
 
 .comment .comment-header {
 	font-family: 'Deezer', 'Open Sans', sans-serif;
+}
+
+.comment .comment-header .source-name {
+	font-size: 15px;
 }
 
 /* .comment .comment-body .media-box {

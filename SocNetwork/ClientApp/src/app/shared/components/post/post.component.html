@@ -1,17 +1,17 @@
     <section class="post">
-        <!-- [routerLink]="['/', author.username, 'post', post.id]" -->
+        <!-- [routerLink]="['/', post.authorDTO.username, 'post', post.id]" -->
         <div class="post-header">
-            <a [routerLink]="['/', author.username]" class="flex ai-c">
+            <a [routerLink]="['/', post.authorDTO.username]" class="flex ai-c">
                 <div class="avatar-box square-48">
                     <img 
-                        [src]="author.avatarPath"
+                        [src]="post.authorDTO.avatarPath"
                         class="square-48"
                         alt=""
                     >
                 </div>
                 <div class="flex fd-c">
-                    <span class="source-name">{{ author.name }}</span>
-                    <span class="nick-name">@{{ author.username }}</span>
+                    <span class="source-name">{{ post.authorDTO.name }}</span>
+                    <span class="nick-name">@{{ post.authorDTO.username }}</span>
                 </div>
             </a>
         </div>
@@ -28,9 +28,14 @@
         <div class="post-footer flex fd-r jc-sb ai-c">
             <ul class="content-actions flex fd-r jc-sb">
                 <li class="flex ai-c">
-                    <span class="like-btn round r-20 square-32" (click)="likePost()"></span>
                     <span 
-                        *ngIf="post.likesNumber != 0"
+                        #likePostBtn 
+                        class="like-btn round r-20 square-32" 
+                        [ngClass]="{'clicked': postLiked()}"
+                        (click)="toggleLikePost(likePostBtn)"
+                    ></span>
+                    <span
+                        [ngClass]="{'invisible': post.likesNumber == 0}" 
                         class="count count-likes"
                     >{{ post.likesNumber }}</span>
                 </li>
@@ -39,7 +44,7 @@
                     <!-- <span class="count count-forwards" data-state="">2</span> -->
                 </li>
                 <li class="flex fd-r">
-                    <span class="comment-btn round r-20 square-32"></span>
+                    <span (click)="commentMaker = true" class="comment-btn round r-20 square-32"></span>
                 </li>
             </ul>
             <div *ngIf="isToday()" class="published-date">{{ post.creationDate | date:'shortTime':'':'uk'}}</div>
@@ -48,34 +53,52 @@
 
         <div class="comments-section">
             <div *ngIf="commentsBehavior == 'all' || commentsBehavior == 'best'" class="comments-container">
-                <div *ngFor="let comment of comments" class="comment flex ai-fs">
+                <div 
+                    *ngFor="let comment of comments" 
+                    class="comment flex ai-fs"
+                >
                     <div class="comment-author-avatar">
                         <div class="avatar-box square-32">
                             <img 
-                                [src]="getCommentAuthor(comment).avatarPath"
+                                [src]="comment.authorDTO.avatarPath"
                                 class="square-32"
                                 alt=""
                             >
                         </div>
                     </div>
-                    <div class="flex fd-c">
+                    <div 
+                        class="flex fd-c"
+                        [ngClass]="{'fg-1': comment.mediaDTOs.length > 0}"
+                    >
                         <div class="flex ai-c">
                             <div class="comment-header-body-wrapper">
                                 <div class="comment-header">
                                     <div class="flex fd-c">
-                                        <span class="source-name">{{ getCommentAuthor(comment).name }}</span>
+                                        <span class="source-name">{{ comment.authorDTO.name }}</span>
                                     </div>
                                 </div>
                                 <div class="comment-body">
                                     <div class="comment-text">
                                         {{ comment.text }}
                                     </div>
+                                    <app-photos-container
+                                        *ngIf="comment.mediaDTOs.length > 0"
+                                        [photos]="comment.mediaDTOs"
+                                    ></app-photos-container>
                                 </div>
                             </div>
-                            <div class="content-actions" data-container="content-actions">
+                            <div class="content-actions">
                                 <div class="flex ai-c">
-                                    <span class="like-btn round r-20 square-28" data-action="like" data-state=""></span>
-                                    <span class="count count-likes" data-state=""></span>
+                                    <span 
+                                        #likeCommentBtn
+                                        class="like-btn round r-20 square-28" 
+                                        [ngClass]="{'clicked': commentLiked(comment)}"
+                                        (click)="likeComment(comment, likeCommentBtn)"
+                                    ></span>
+                                    <span 
+                                        [ngClass]="{'invisible': comment.likesNumber == 0}" 
+                                        class="count count-likes"
+                                    >{{ comment.likesNumber }}</span>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +109,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="show-more-btn" (click)="loadComments">show more comments</div>
+                <div 
+                    *ngIf="comments.length > 0 && !commentsLoaded"
+                    class="show-more-btn"
+                    (click)="loadComments()"
+                >show more comments</div>
             </div>
             <div *ngIf="commentMaker" class="comments-footer">
                 <div class="flex jc-c">
@@ -112,7 +139,7 @@
                     </div>
                     <form 
                         #form="ngForm"
-                        (ngSubmit)="onSubmit(form)"
+                        (ngSubmit)="onSubmitComment(form)"
                         novalidate
                         class="flex fd-r ai-c"
                     >

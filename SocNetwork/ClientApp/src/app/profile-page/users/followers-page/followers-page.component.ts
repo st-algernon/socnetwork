@@ -26,14 +26,16 @@ export class FollowersPageComponent implements OnInit {
     const urlTree = this.router.parseUrl(this.router.url);
     this.username = urlTree.root.children.primary.segments[0].path;
 
-    this.subs.push( 
+    if (this.username) {
+      this.subs.push( 
 
-      this.usersService.getFollowers(this.username, { number: 1, size: 15 })
-        .subscribe((response: ShortProfile[]) => { 
-          this.followers = response;
-        })
+        this.usersService.getFollowers(this.username, { number: 1, size: 15 })
+          .subscribe((response: ShortProfile[]) => { 
+            this.followers = response;
+          })
 
-    );
+      );
+    }
   }
 
   ngOnDestroy() {

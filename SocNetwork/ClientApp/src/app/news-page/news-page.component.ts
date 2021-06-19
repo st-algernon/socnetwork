@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { PostComponent } from '../shared/components/post/post.component';
 import { ContainerDirective } from '../shared/directives/container.directive';
 import { PostsHub } from '../shared/hubs/posts.hub';
-import { Post, ShortProfile } from '../shared/interfaces';
+import { PageParams, Post, ShortProfile } from '../shared/interfaces';
 import { PostsService } from '../shared/services/posts.service';
 import { UsersService } from '../shared/services/users.service';
 
@@ -16,6 +16,7 @@ export class NewsPageComponent implements OnInit, OnDestroy {
   me: ShortProfile;
   subs: Subscription[] = [];
   posts: Post[];
+  page: number = 1;
 
   constructor(
     private usersService: UsersService,
@@ -26,11 +27,12 @@ export class NewsPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.postsHub.startConnection();
     this.postsHub.addReceivedPostLikesListener();
+    this.postsHub.addReceivedCommentLikesListener();
 
     this.subs.push(
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 
-      this.postsService.getFeed({ number: 1, size: 15 }).subscribe((posts: Post[]) => {
+      this.postsService.getFeed(this.page).subscribe((posts: Post[]) => {
         console.log(posts);
         this.posts = posts;
       })
@@ -44,6 +46,17 @@ export class NewsPageComponent implements OnInit, OnDestroy {
   }
 
   addNewPost($event: Post) {
-    this.posts.push($event);
+    this.posts.unshift($event);
+  }
+
+  onScroll() {
+    this.subs.push(
+
+      this.postsService.getFeed(++this.page).subscribe((posts: Post[]) => {
+        console.log(posts);
+        this.posts.push(...posts);
+      })
+
+    );
   }
 }

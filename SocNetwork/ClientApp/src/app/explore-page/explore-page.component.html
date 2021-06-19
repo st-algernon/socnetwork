@@ -4,9 +4,15 @@
         <h2>Рекомендовані публікації</h2>
       </div>
       <div class="posts-container-body">
-        <ng-container *ngIf="posts; else empty_posts">
+        <div 
+          *ngIf="posts; else empty_posts"
+          infinite-scroll
+          infiniteScrollDistance="2"
+          infiniteScrollThrottle="500"
+          (scrolled)="onScroll()"
+        >
           <app-post *ngFor="let post of posts" [me]="me" [post]="post" comment="best"></app-post>
-        </ng-container>
+      </div>
         <ng-template #empty_posts>
           <app-empty-post></app-empty-post>
           <app-empty-post withMedia="true"></app-empty-post>

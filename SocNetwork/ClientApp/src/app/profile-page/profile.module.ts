@@ -12,6 +12,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { SharedModule } from "../shared/shared.module";
 import { ChatsService } from "../shared/services/chats.service";
 import { RelationshipsService } from "../shared/services/relationships.service";
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import { RelationshipsService } from "../shared/services/relationships.service";
         FormsModule,
         ReactiveFormsModule,
         NgScrollbarModule,
+        InfiniteScrollModule,
         SharedModule
     ],
     exports: [],

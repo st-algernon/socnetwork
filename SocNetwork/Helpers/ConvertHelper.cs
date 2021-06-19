@@ -110,6 +110,9 @@ namespace SocNetwork.Helpers
 
             postDTO.LikesNumber = post.PostUsers.Where(pu => pu.IsLiked).Count();
 
+            var author = post.PostUsers.FirstOrDefault(pu => pu.IsAuthor).User;
+            postDTO.AuthorDTO = ToShortProfileDTO(author);
+
             return postDTO;
         }
 
@@ -144,6 +147,11 @@ namespace SocNetwork.Helpers
             {
                 commentDTO.UserCommentDTOs.Add(ToUserCommentDTO(cu));
             });
+
+            commentDTO.LikesNumber = comment.CommentUsers.Where(pu => pu.IsLiked).Count();
+
+            var author = comment.CommentUsers.FirstOrDefault(cu => cu.IsAuthor).User;
+            commentDTO.AuthorDTO = ToShortProfileDTO(author);
 
             return commentDTO;
         }
@@ -218,34 +226,14 @@ namespace SocNetwork.Helpers
             return relationshipDTO;
         }
 
-        public static PostNotifDTO ToPostNotifDTO(PostNotification postNotif)
+        public static NotificationDTO ToNotificationDTO(Notification notification)
         {
-            var postNotifDTO = new PostNotifDTO();
+            var notificDTO = new NotificationDTO();
 
-            postNotif.CopyPropertiesTo(postNotifDTO);
-            postNotifDTO.SenderDTO = ToShortProfileDTO(postNotif.Sender);
+            notification.CopyPropertiesTo(notificDTO);
+            notificDTO.SenderDTO = ToShortProfileDTO(notification.Sender);
 
-            return postNotifDTO;
-        }
-
-        public static UserNotifDTO ToUserNotifDTO(UserNotification userNotif)
-        {
-            var userNotifDTO = new UserNotifDTO();
-
-            userNotif.CopyPropertiesTo(userNotifDTO);
-            userNotifDTO.SenderDTO = ToShortProfileDTO(userNotif.Sender);
-
-            return userNotifDTO;
-        }
-
-        public static CommentNotifDTO ToCommentNotifDTO(CommentNotification commentNotif)
-        {
-            var commentNotifDTO = new CommentNotifDTO();
-
-            commentNotif.CopyPropertiesTo(commentNotifDTO);
-            commentNotifDTO.SenderDTO = ToShortProfileDTO(commentNotif.Sender);
-
-            return commentNotifDTO;
+            return notificDTO;
         }
     }
 }

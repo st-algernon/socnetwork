@@ -32,6 +32,9 @@
           />
         </div>
         <div class="sign-box-btn">
+          <span *ngIf="submitted" class="loader">
+            <app-loader></app-loader>
+          </span>
           <button type="submit" [disabled]="form.invalid || submitted" class="sign-btn">Sign in</button>
         </div>
       </div>

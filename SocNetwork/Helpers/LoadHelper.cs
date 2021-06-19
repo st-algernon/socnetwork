@@ -15,45 +15,45 @@ namespace SocNetwork.Helpers
             db = context;
         }
 
-        public async Task<Post> ForPostAsync(Post post)
+        public Post LoadPostDepends(Post post)
         {
-            await db.Entry(post).Collection(c => c.Comments).LoadAsync();
-            await db.Entry(post).Collection(c => c.PostMedia).LoadAsync();
-            await db.Entry(post).Collection(c => c.PostUsers).LoadAsync();
-            await db.Entry(post).Collection(c => c.Tags).LoadAsync();
+            db.Entry(post).Collection(c => c.Comments).Load();
+            db.Entry(post).Collection(c => c.PostMedia).Load();
+            db.Entry(post).Collection(c => c.PostUsers).Load();
+            db.Entry(post).Collection(c => c.Tags).Load();
 
-            post.PostUsers.ForEach(async pu =>
+            post.PostUsers.ForEach(pu =>
             {
-                await db.Entry(pu).Reference(c => c.User).LoadAsync();
-                pu.User = await ForUserAsync(pu.User);
+                db.Entry(pu).Reference(c => c.User).Load();
+                pu.User = LoadUserDepends(pu.User);
             });
 
-            post.Comments.ForEach(async c =>
+            post.Comments.ForEach(c =>
             {
-                c = await ForCommentAsync(c);
+                c = LoadCommentDepends(c);
             });
 
             return post;
         } 
 
-        public async Task<Comment> ForCommentAsync(Comment comment)
+        public Comment LoadCommentDepends(Comment comment)
         {
-            await db.Entry(comment).Reference(c => c.Post).LoadAsync();
-            await db.Entry(comment).Collection(c => c.CommentMedia).LoadAsync();
-            await db.Entry(comment).Collection(c => c.CommentUsers).LoadAsync();
+            db.Entry(comment).Reference(c => c.Post).Load();
+            db.Entry(comment).Collection(c => c.CommentMedia).Load();
+            db.Entry(comment).Collection(c => c.CommentUsers).Load();
 
-            comment.CommentUsers.ForEach(async cu =>
+            comment.CommentUsers.ForEach(cu =>
             {
-                await db.Entry(cu).Reference(c => c.User).LoadAsync();
-                cu.User = await ForUserAsync(cu.User);
+                db.Entry(cu).Reference(c => c.User).Load();
+                cu.User = LoadUserDepends(cu.User);
             });
 
             return comment;
         }
 
-        public async Task<User> ForUserAsync(User user)
+        public User LoadUserDepends(User user)
         {
-            await db.Entry(user).Collection(c => c.ProfileMedia).LoadAsync();
+            db.Entry(user).Collection(c => c.ProfileMedia).Load();
 
             return user;
         }

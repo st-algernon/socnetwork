@@ -25,10 +25,8 @@ namespace SocNetwork.Models
         public DbSet<UserPost> UserPost { get; set; }
         public DbSet<UserComment> UserComment { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<PostNotification> PostNotifications { get; set; }
-        public DbSet<UserNotification> UserNotifications { get; set; }
-        public DbSet<CommentNotification> CommentNotifications { get; set; }
         public DbSet<UserRelationship> UserRelationships { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public SocNetworkContext(DbContextOptions<SocNetworkContext> options)
             : base(options)

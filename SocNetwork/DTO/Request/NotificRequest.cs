@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.DTO.Request
 {
-    public class PostNotifRequest
+    public class NotificRequest
     {
         public string RecipientId { get; set; }
-        public string PostId { get; set; }
-        public string NotifType { get; set; }
+        public string SubjectId { get; set; }
+        public int SubjectType { get; set; }
+        public int NotificType { get; set; }
     }
 }

@@ -27,7 +27,8 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   messageForm: {
     text: string,
     images: File[]
-  }
+  };
+  messagePage: number = 1;
 
   previewImagesData: Media[] = [];
   
@@ -36,7 +37,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private messengerHub: MessengerHub,
-    private messengerService: ChatsService,
+    private chatsService: ChatsService,
     private mediaService: MediaService,
     private usersService: UsersService,
     private route: ActivatedRoute,
@@ -56,7 +57,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
       
       this.route.params.pipe(
         switchMap((params: Params) => {
-          return this.messengerService.getChatById(params['id']);
+          return this.chatsService.getChatById(params['id']);
         })
       ).subscribe((chat: Chat) => { 
   
@@ -172,6 +173,21 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight * 5 / 7 + 'px';
+  }
+
+  onScrollUp() {
+    this.subs.push(
+
+      this.chatsService
+        .getChatMessages(this.chat.id, ++this.messagePage)
+        .subscribe(
+          (messages: Message[]) => {
+            console.log(messages);
+            this.chat.messageDTOs.unshift(...messages);
+          }
+        )
+
+    );
   }
 
   private renderMessage(message: Message) {

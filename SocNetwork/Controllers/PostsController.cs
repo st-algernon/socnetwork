@@ -43,7 +43,7 @@ namespace SocNetwork.Controllers
             }
 
             var loadHelper = new LoadHelper(db);
-            var p = await loadHelper.ForPostAsync(post);
+            var p = loadHelper.LoadPostDepends(post);
             var postDTO = ConvertHelper.ToPostDTO(p);
 
             return Ok(new PostsResponse()
@@ -80,7 +80,7 @@ namespace SocNetwork.Controllers
 
             foreach (var post in posts)
             {
-                var p = await loadHelper.ForPostAsync(post);
+                var p = loadHelper.LoadPostDepends(post);
                 postDTOs.Add(ConvertHelper.ToPostDTO(p));
             }
 
@@ -169,7 +169,7 @@ namespace SocNetwork.Controllers
 
             foreach (var post in partOfFeed)
             {
-                var p = await loadHelper.ForPostAsync(post);
+                var p = loadHelper.LoadPostDepends(post);
                 partOfFeedDTO.Add(ConvertHelper.ToPostDTO(p));
             }
 
@@ -208,7 +208,7 @@ namespace SocNetwork.Controllers
 
             foreach (var post in explorePosts)
             {
-                var p = await loadHelper.ForPostAsync(post);
+                var p = loadHelper.LoadPostDepends(post);
                 explorePostDTOs.Add(ConvertHelper.ToPostDTO(p));
             }
 
@@ -238,7 +238,7 @@ namespace SocNetwork.Controllers
 
             foreach (var post in posts)
             {
-                var p = await loadHelper.ForPostAsync(post);
+                var p = loadHelper.LoadPostDepends(post);
                 postDTOs.Add(ConvertHelper.ToPostDTO(p));
             }
 
@@ -251,7 +251,7 @@ namespace SocNetwork.Controllers
 
         [HttpPost("comment")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> AddCommentToPost([FromBody] CommentRequest request)
+        public async Task<IActionResult> SaveComment([FromBody] CommentRequest request)
         {
             var currentUser = HttpContext.Items["User"] as User;
             var post = await db.Posts.FirstOrDefaultAsync(p => p.Id == Guid.Parse(request.PostId));
@@ -335,7 +335,7 @@ namespace SocNetwork.Controllers
 
             foreach (var comment in comments)
             {
-                var c = await loadHelper.ForCommentAsync(comment);
+                var c = loadHelper.LoadCommentDepends(comment);
                 commentDTOs.Add(ConvertHelper.ToCommentDTO(c));
             }
 

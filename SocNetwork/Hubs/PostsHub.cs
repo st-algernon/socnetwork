@@ -21,26 +21,137 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async void LikePost(string postId)
+        public async Task LikePost(string postId)
         {
             var callerId = Context.User.Identity.Name;
-            var author = await db.UserPost
-                .Where(up => up.PostId == Guid.Parse(postId) && up.IsAuthor)
-                .Select(up => up.User)
-                .FirstOrDefaultAsync();
-            var userPost = new UserPost
-            {
-                UserId = Guid.Parse(callerId),
-                PostId = Guid.Parse(postId),
-                IsLiked = true
-            };
 
-            await db.UserPost.AddAsync(userPost);
+            var userPost = await db.UserPost
+                .Include(up => up.User)
+                .FirstOrDefaultAsync(up => 
+                    up.UserId == Guid.Parse(callerId) && 
+                    up.PostId == Guid.Parse(postId)
+                );
+
+            if (userPost == null)
+            {
+                userPost = new UserPost
+                {
+                    UserId = Guid.Parse(callerId),
+                    PostId = Guid.Parse(postId),
+                    IsLiked = true
+                };
+
+                await db.UserPost.AddAsync(userPost);
+            } else
+            {
+                userPost.IsLiked = true;
+            }
+
             await db.SaveChangesAsync();
 
             var userPostDTO = ConvertHelper.ToUserPostDTO(userPost);
 
-            await Clients.Users(author.Id.ToString()).SendAsync("ReceivePostLikes", userPostDTO);
+            await Clients.All.SendAsync("ReceivePostLikes", userPostDTO);
+        }
+
+        public async Task UnlikePost(string postId)
+        {
+            var callerId = Context.User.Identity.Name;
+
+            var userPost = await db.UserPost
+                .Include(up => up.User)
+                .FirstOrDefaultAsync(up =>
+                    up.UserId == Guid.Parse(callerId) &&
+                    up.PostId == Guid.Parse(postId)
+                );
+
+            if (userPost == null)
+            {
+                userPost = new UserPost
+                {
+                    UserId = Guid.Parse(callerId),
+                    PostId = Guid.Parse(postId),
+                    IsLiked = false
+                };
+
+                await db.UserPost.AddAsync(userPost);
+            }
+            else
+            {
+                userPost.IsLiked = false;
+            }
+
+            await db.SaveChangesAsync();
+
+            var userPostDTO = ConvertHelper.ToUserPostDTO(userPost);
+
+            await Clients.All.SendAsync("ReceivePostLikes", userPostDTO);
+        }
+
+        public async Task LikeComment(string commentId)
+        {
+            var callerId = Context.User.Identity.Name;
+            var userComment = await db.UserComment
+                .Include(up => up.User)
+                .FirstOrDefaultAsync(uc =>
+                   uc.UserId == Guid.Parse(callerId) &&
+                   uc.CommentId == Guid.Parse(commentId)
+                );
+
+            if (userComment == null)
+            {
+                userComment = new UserComment
+                {
+                    UserId = Guid.Parse(callerId),
+                    CommentId = Guid.Parse(commentId),
+                    IsLiked = true
+                };
+
+                await db.UserComment.AddAsync(userComment);
+            }
+            else
+            {
+                userComment.IsLiked = true;
+            }
+
+            await db.SaveChangesAsync();
+
+            var userCommentDTO = ConvertHelper.ToUserCommentDTO(userComment);
+
+            await Clients.All.SendAsync("ReceiveCommentLikes", userCommentDTO);
+        }
+
+        public async Task UnlikeComment(string commentId)
+        {
+            var callerId = Context.User.Identity.Name;
+            var userComment = await db.UserComment
+                .Include(up => up.User)
+                .FirstOrDefaultAsync(uc =>
+                   uc.UserId == Guid.Parse(callerId) &&
+                   uc.CommentId == Guid.Parse(commentId)
+                );
+
+            if (userComment == null)
+            {
+                userComment = new UserComment
+                {
+                    UserId = Guid.Parse(callerId),
+                    CommentId = Guid.Parse(commentId),
+                    IsLiked = false
+                };
+
+                await db.UserComment.AddAsync(userComment);
+            }
+            else
+            {
+                userComment.IsLiked = false;
+            }
+
+            await db.SaveChangesAsync();
+
+            var userCommentDTO = ConvertHelper.ToUserCommentDTO(userComment);
+
+            await Clients.All.SendAsync("ReceiveCommentLikes", userCommentDTO);
         }
     }
 }

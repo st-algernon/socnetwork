@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http.Features;
 using SocNetwork.Hubs;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using System;
 
 namespace SocNetwork
 {
@@ -36,7 +37,12 @@ namespace SocNetwork
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<SocNetworkContext>(options => options.UseSqlServer(connection));
 
-            services.AddSignalR();
+            services.AddSignalR(hubOptions =>
+            {
+                hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(50);
+                hubOptions.ClientTimeoutInterval = TimeSpan.FromMinutes(55);
+                hubOptions.EnableDetailedErrors = true;
+            });
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
             services.AddControllersWithViews();
@@ -52,22 +58,26 @@ namespace SocNetwork
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = JwtConfig.ISSUER,
+
+                ValidateAudience = true,
+                ValidAudience = JwtConfig.AUDIENCE,
+
+                ValidateLifetime = true,
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey(),
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = JwtConfig.ISSUER,
-
-                        ValidateAudience = true,
-                        ValidAudience = JwtConfig.AUDIENCE,
-
-                        ValidateLifetime = true,
-
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = JwtConfig.GetSymmetricSecurityKey(),
-                    };
+                    options.TokenValidationParameters = tokenValidationParameters;
                     options.Events = new JwtBearerEvents
                     {
                         OnMessageReceived = context =>
@@ -126,8 +136,8 @@ namespace SocNetwork
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapHub<MessengerHub>("/hubs/messenger");
-                endpoints.MapHub<MessengerHub>("/hubs/notifications");
-                endpoints.MapHub<MessengerHub>("/hubs/posts");
+                endpoints.MapHub<NotificationsHub>("/hubs/notifications");
+                endpoints.MapHub<PostsHub>("/hubs/posts");
             });
 
             app.UseSpa(spa =>

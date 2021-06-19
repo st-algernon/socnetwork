@@ -28,6 +28,7 @@ export class MessengerPageComponent implements OnInit, OnDestroy {
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 
       this.messengerService.getShortChats().subscribe((shortChats: ShortChat[]) => { 
+        console.log(shortChats);
         this.chats = shortChats;
       })
     );

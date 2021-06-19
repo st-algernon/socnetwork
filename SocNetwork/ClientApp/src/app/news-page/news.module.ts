@@ -6,6 +6,7 @@ import { NewsPageComponent } from "./news-page.component";
 import { NewsRoutingModule } from "./news-routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
         NewsRoutingModule,
         CommonModule,
         SharedModule,
-        NgScrollbarModule
+        NgScrollbarModule,
+        InfiniteScrollModule
     ],
     exports: [],
     providers: []

@@ -33,6 +33,11 @@ namespace SocNetwork.Helpers
                 }
             }
 
+            if (bestComment == null && comments.Count > 0)
+            {
+                bestComment = comments.First();
+            }
+
             return bestComment;
         }
     }

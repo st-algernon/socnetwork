@@ -7,7 +7,7 @@ import { MediaFor } from "../enums";
 import { 
     EditProfileInfoRequest, ProfileMedia, Profile, 
     Media, MediaResponse, ProfileResponse,
-    ShortProfile, ShortProfilesResponse, Relationship, PageParams 
+    ShortProfile, ShortProfilesResponse, Relationship, PageParams, VerificationResponse 
 } from "../interfaces";
 
 @Injectable({ providedIn: 'root' }) 
@@ -77,7 +77,7 @@ export class UsersService {
     }
 
     getShortProfile(username: string): Observable<ShortProfile> {
-        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/${username}`)
+        return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/short/${username}`)
         .pipe(
             map((response: ShortProfilesResponse) => response.shortProfiles),
             map((shortProfiles: ShortProfile[]) => { 
@@ -107,7 +107,7 @@ export class UsersService {
         return this.http.put(`${environment.apiUrl}/users/edit`, editProfileInfoRequest);
     }
 
-    getWantedhUsers(query: string) {
+    getWantedhUsers(query: string): Observable<ShortProfile[]> {
         return this.http.get<ShortProfilesResponse>(`${environment.apiUrl}/users/search/${query}`)
         .pipe(
             map((response: ShortProfilesResponse) => response.shortProfiles)

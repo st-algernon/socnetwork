@@ -5,6 +5,7 @@ using SocNetwork.DTO;
 using SocNetwork.DTO.Response;
 using SocNetwork.Helpers;
 using SocNetwork.Models;
+using SocNetwork.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,6 +109,56 @@ namespace SocNetwork.Controllers
             {
                 Result = true,
                 Chat = chatDTO
+            });
+        }
+
+        [HttpGet("{id}/messages")]
+        public async Task<IActionResult> GetChatMessages(string id, PageParams pageParams)
+        {
+            var chatHelper = new ChatHelper(db);
+            var currentUser = HttpContext.Items["User"] as User;
+            var currentUserChats = await chatHelper.GetUserChatsAsync(currentUser);
+
+            var chat = await db.Chats
+                .Include(c => c.Messages)
+                .ThenInclude(m => m.MessageMedia)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == id);
+
+            if (chat == null)
+            {
+                return BadRequest(new ProfileResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "Chat not found" }
+                });
+            }
+
+            var isMine = currentUserChats.Contains(chat);
+
+            if (isMine == false)
+            {
+                return BadRequest(new ProfileResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "You do not have access to this chat" }
+                });
+            }
+
+            var messageDTOs = await db.Messages
+                .Where(m => m.Chat == chat && m.MessageStatus != MessageStatus.IsDeleted)
+                .Include(m => m.Author)
+                .ThenInclude(u => u.ProfileMedia)
+                .Include(m => m.MessageMedia)
+                .OrderBy(p => p.CreationDate)
+                .Skip((pageParams.Number - 1) * pageParams.Size)
+                .Take(pageParams.Size)
+                .Select(m => ConvertHelper.ToMessageDTO(m))
+                .ToListAsync();
+
+            return Ok(new MessagesResponse()
+            {
+                Result = true,
+                Messages = messageDTOs
             });
         }
     }

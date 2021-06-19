@@ -3,8 +3,8 @@ import { AfterContentChecked, ChangeDetectorRef, Component, Input, OnDestroy, On
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { MediaFor, UserNotifType, UserRelationshipType } from '../shared/enums';
-import { Profile, ShortChat, ShortProfile, Relationship, Post, UserNotifRequest } from '../shared/interfaces';
+import { MediaFor, NotificType, SubjectType, UserRelationshipType } from '../shared/enums';
+import { Profile, ShortChat, ShortProfile, Relationship, Post, NotificRequest } from '../shared/interfaces';
 import { MediaService } from '../shared/services/media.service';
 import { UsersService } from '../shared/services/users.service';
 import { RelationshipsService } from '../shared/services/relationships.service';
@@ -30,6 +30,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     isFollowed: boolean,
     isBlocked: boolean
   };
+  postsPage: number = 1;
   subs: Subscription[] = [];
   editProfileFlag: boolean = false;
 
@@ -40,7 +41,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     private chatsService: ChatsService,
     private postsService: PostsService,
     private relationshipsService: RelationshipsService,
-    private notifHub: NotificationsHub
+    private notificsHub: NotificationsHub
     ) { 
       this.user = {
         profile: null,
@@ -73,7 +74,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
               this.defineRelationship(relationship);
             }
           ),
-          this.postsService.getPosts(params['username'], { number: 1, size: 15 }).subscribe(
+          this.postsService.getPosts(params['username'], this.postsPage).subscribe(
             (posts: Post[]) => {
               console.log(posts);
               this.user.posts = posts;
@@ -112,11 +113,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     this.subs.push( 
 
       this.relationshipsService.follow(this.user.profile.username).subscribe(() => { 
-        const request: UserNotifRequest = { 
+        const request: NotificRequest = { 
           recipientId: this.user.profile.id,
-          notifType: UserNotifType.Followed
+          subjectId: '',
+          subjectType: SubjectType.None,
+          notificType: NotificType.Followed
         };
-        this.notifHub.userNotify(request)
+
+        this.notificsHub.notify(request)
         this.relationship.isFollowed = true;
         this.relationship.isUnFollowed = false;
       })
@@ -157,5 +161,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     if (relationship.userRelationshipType == UserRelationshipType.Blocked) {
       this.relationship.isBlocked = true;
     }
+  }
+
+  onScroll() {
+    this.subs.push(
+
+      this.postsService.getPosts(this.user.profile.username, ++this.postsPage).subscribe((posts: Post[]) => {
+        console.log(posts);
+        this.user.posts.push(...posts);
+      })
+
+    );
   }
 }

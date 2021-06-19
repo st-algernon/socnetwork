@@ -19,6 +19,7 @@ import { RouterModule } from "@angular/router";
 import { EmptyPostComponent } from './components/empty-post/empty-post.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { SearchMakerComponent } from './components/search-maker/search-maker.component';
+import { ShortUserComponent } from './components/short-user/short-user.component';
 
 registerLocaleData(localeUk, 'uk');
 
@@ -35,7 +36,8 @@ registerLocaleData(localeUk, 'uk');
     MessageComponent,
     EmptyPostComponent,
     AlertComponent,
-    SearchMakerComponent
+    SearchMakerComponent,
+    ShortUserComponent
   ],
   imports: [
     CommonModule,

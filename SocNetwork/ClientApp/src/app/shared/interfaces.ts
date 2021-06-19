@@ -1,4 +1,4 @@
-import { AccountStatus, CommentNotifType, CommentStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, PostNotifType, PostStatus, UserNotifType, UserRelationshipType } from "./enums";
+import { AccountStatus, CommentStatus, Gender, MaritalStatus, MediaFor, MessageState, MessageStatus, NotificType, PostStatus, SubjectType, UserRelationshipType } from "./enums";
 
 export interface AccountLoginRequest {
     email: string
@@ -10,6 +10,11 @@ export interface AccountRegistrationRequest {
     name: string
     username: string
     password: string
+}
+
+export interface TokenRequest {
+    token: string,
+    refreshToken: string
 }
 
 export interface EditProfileInfoRequest {
@@ -31,21 +36,11 @@ export interface MessageRequest {
     mediaDTOs: Media[]
 }
 
-export interface PostNotifRequest {
+export interface NotificRequest {
     recipientId: string,
-    postId: string,
-    notifType: number
-}
-
-export interface CommentNotifRequest {
-    recipientId: string,
-    commentId: string,
-    notifType: number
-}
-
-export interface UserNotifRequest {
-    recipientId: string,
-    notifType: number
+    subjectId: string,
+    subjectType: number,
+    notificType: number
 }
 
 export interface PostRequest {
@@ -61,6 +56,7 @@ export interface CommentRequest {
 
 export interface AuthResponse {
     token: string,
+    refreshToken: string,
     expiresIn: string
     result: string
     errors: string[]
@@ -92,15 +88,15 @@ export interface ChatResponse {
     errors: string[]
 }
 
-export interface ShortChatsResponse {
+export interface MessagesResponse {
     result: string,
-    shortChats: ShortChat[],
+    messages: Message[],
     errors: string[]
 }
 
-export interface UploadMediaResponse {
+export interface ShortChatsResponse {
     result: string,
-    mediaDTOs: Media[],
+    shortChats: ShortChat[],
     errors: string[]
 }
 
@@ -128,12 +124,14 @@ export interface RelationshipResponse {
     errors: string[]
 }
 
-export interface NotificationsResponse {
+export interface NotifsResponse {
     result: string,
-    postNotifDTOs: PostNotif[],
-    userNotifDTOs: Notification[],
-    commentNotifDTOs: CommentNotif[],
+    notificDTOs: Notification[],
     errors: string[]
+}
+
+export interface VerificationResponse {
+    result: boolean
 }
 
 export interface Post {
@@ -144,7 +142,8 @@ export interface Post {
     userPostDTOs: UserPost[],
     postStatus: PostStatus,
     bestCommentDTO: Comment,
-    likesNumber: number
+    likesNumber: number,
+    authorDTO: ShortProfile
 }
 
 export interface UserPost {
@@ -161,13 +160,15 @@ export interface Comment {
     text: string,
     creationDate: string,
     mediaDTOs: Media[],
-    userCommentDTOs: UserPost[],
+    userCommentDTOs: UserComment[],
     commentStatus: CommentStatus,
-    author?: ShortProfile
+    authorDTO: ShortProfile,
+    likesNumber: number
 }
 
 export interface UserComment {
     userDTO: ShortProfile,
+    commentId: string,
     isLiked: boolean,
     isAuthor: boolean
 }
@@ -273,6 +274,12 @@ export interface Options {
     value: string
 }
 
+export interface NotifOptions {
+    key: number,
+    subject: number,
+    value: string
+}
+
 export interface SelectConfig {
     label: string,
     options: Options[],
@@ -285,15 +292,10 @@ export interface PageParams {
 }
 
 export interface Notification {
+    id: string,
     senderDTO: ShortProfile,
+    subjectId: string,
+    subjectType: SubjectType,
     creationDate: string,
-    notifType: PostNotifType | UserNotifType | CommentNotifType
-}
-
-export interface PostNotif extends Notification {
-    postId: string
-}
-
-export interface CommentNotif extends Notification {
-    commentId: string
+    notificType: NotificType
 }
