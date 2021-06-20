@@ -11,6 +11,7 @@ import { RelationshipsService } from '../shared/services/relationships.service';
 import { ChatsService } from '../shared/services/chats.service';
 import { PostsService } from '../shared/services/posts.service';
 import { NotificationsHub } from '../shared/hubs/notifications.hub';
+import { MaritalStatusOptions } from '../shared/enums-options';
 
 @Component({
   selector: 'app-profile-page',
@@ -148,7 +149,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   }
 
   changeTitleToUnfollow($event: MouseEvent) {
-    ($event.target as HTMLElement).innerText = $event.type == "mouseover" ? "Unfollow" : "Following";
+    ($event.target as HTMLElement).innerText = $event.type == "mouseover" ? "Не стежити" : "Відстежується";
   }
 
   defineRelationship(relationship: Relationship) {
@@ -173,4 +174,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
 
     );
   }
+
+  // getMaritalStatus(): string {
+  //   return MaritalStatusOptions.find(t => t.key == this.user.profile.maritalStatus).value;
+  // }
 }

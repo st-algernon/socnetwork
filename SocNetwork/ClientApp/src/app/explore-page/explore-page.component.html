@@ -11,7 +11,7 @@
           infiniteScrollThrottle="500"
           (scrolled)="onScroll()"
         >
-          <app-post *ngFor="let post of posts" [me]="me" [post]="post" comment="best"></app-post>
+          <app-post *ngFor="let post of posts" [me]="me" [post]="post" [commentBehavior]="none" [commentMaker]="false"></app-post>
       </div>
         <ng-template #empty_posts>
           <app-empty-post></app-empty-post>

@@ -53,7 +53,7 @@ namespace SocNetwork.Helpers
             }
 
             shortChatDTO.CoverPath = chat.Cover?.Path 
-                ?? ChatHelper.GenerateChatCover(chat, currentUser)?.Path;
+                ?? ChatHelper.GenerateChatCover(chat, currentUser).Path;
 
             if(chat.Messages.Any())
             {

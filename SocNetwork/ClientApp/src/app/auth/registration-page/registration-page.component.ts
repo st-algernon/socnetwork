@@ -84,4 +84,8 @@ export class RegistrationPageComponent implements OnInit {
       this.submitted = false;
     });
   }
+
+  resolved(captchaResponse: string) {
+    console.log(`Resolved captcha with response: ${captchaResponse}`);
+  }
 }

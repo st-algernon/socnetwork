@@ -25,9 +25,9 @@ export class NewsPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.postsHub.startConnection();
-    this.postsHub.addReceivedPostLikesListener();
-    this.postsHub.addReceivedCommentLikesListener();
+    // this.postsHub.startConnection();
+    // this.postsHub.addReceivedPostLikesListener();
+    // this.postsHub.addReceivedCommentLikesListener();
 
     this.subs.push(
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),

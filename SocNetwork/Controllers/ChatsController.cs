@@ -81,6 +81,7 @@ namespace SocNetwork.Controllers
             var chat = await db.Chats
                 .Include(c => c.Messages)
                 .ThenInclude(m => m.MessageMedia)
+                .OrderByDescending(m => m.CreationDate)
                 .FirstOrDefaultAsync(c => c.Id.ToString() == id);
 
             if (chat == null)
@@ -103,6 +104,14 @@ namespace SocNetwork.Controllers
                 });
             }
 
+            chat.Messages = await db.Messages
+                .Where(m => m.Chat == chat && m.MessageStatus != MessageStatus.IsDeleted)
+                .Include(m => m.Author)
+                .ThenInclude(u => u.ProfileMedia)
+                .Include(m => m.MessageMedia)
+                .OrderByDescending(p => p.CreationDate)
+                .Take(ChatHelper.DEFAULT_LAST_MESSAGES_NUM)
+                .ToListAsync();
             var chatDTO = ConvertHelper.ToChatDTO(chat, currentUser);
 
             return Ok(new ChatResponse()
@@ -113,7 +122,7 @@ namespace SocNetwork.Controllers
         }
 
         [HttpGet("{id}/messages")]
-        public async Task<IActionResult> GetChatMessages(string id, PageParams pageParams)
+        public async Task<IActionResult> GetChatMessages(string id, [FromQuery] PageParams pageParams)
         {
             var chatHelper = new ChatHelper(db);
             var currentUser = HttpContext.Items["User"] as User;
@@ -149,7 +158,7 @@ namespace SocNetwork.Controllers
                 .Include(m => m.Author)
                 .ThenInclude(u => u.ProfileMedia)
                 .Include(m => m.MessageMedia)
-                .OrderBy(p => p.CreationDate)
+                .OrderByDescending(p => p.CreationDate)
                 .Skip((pageParams.Number - 1) * pageParams.Size)
                 .Take(pageParams.Size)
                 .Select(m => ConvertHelper.ToMessageDTO(m))

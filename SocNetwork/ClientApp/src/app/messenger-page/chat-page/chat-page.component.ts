@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ComponentFactoryResolver, ElementRef, HostListener, ModuleWithComponentFactories, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ComponentFactoryResolver, ElementRef, HostListener, Input, ModuleWithComponentFactories, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { switchMap, tap } from 'rxjs/operators';
@@ -19,7 +19,7 @@ import { ContainerDirective } from 'src/app/shared/directives/container.directiv
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.css']
 })
-export class ChatPageComponent implements OnInit, OnDestroy {
+export class ChatPageComponent implements OnInit, OnDestroy, AfterViewInit {
   me: ShortProfile;
   chat: Chat;
   subs: Subscription[] = [];
@@ -29,10 +29,8 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     images: File[]
   };
   messagePage: number = 1;
-
   previewImagesData: Media[] = [];
   
-  @ViewChild(ContainerDirective, { static: true }) messagesContainer: ContainerDirective;
   @ViewChild('ngScrollbar', { static: true }) ngScrollbar: NgScrollbar;
 
   constructor(
@@ -60,25 +58,15 @@ export class ChatPageComponent implements OnInit, OnDestroy {
           return this.chatsService.getChatById(params['id']);
         })
       ).subscribe((chat: Chat) => { 
-  
         this.chat = chat;
-        this.chat.messageDTOs.reverse();
-  
-        this.clearMessagesContainer();
-
-        this.chat.messageDTOs.forEach(m => {
-          this.renderMessage(m);
-        })
-  
-        this.moveMessagesDown();
+        console.log(chat.messageDTOs);
+        this.chat.messageDTOs = this.chat.messageDTOs.reverse();
         this.scrollToBottom();
       }),
 
       this.messengerHub.message$.subscribe((messageDTO: Message) => {
         if (messageDTO.chatId === this.chat.id) {
           this.chat.messageDTOs.push(messageDTO)
-          this.renderMessage(messageDTO);
-          this.moveMessagesDown();
           this.scrollToBottom();
         }
       })
@@ -90,6 +78,10 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     this.subs.forEach(
       s => s.unsubscribe()
     );
+  }
+
+  ngAfterViewInit() {
+    this.scrollToBottom();
   }
 
   onSubmit(form: NgForm) {
@@ -176,6 +168,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   onScrollUp() {
+    console.log('scrolled up')
     this.subs.push(
 
       this.chatsService
@@ -190,49 +183,21 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  private renderMessage(message: Message) {
-    this.hideSameAuthors(message);
-
-    const viewContainerRef = this.messagesContainer.viewContainerRef;
-    const componentFactory = this.resolver.resolveComponentFactory(MessageComponent);
-    const componentRef = viewContainerRef.createComponent<MessageComponent>(componentFactory);
-    
-    componentRef.instance.message = message;
-    componentRef.instance.mine = message.authorDTO.id === this.me.id;
-  }
-
-  private hideSameAuthors(message: Message) {
+  checkAuthorVisibility(message: Message) {
     const index = this.chat.messageDTOs.indexOf(message);
-    const previous = this.chat.messageDTOs[index - 1];
-    const contentWrapper = this.ngScrollbar.viewport.contentWrapperElement as HTMLElement;
-    const lastMessage = contentWrapper?.lastElementChild;
-    const lastAuthor = lastMessage?.querySelector('.message-author');
+    const next = this.chat.messageDTOs[index + 1];
 
-    if (previous?.authorDTO.id === message.authorDTO.id) {
-      (lastAuthor as HTMLElement).style.visibility = 'hidden';
+    if (next?.authorDTO.id === message.authorDTO.id) {
+      return true;
     }
+
+    return false;
   }
 
-  private scrollToBottom() {
+  scrollToBottom() {
     this.ngScrollbar.scrollTo({ 
       left: 0, 
       top: (this.ngScrollbar.viewport.contentWrapperElement as HTMLElement).scrollHeight
     });
-  }
-
-  private clearMessagesContainer() {
-    this.messagesContainer.viewContainerRef.clear();
-  }
-
-  private moveMessagesDown() {
-    const contentWrapper = (this.ngScrollbar as NgScrollbar).viewport.contentWrapperElement;
-  
-    if (contentWrapper) {
-      contentWrapper.style.display = 'flex';
-      contentWrapper.style.flexDirection = 'column';
-      contentWrapper.style.justifyContent = 'flex-end';
-      contentWrapper.style.paddingBottom = '8px';
-      contentWrapper.style.minHeight = '100%';
-    }
   }
 }

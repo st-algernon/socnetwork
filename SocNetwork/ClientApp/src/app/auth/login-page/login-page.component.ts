@@ -9,7 +9,7 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css']
 })
-export class LoginPageComponent implements OnInit, OnDestroy {
+export class LoginPageComponent implements OnInit {
 
   form: FormGroup;
   submitted = false;
@@ -55,7 +55,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    console.log('destroy');
+  resolved(captchaResponse: string) {
+    console.log(`Resolved captcha with response: ${captchaResponse}`);
   }
 }

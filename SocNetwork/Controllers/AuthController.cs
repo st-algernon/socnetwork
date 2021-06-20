@@ -93,7 +93,7 @@ namespace SocNetwork.Controllers
             return Ok(await tokenHelper.GenerateJwtAsync(user));
         }
 
-        [HttpPost("refresh")]
+        [HttpPut("refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] TokenRequest tokenRequest)
         {
             if (ModelState.IsValid)

@@ -12,7 +12,7 @@ namespace SocNetwork.Helpers
     public class ChatHelper
     {
         private readonly SocNetworkContext db;
-        private const int DEFAULT_LAST_MESSAGES_NUM = 25;
+        public const int DEFAULT_LAST_MESSAGES_NUM = 25;
         public const string SAVED_MESSAGES_PATH = "Resources\\defaults\\saved-messages.jpg";
 
         public ChatHelper(SocNetworkContext context)
@@ -105,7 +105,7 @@ namespace SocNetwork.Helpers
                 .Collection(c => c.Messages)
                 .Query()
                 .Where(m => m.MessageStatus != MessageStatus.IsDeleted)
-                .OrderBy(m => m.CreationDate)
+                .OrderByDescending(m => m.CreationDate)
                 .Take(number)
                 .ToListAsync();
         }
@@ -123,8 +123,10 @@ namespace SocNetwork.Helpers
         public static Media GenerateChatCover(Chat chat, User currentUser)
         {
             var otherMembers = chat.Members.Except(new List<User> { currentUser }).ToList();
+            var chatCover = UsersHelper.GetCurrentAvatar(otherMembers.First()) 
+                ?? new Media { Path = UsersHelper.DEFAULT_AVATAR_PATH };
 
-            return UsersHelper.GetCurrentAvatar(otherMembers.First());
+            return chatCover;
         }
     }
 }

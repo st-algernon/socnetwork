@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { TokenRequest } from "./interfaces";
 import { AuthService } from "./services/auth.service";
 
 @Injectable()
@@ -28,7 +27,8 @@ export class AuthInterceptor implements HttpInterceptor{
                 console.log('Interceptor Error: ', error)
 
                 if (error.status === 401) {
-                    this.auth.updateToken()
+                    this.auth.logout();
+                    this.router.navigate(['/auth', 'login'])
                 }
                 
                 return throwError(error)

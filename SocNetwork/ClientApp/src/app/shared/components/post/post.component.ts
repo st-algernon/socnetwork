@@ -120,7 +120,7 @@ export class PostComponent implements OnInit, OnDestroy {
   
   toggleLikePost(likeBtn: HTMLElement) {
     let up = this.post.userPostDTOs.find(up => up.userDTO.id == this.me.id && up.isLiked);
-    console.log('from toggle like post', up);
+
     if(up) {
       this.postsHub.unlikePost(this.post.id);
       likeBtn.classList.remove('clicked');
@@ -140,7 +140,7 @@ export class PostComponent implements OnInit, OnDestroy {
 
   likeComment(comment: Comment, likeBtn: HTMLElement) {
     let uc = comment.userCommentDTOs.find(uc => uc.userDTO.id == this.me.id && uc.isLiked);
-    console.log('from toggle like comment', uc);
+    
     if(uc) {
       this.postsHub.unlikeComment(comment.id);
       likeBtn.classList.remove('clicked');
@@ -148,6 +148,10 @@ export class PostComponent implements OnInit, OnDestroy {
       this.postsHub.likeComment(comment.id);
       likeBtn.classList.add('clicked');
     }
+  }
+
+  stopPropagation($event: MouseEvent) {
+    $event.stopPropagation();
   }
 
   loadComments() {

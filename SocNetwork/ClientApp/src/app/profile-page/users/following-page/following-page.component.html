@@ -1,4 +1,4 @@
-<div *ngFor="let user of following" class="user-item">
+<div [routerLink]="'/' + user.username" *ngFor="let user of following" class="user-item">
     <div class="user-wrapper">
         <div class="flex fd-r jc-sb ai-c">
             <div class="avatar-box square-40">
@@ -16,7 +16,7 @@
                 (mouseover)="changeTitleToUnfollow($event)"
                 (mouseout)="changeTitleToUnfollow($event)"
                 class="btn btn-sm btn-filled"
-            >Following</button>
+            >Відстежується</button>
         </div>
     </div>
 </div>

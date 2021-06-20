@@ -5,10 +5,10 @@
 	position: relative;
 }
 
-.notifs {
+main {
     position: absolute;
 	width: 612px;
-    height: 90.2%;
+    min-height: 90.2%;
 	margin: 69px 60px 0px 0px;
     padding: 0px 8px;
 	box-sizing: border-box;

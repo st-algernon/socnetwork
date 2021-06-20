@@ -1,7 +1,3 @@
-ng-scrollbar {
-	--scrollbar-thumb-color: transparent;
-}
-
 main {
 	width: 612px;
 	margin: 54px 60px 0px 0px;
@@ -33,6 +29,10 @@ main {
 	overflow: hidden;
 	z-index: 9;
 	box-sizing: border-box;
+}
+
+.right-col ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1224px) {

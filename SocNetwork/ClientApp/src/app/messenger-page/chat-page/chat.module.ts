@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ChatPageComponent } from './chat-page.component';
 import { ChatRoutingModule } from './chat-routing.module';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     FormsModule,
     CommonModule,
     NgScrollbarModule,
-    SharedModule
+    SharedModule,
+    InfiniteScrollModule
   ],
   providers: [
     ChatsService

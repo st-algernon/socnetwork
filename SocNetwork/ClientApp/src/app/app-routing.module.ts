@@ -14,6 +14,7 @@ const routes : Routes = [
         { path: 'notifications', loadChildren: () => import('./notifications-page/notifications.module').then(m => m.NotificationsModule), canActivate: [AuthGuard] },
         { path: 'explore', loadChildren: () => import('./explore-page/explore.module').then(m => m.ExploreModule), canActivate: [AuthGuard] },
         { path: 'search', loadChildren: () => import('./search/search.module').then(m => m.SearchModule), canActivate: [AuthGuard] },
+        { path: 'saved', loadChildren: () => import('./saved-page/saved.module').then(m => m.SavedModule), canActivate: [AuthGuard] },
         { path: ':username', loadChildren: () => import('./profile-page/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] },
     ]},
     { path: '**', component: NotFoundPageComponent }

@@ -2,17 +2,16 @@
   <div class="sign-box">
     <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="validation" *ngIf="email?.invalid && email?.touched">
-        <small *ngIf="email?.errors?.required">Email is required. </small>
-        <small *ngIf="email?.errors?.email">Enter a valid e-mail</small>
+        <small *ngIf="email?.errors?.required">Email є обов'язковим </small>
+        <small *ngIf="email?.errors?.email">Введіть валідний e-mail </small>
       </div>
       <div class="validation" *ngIf="password?.invalid && password?.touched">
-        <small *ngIf="password?.errors?.required">Password is required</small>
+        <small *ngIf="password?.errors?.required">Пароль є обов'язковим</small>
         <small *ngIf="password?.errors?.minlength"
-          >Password must be at least
-          {{ password?.errors?.minlength?.requiredLength }} characters long.
-          {{ password?.errors?.minlength?.actualLength }} characters are now
-          entered</small
-        >
+          >Довжина паролю повинна бути щонайменше 
+          {{ password?.errors?.minlength?.requiredLength }} символів. 
+          {{ password?.errors?.minlength?.actualLength }} символів введено
+        </small>
       </div>
       <div class="controls-box">
         <div class="form-control flex fd-r jc-sb">
@@ -24,7 +23,7 @@
           />
         </div>
         <div class="form-control flex fd-r jc-sb">
-          <label>Password:</label>
+          <label>Пароль:</label>
           <input
             type="password"
             formControlName="password"
@@ -35,12 +34,23 @@
           <span *ngIf="submitted" class="loader">
             <app-loader></app-loader>
           </span>
-          <button type="submit" [disabled]="form.invalid || submitted" class="sign-btn">Sign in</button>
+          <button 
+            (click)="captchaRef.execute()" 
+            type="submit" 
+            [disabled]="form.invalid || submitted" 
+            class="sign-btn"
+          >Sign in</button>
         </div>
       </div>
+      <re-captcha
+        (resolved)="resolved($event)"
+        size="invisible"
+        siteKey="6Lem90YbAAAAAPs2f74pe9FznGebVCDVDwrBUwCW"
+        #captchaRef="reCaptcha"
+      ></re-captcha>
       <div class="form-footer">
-        <a class="forgot-password">Forgot your password?</a>
-        <a class="create-account" [routerLink]="['/auth', 'sign-up']">Create an account</a>
+        <a class="forgot-password">Забули пароль?</a>
+        <a class="create-account" [routerLink]="['/auth', 'sign-up']">Створити аккаунт</a>
       </div>
     </form>
   </div>

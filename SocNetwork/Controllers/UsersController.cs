@@ -131,6 +131,7 @@ namespace SocNetwork.Controllers
         [HttpGet("{username}/following")]
         public async Task<IActionResult> GetFollowings(string username, [FromQuery] UsersPageParams usersPageParams)
         {
+            var currentUser = HttpContext.Items["User"] as User;
             var user = await db.Users
                 .Include(u => u.ProfileMedia)
                 .FirstOrDefaultAsync(u => u.Username == username);
@@ -151,6 +152,7 @@ namespace SocNetwork.Controllers
                 .Select(ur => ur.ToUser)
                 .ToListAsync();
 
+            var currentUserDTO = ConvertHelper.ToShortProfileDTO(currentUser);
             var followingDTOs = new List<ShortProfileDTO>();
 
             followings.ForEach(u => {
@@ -259,11 +261,11 @@ namespace SocNetwork.Controllers
                 .Select(ur => ur.ToUser )
                 .ToListAsync();
 
-            var users = await db.Users.ToListAsync();
+            var users = await db.Users.Include(u => u.ProfileMedia).ToListAsync();
 
             var suggestionDTOs = users
                 .Except(followings)
-                .OrderBy(ur => ur.CreationDate)
+                .OrderByDescending(ur => ur.CreationDate)
                 .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
                 .Take(usersPageParams.Size)
                 .Select(u => ConvertHelper.ToShortProfileDTO(u))

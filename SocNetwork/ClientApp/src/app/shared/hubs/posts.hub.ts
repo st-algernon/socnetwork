@@ -16,26 +16,28 @@ export class PostsHub {
     ) {}
     
     startConnection () {
-      this.hubConnection = new signalR.HubConnectionBuilder()
-                              .withUrl('/hubs/posts', { accessTokenFactory: () => this.auth.token })
-                              .build();
-      this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
-      this.hubConnection
-        .start()
-        .then(() => console.log('Connection started'))
-        .catch(err => console.log('Error while starting connection: ' + err))
+        if (!this.hubConnection) {
+            this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/hubs/posts', { accessTokenFactory: () => this.auth.token })
+            .build();
+
+            this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
+
+            this.hubConnection
+            .start()
+            .then(() => console.log('Connection started'))
+            .catch(err => console.log('Error while starting connection: ' + err))
+        }
     }
 
     addReceivedPostLikesListener() {
         this.hubConnection.on("ReceivePostLikes", (userPost: UserPost) => {
-            console.log('Post liked', userPost);
             this.postLikes$.next(userPost);
         });
     }
 
     addReceivedCommentLikesListener() {
         this.hubConnection.on("ReceiveCommentLikes", (userComment: UserComment) => {
-            console.log('Comment liked', userComment);
             this.commentLikes$.next(userComment);
         });
     }

@@ -5,19 +5,15 @@
 	position: relative;
 }
 
-ng-scrollbar {
-	--scrollbar-thumb-color: transparent;
-}
-
-.photos {
+main {
 	width: 612px;
+	min-height: 90.2%;
 	margin: 69px 60px 0px 0px;
 	box-sizing: border-box;
     border-radius: 15px;
 	padding: 0px 6px;
     background-color: #fff;
     position: absolute;
-	height: calc(100% - 69px);
 }
 
 .photos-header {
@@ -72,6 +68,10 @@ ng-scrollbar {
 	overflow: hidden;
 	z-index: 9;
 	box-sizing: border-box;
+}
+
+.right-col ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
 }
 
 @media screen and (min-width: 1024px) and (max-width: 1224px) {

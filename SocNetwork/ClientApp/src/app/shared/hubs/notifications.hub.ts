@@ -16,23 +16,24 @@ export class NotificationsHub {
     ) {}
     
     startConnection () {
-      this.hubConnection = new signalR.HubConnectionBuilder()
-                              .withUrl('/hubs/notifications', { accessTokenFactory: () => this.auth.token })
-                              .build();
-      this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
-      this.hubConnection
-        .start()
-        .then(() => console.log('Connection started'))
-        .catch(err => console.log('Error while starting connection: ' + err))
+        if (!this.hubConnection) {
+            this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/hubs/notifications', { accessTokenFactory: () => this.auth.token })
+            .build();
+            this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
+            this.hubConnection
+            .start()
+            .then(() => console.log('Connection started'))
+            .catch(err => console.log('Error while starting connection: ' + err))
+        }
     }
 
     addReceivedNotificListener() {
         this.hubConnection.on("ReceiveNotific", (notif: Notification) => {
-            console.log('notif', notif);
             this.notif$.next(notif);
         });
     }
-    
+
     notify(request: NotificRequest) {
         this.hubConnection.invoke('Notify', request);
     }

@@ -64,8 +64,8 @@ export class SearchMakerComponent implements OnInit, OnDestroy {
         this.subs.push(
 
           this.usersService.getWantedhUsers(this.query).subscribe((users: ShortProfile[]) => {
-              console.log(users);
               this.wantedUsers = users;
+              console.log(this.wantedUsers);
             }
           )
     

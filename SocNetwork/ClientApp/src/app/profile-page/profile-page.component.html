@@ -33,19 +33,19 @@
                 *ngIf="relationship.isUnFollowed && !relationship.isMe" 
                 class="btn btn-lg btn-outlined profile-action-btn"
                 (click)="follow()"
-              >Follow</button>
+              >Стежити</button>
               <button 
                 *ngIf="relationship.isFollowed && !relationship.isMe"
                 class="btn btn-lg btn-filled profile-action-btn"
                 (mouseover)="changeTitleToUnfollow($event)"
                 (mouseout)="changeTitleToUnfollow($event)"
                 (click)="unfollow()"
-              >Following</button>
+              >Відстежується</button>
               <button 
                 *ngIf="relationship.isMe"
                 class="btn btn-lg btn-outlined profile-action-btn" 
                 (click)="editProfileFlag = true"
-              >Edit profile</button>
+              >Редагувати</button>
             </div>
           </div>
           <div class="flex fd-r jc-fe">
@@ -57,11 +57,11 @@
               <ul class="follow-wrap flex fd-r jc-sb">
                 <li class="">
                   <a href="#">
-                    <span *ngIf="user.profile; else empty_count_posts">30</span>
+                    <span *ngIf="user.profile; else empty_count_posts">28</span>
                     <ng-template #empty_count_posts>
                       <span class="empty count"></span>
                     </ng-template> 
-                    <span> posts</span>
+                    <span> публікацій</span>
                   </a>
                 </li>
                 <li class="">
@@ -70,7 +70,7 @@
                     <ng-template #empty_count_followers>
                       <span class="empty count"></span>
                     </ng-template> 
-                    <span class="followers-label"> followers</span>
+                    <span class="followers-label"> відстежують</span>
                   </a>
                 </li>
 
@@ -80,14 +80,14 @@
                     <ng-template #empty_count_following>
                       <span class="empty count"></span>
                     </ng-template>
-                    <span class="following-label"> following</span>
+                    <span class="following-label"> відстежує</span>
                   </a>
                 </li>
               </ul>
               <ul *ngIf="user.profile; else empty_short_info" class="short-info flex fd-r">
-                <li class="residence">Zhytomyr</li>
-                <li class="birthday">Born June 26, 1998</li>
-                <li class="relationship">Married</li>
+                <li class="residence">Житомир</li>
+                <li class="birthday">Червень 26, 1999</li>
+                <li class="relationship">В шлюбі</li>
                 <li class="more-details"></li>
               </ul>
               <ng-template #empty_short_info>
@@ -113,8 +113,8 @@
           <section class="user-wall-header-wrapper">
             <div class="user-wall-header flex row jc-sb">
               <div data-container="post-switches">
-                <button data-action="loadAll" data-state="active">All posts</button>
-                <button data-action="loadByMe" data-state="inactive">Original</button>
+                <button data-action="loadAll" data-state="active">Всі публікації</button>
+                <button data-action="loadByMe" data-state="inactive">Оригінальні</button>
               </div>
               <form action="" method="get" class="search-form flex col jc-c">
                 <input
@@ -135,7 +135,7 @@
               (scrolled)="onScroll()"
             >
               <ng-container *ngFor="let post of user.posts">
-                <app-post [post]="post" [me]="me" commentsBehavior="none"></app-post>
+                <app-post [post]="post" [me]="me" commentsBehavior="best"></app-post>
               </ng-container>
             </div>
             <ng-template #empty_post>

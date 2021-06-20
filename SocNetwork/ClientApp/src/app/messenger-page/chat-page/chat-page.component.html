@@ -9,7 +9,7 @@
                 </div>
                 <div *ngIf="chat" class="flex fd-c ai-c">
                     <div class="source-name">{{ chat.title }}</div>
-                    <div class="last-visited">14 March 2021 at 09:23 am</div>
+                    <div class="last-visited">14 червня 2021 о 09:23</div>
                 </div>
                 <form action="" method="get" class="search-message-form flex fd-c jc-c" >
                     <input type="search" name="search_field" placeholder="Search for people and groups" autocomplete="off" />
@@ -22,8 +22,25 @@
                 trackClass="scrollbar-track"
                 #ngScrollbar
             >
-                <div class="messages-container flex fd-c jc-fe" container>
-                    <app-loader *ngIf="!chat"></app-loader>
+                <div 
+                    infiniteScroll 
+                    infiniteScrollUpDistance="2"
+                    [scrollWindow]="false" 
+                    (scrolledUp)="onScrollUp()"
+                    scrollViewport
+                >
+                    <div class="messages-container flex fd-c"
+                        [ngClass]="{'jc-fe': chat, 'jc-c': !chat}"
+                    >
+                        <ng-container *ngFor="let message of chat?.messageDTOs">
+                            <app-message 
+                                [message]="message" 
+                                [mine]="message.authorDTO.id === me.id"
+                                [invisibleAuthor]="checkAuthorVisibility(message)"
+                            ></app-message>
+                        </ng-container>
+                        <app-loader *ngIf="!chat"></app-loader>
+                    </div>
                 </div>
             </ng-scrollbar>
         </section>
@@ -71,7 +88,7 @@
                         [(ngModel)]="messageForm.text"
                         (keydown)="onEnterSubmit(form, $event)"
                         (input)="resizeTextarea($event)"
-                        placeholder="Write a message..."
+                        placeholder="Написати повідомлення..."
                     ></textarea>
                     <ul class="attach flex fd-r jc-sb">
                         <li class="add-emoji-btn round r-22 square-28"></li>

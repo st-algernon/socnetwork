@@ -156,8 +156,9 @@ namespace SocNetwork.Helpers
                 var tokenHelper = new TokenHelper(db);
                 return await tokenHelper.GenerateJwtAsync(dbUser);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                var _ex = ex;
                 return null;
             }
         }

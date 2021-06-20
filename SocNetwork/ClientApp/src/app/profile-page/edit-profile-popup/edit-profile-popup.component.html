@@ -2,7 +2,7 @@
   <section class="edit-profile">
     <div class="edit-profile-header flex fd-c jc-c ai-c">
       <button (click)="close()" class="close-btn round r-22 square-32"></button>
-      <h3>Edit profile</h3>
+      <h3>Редагувати профіль</h3>
     </div>
     <div class="edit-profile-body">
       <form
@@ -12,7 +12,7 @@
       >
         <div class="photo-cover" data-container="image-box">
           <img
-            *ngIf="user && !previewCoverData"
+            *ngIf="user && user?.coverPath && !previewCoverData"
             [src]="user.coverPath"
             alt="photo-cover"
           />
@@ -38,7 +38,7 @@
           </div>
         </div>
         <div class="user-avatar-back">
-          <div class="user-avatar" data-container="image-box">
+          <div class="user-avatar">
             <img
               *ngIf="user && !previewAvatarData"
               [src]="user.avatarPath"
@@ -70,19 +70,19 @@
           <ng-scrollbar appearance="standard">
             <div class="group">
               <input type="text" formControlName="name" />
-              <label for="">name</label>
+              <label for="">ім'я</label>
 
               <div class="validation" *ngIf="name?.invalid && name?.touched">
                 <small *ngIf="name?.errors?.minlength"
-                  >Name must be at least
-                  {{ name?.errors?.minlength?.requiredLength }} characters long.
+                  >Довжина імені повинна бути щонайменше 
+                  {{ name?.errors?.minlength?.requiredLength }} символів.
                 </small>
                 <small *ngIf="name?.errors?.pattern"
-                  >The name can only contain letters and a space.
+                  >Ім'я повинно містити тільки літери і пробіли.
                 </small>
                 <small *ngIf="name?.errors?.maxlength">
-                  Name must be at least
-                  {{ name?.errors?.maxlength?.requiredLength }} characters long.
+                  Максимальна довжина імені 
+                  {{ name?.errors?.maxlength?.requiredLength }} символів.
                 </small>
               </div>
             </div>
@@ -94,17 +94,16 @@
                 class="validation"
                 *ngIf="username?.invalid && username?.touched"
               >
-                <small *ngIf="username?.errors?.pattern"
-                  >The username can only contain Latin letters, numbers, and
-                  underscores.
+                <small *ngIf="username?.errors?.pattern">
+                  Username може містити тільки латинські літери, цифри та знаки підкреслення
                 </small>
                 <small *ngIf="username?.errors?.minlength">
-                  Min length is
-                  {{ username?.errors?.minlength?.requiredLength }} characters.
+                  Мінімальна довжина імені 
+                  {{ username?.errors?.minlength?.requiredLength }} символів.
                 </small>
                 <small *ngIf="username?.errors?.maxlength">
-                  Max length is
-                  {{ username?.errors?.maxlength?.requiredLength }} characters.
+                  Максимальна довжина імені 
+                  {{ username?.errors?.maxlength?.requiredLength }} символів.
                 </small>
               </div>
             </div>
@@ -113,8 +112,8 @@
               <label for="">bio</label>
               <div class="validation" *ngIf="bio?.invalid && bio?.touched">
                 <small *ngIf="bio?.errors?.maxlength">
-                  Max length is
-                  {{ bio?.errors?.maxlength?.requiredLength }} characters.
+                  Максимальна довжина bio
+                  {{ bio?.errors?.maxlength?.requiredLength }} символів.
                 </small>
               </div>
             </div>
@@ -122,13 +121,13 @@
               <input type="number" formControlName="dayOfBirth" />
               <input type="number" formControlName="monthOfBirth" />
               <input type="number" formControlName="yearOfBirth" min="1900" />
-              <label for="">date of birth</label>
+              <label for="">дата народження</label>
               <div
                 class="validation"
                 *ngIf="dayOfBirth?.invalid && dayOfBirth?.touched"
               >
                 <small *ngIf="dayOfBirth?.errors?.max || dayOfBirth?.errors?.min">
-                  Enter the correct day.
+                  Введіть коректну дату.
                 </small>
               </div>
               <div
@@ -138,7 +137,7 @@
                 <small
                   *ngIf="monthOfBirth?.errors?.max || monthOfBirth?.errors?.min"
                 >
-                  Enter the correct month.
+                  Введіть коректний місяць.
                 </small>
               </div>
               <div
@@ -146,7 +145,7 @@
                 *ngIf="yearOfBirth?.invalid && yearOfBirth?.touched"
               >
                 <small *ngIf="yearOfBirth?.errors?.max || yearOfBirth?.errors?.min">
-                  Enter the correct year.
+                  Введіть коректний рік.
                 </small>
               </div>
             </div>
@@ -170,8 +169,8 @@
             </div>
 
             <div class="form-actions flex jc-sb">
-              <a href="#" class="advanced-editing">Advanced editing</a>
-              <button type="submit" class="save-info-btn as-fe">Save</button>
+              <a href="#" class="advanced-editing">Розширене редагування</a>
+              <button type="submit" class="save-info-btn as-fe">Зберегти</button>
             </div>
           </ng-scrollbar>
         </div>

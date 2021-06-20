@@ -15,24 +15,17 @@ import {
 export class AuthService {
 
   get token(): string {
-    // const expDate = new Date(localStorage.getItem("token-exp"));
+    const expDate = new Date(localStorage.getItem("token-exp"));
 
-    // if (new Date() > expDate) {
-    //   this.logout();
-    //   return null;
-    // }
+    if (new Date() > expDate) {
+      this.logout();
+      return null;
+    }
 
     return localStorage.getItem('token');
   }
 
   get refreshToken(): string {
-    // const expDate = new Date(localStorage.getItem("token-exp"));
-
-    // if (new Date() > expDate) {
-    //   this.logout();
-    //   return null;
-    // }
-
     return localStorage.getItem('refresh-token');
   }
 
@@ -68,7 +61,7 @@ export class AuthService {
       refreshToken: this.refreshToken
     }
 
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/refresh`, request)
+    return this.http.put<AuthResponse>(`${environment.apiUrl}/auth/refresh`, request)
       .pipe(
         tap(this.setTokens),
         catchError((error) => {

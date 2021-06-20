@@ -10,6 +10,7 @@ export class MessageComponent implements OnInit {
 
   @Input() mine: boolean = false;
   @Input() message: Message;
+  @Input() invisibleAuthor: boolean = false;
 
   constructor() { }
 

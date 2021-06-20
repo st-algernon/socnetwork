@@ -91,13 +91,13 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
     }
 
     this.genderSelect = { 
-      label: 'gender',
+      label: 'гендер',
       options: GenderOptions,
       selected: GenderOptions.find(o => o.key == this.user.gender.toString())
     };
 
     this.maritalStatusSelect = {
-      label: 'marital status',
+      label: 'сімейний стан',
       options: MaritalStatusOptions,
       selected: MaritalStatusOptions.find(o => o.key == this.user.maritalStatus.toString())
     }
@@ -151,10 +151,12 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
   }
 
   previewCover(file: File) {
+    this.coverFile = file;
     this.previewImage(file, MediaFor.Cover);
   }
 
   previewAvatar(file: File) {
+    this.avatarFile = file;
     this.previewImage(file, MediaFor.Avatar);
   }
 

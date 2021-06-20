@@ -1,31 +1,28 @@
-    <section class="post">
-        <!-- [routerLink]="['/', post.authorDTO.username, 'post', post.id]" -->
-        <div class="post-header">
-            <a [routerLink]="['/', post.authorDTO.username]" class="flex ai-c">
-                <div class="avatar-box square-48">
+<section [routerLink]="['/', post.authorDTO.username, 'post', post.id]" class="post">
+        <div class="post-header flex ai-c">
+                <div [routerLink]="['/', post.authorDTO.username]" class="avatar-box square-48">
                     <img 
                         [src]="post.authorDTO.avatarPath"
                         class="square-48"
                         alt=""
                     >
                 </div>
-                <div class="flex fd-c">
+                <div (click)="stopPropagation($event)" [routerLink]="['/', post.authorDTO.username]" class="flex fd-c">
                     <span class="source-name">{{ post.authorDTO.name }}</span>
                     <span class="nick-name">@{{ post.authorDTO.username }}</span>
                 </div>
-            </a>
         </div>
         <div class="post-body">
-            <div #post_text_container class="post-text">
+            <span #post_text_container (click)="stopPropagation($event)" class="post-text">
                
-            </div>
+            </span>
             <app-photos-container 
                 *ngIf="post.mediaDTOs.length > 0"
                 [photos]="post.mediaDTOs"
                 size="large"
             ></app-photos-container>
         </div>
-        <div class="post-footer flex fd-r jc-sb ai-c">
+        <div (click)="stopPropagation($event)" class="post-footer flex fd-r jc-sb ai-c">
             <ul class="content-actions flex fd-r jc-sb">
                 <li class="flex ai-c">
                     <span 
@@ -51,7 +48,7 @@
             <div *ngIf="isToday() == false" class="published-date">{{ post.creationDate | date:'mediumDate':'':'uk'}}</div>
         </div>
 
-        <div class="comments-section">
+        <div *ngIf="commentMaker" (click)="stopPropagation($event)" class="comments-section">
             <div *ngIf="commentsBehavior == 'all' || commentsBehavior == 'best'" class="comments-container">
                 <div 
                     *ngFor="let comment of comments" 
@@ -103,7 +100,7 @@
                             </div>
                         </div>
                         <div class="comment-footer flex jc-sb">
-                            <span class="replay-btn">Replay</span>
+                            <span class="replay-btn">Відповісти</span>
                             <div *ngIf="isToday()" class="published-date">{{ comment.creationDate | date:'shortTime':'':'uk'}}</div>
                             <div *ngIf="isToday() == false" class="published-date">{{ comment.creationDate | date:'mediumDate':'':'uk'}}</div>
                         </div>
@@ -113,7 +110,7 @@
                     *ngIf="comments.length > 0 && !commentsLoaded"
                     class="show-more-btn"
                     (click)="loadComments()"
-                >show more comments</div>
+                >показати більше коментарів</div>
             </div>
             <div *ngIf="commentMaker" class="comments-footer">
                 <div class="flex jc-c">
@@ -150,7 +147,7 @@
                                 [(ngModel)]="commentForm.text"
                                 (keydown)="onEnterSubmit(form, $event)"
                                 (input)="resizeTextarea($event)"
-                                placeholder="Leave a comment..."
+                                placeholder="Залишити коментар..."
                             ></textarea>
                             <ul class="attach flex fd-r jc-sb" data-container="attach">
                                 <li class="add-picture-btn round r-18 square-28" (click)="input_image.click()">

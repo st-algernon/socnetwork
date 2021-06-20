@@ -34,7 +34,7 @@ namespace SocNetwork.Hubs
                 var notific = await db.Notifications.FirstOrDefaultAsync(n =>
                     n.SenderId == caller.Id &&
                     n.RecipientId == Guid.Parse(request.RecipientId) &&
-                    n.SubjectId == Guid.Parse(request.SubjectId) &&
+                    n.SubjectId.ToString() == request.SubjectId &&
                     n.SubjectType == (SubjectType)request.SubjectType &&
                     n.NotificType == (NotificType)request.NotificType
                 );
@@ -45,11 +45,15 @@ namespace SocNetwork.Hubs
                     {
                         SenderId = caller.Id,
                         RecipientId = Guid.Parse(request.RecipientId),
-                        SubjectId = Guid.Parse(request.SubjectId),
                         SubjectType = (SubjectType)request.SubjectType,
                         NotificType = (NotificType)request.NotificType,
                         CreationDate = DateTime.UtcNow
                     };
+
+                    if (string.IsNullOrEmpty(request.SubjectId) == false)
+                    {
+                        notific.SubjectId = Guid.Parse(request.SubjectId);
+                    }
 
                     await db.Notifications.AddAsync(notific);
                 }

@@ -16,19 +16,22 @@ export class MessengerHub {
     ) {}
     
     startConnection () {
-      this.hubConnection = new signalR.HubConnectionBuilder()
-                              .withUrl('/hubs/messenger', { accessTokenFactory: () => this.auth.token })
-                              .build();
-      this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
-      this.hubConnection
-        .start()
-        .then(() => console.log('Connection started'))
-        .catch(err => console.log('Error while starting connection: ' + err))
+        if (!this.hubConnection) {
+            this.hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('/hubs/messenger', { accessTokenFactory: () => this.auth.token })
+            .build();
+
+            this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
+            
+            this.hubConnection
+            .start()
+            .then(() => console.log('Connection started'))
+            .catch(err => console.log('Error while starting connection: ' + err))
+        }
     }
 
     addReceivedMessageListener() {
         this.hubConnection.on("Receive", (message: Message) => {
-            console.log('Message', message);
             this.message$.next(message);
         });
     }

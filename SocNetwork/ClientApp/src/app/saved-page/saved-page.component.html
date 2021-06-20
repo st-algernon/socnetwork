@@ -1,15 +1,15 @@
 <div class="flex jc-c">
-    <main class="post-container flex fd-c">
-      <div class="post-container-header">
-        <h2>Saved posts</h2>
+    <main class="saved-posts flex fd-c">
+      <div class="saved-posts-header">
+        <h2>Збережені публікації</h2>
       </div>
-      <div class="post-container-body">
-        <ng-container *ngIf="post; else empty_post">
-          <app-post [me]="me" [post]="post" comment="all"></app-post>
-        </ng-container>
-        <ng-template #empty_post>
-          <app-empty-post withMedia="true"></app-empty-post>
-        </ng-template>
+      <div class="saved-posts-body fg-1">
+        <div 
+          *ngIf="savedPosts?.length == 0"
+          class="saved-posts-lining flex jc-c ai-c"
+        >
+          <p class="lining-label">Не знайдено збережених публікацій</p>
+        </div>
       </div>
     </main>
   </div>

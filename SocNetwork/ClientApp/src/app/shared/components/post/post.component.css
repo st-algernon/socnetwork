@@ -26,7 +26,7 @@
 .post-body .post-text {
 	word-wrap: break-word;
 	margin-bottom: 5px;
-	cursor: pointer;
+	cursor: auto;
 }
 
 .post .post-footer {

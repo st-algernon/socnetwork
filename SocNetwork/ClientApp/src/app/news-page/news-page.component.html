@@ -9,7 +9,7 @@
       (scrolled)="onScroll()"
     >
       <ng-container *ngFor="let post of posts">
-        <app-post [me]="me" [post]="post" comments="best"></app-post>
+        <app-post [me]="me" [post]="post" commentsBehavior="best"></app-post>
       </ng-container>
     </div>
     <ng-template #empty_post>

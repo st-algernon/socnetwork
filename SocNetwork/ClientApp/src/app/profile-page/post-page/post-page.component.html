@@ -1,11 +1,11 @@
 <div class="flex jc-c">
     <main class="post-container flex fd-c">
       <div class="post-container-header">
-        <h2>Post</h2>
+        <h2>Публікація</h2>
       </div>
       <div class="post-container-body">
         <ng-container *ngIf="post; else empty_post">
-          <app-post [me]="me" [post]="post" comment="all"></app-post>
+          <app-post [me]="me" [post]="post" commentsBehavior="all"></app-post>
         </ng-container>
         <ng-template #empty_post>
           <app-empty-post withMedia="true"></app-empty-post>
