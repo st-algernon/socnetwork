@@ -1,1 +1,35 @@
-<p>news-page works!</p>
+<div class="flex jc-c">
+  <main>
+    <app-post-maker [me]="me" (newPostEvent)="addNewPost($event)"></app-post-maker>
+    <div 
+      *ngIf="posts; else empty_post"
+      infinite-scroll
+      infiniteScrollDistance="2"
+      infiniteScrollThrottle="500"
+      (scrolled)="onScroll()"
+    >
+      <ng-container *ngFor="let post of posts">
+        <app-post [me]="me" [post]="post" commentsBehavior="best"></app-post>
+      </ng-container>
+    </div>
+    <ng-template #empty_post>
+      <app-empty-post></app-empty-post>
+      <app-empty-post withMedia="true"></app-empty-post>
+      <app-empty-post></app-empty-post>
+    </ng-template>
+    <div 
+      *ngIf="posts?.length == 0"
+      class="news-lining flex jc-c ai-c"
+    >
+      <p class="lining-label">Тут будуть розміщуватись публікації користувачів, на яких Ви підписані</p>
+    </div>
+  </main>
+</div>
+<div class="flex jc-fe">
+  <div class="right-col">
+    <ng-scrollbar>
+      <app-trends></app-trends>
+      <app-follow-offers></app-follow-offers>
+    </ng-scrollbar>
+  </div>
+</div>

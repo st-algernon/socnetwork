@@ -28,28 +28,21 @@ namespace SocNetwork.Controllers
             db = context;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         [Authorize(Roles = "User")]
         [HttpPost("profile"), DisableRequestSizeLimit]
-        public async Task<IActionResult> ProfileMedia()
+        public async Task<IActionResult> UploadProfileMedia()
         {
             var currentUser = HttpContext.Items["User"] as User;
 
             var formCollection = await Request.ReadFormAsync();
-            var mediaForStr = Request.Headers["Media-For"][0];
-            var mediaFor = (MediaFor) Enum.Parse(typeof(MediaFor), mediaForStr);
             var file = formCollection.Files[0];
-            var mediaHelper = new MediaHelper(db);
-            var pathToFile = mediaHelper.SaveFile(file);
+            var pathToFile = MediaHelper.SaveToFileSystem(file);
+            var mediaForStr = Request.Headers["Media-For"][0];
+            var mediaFor = (MediaFor)Enum.Parse(typeof(MediaFor), mediaForStr);
 
-            mediaHelper.ResetCurrentImage(currentUser, mediaFor);
+            UsersHelper.ResetCurrentProfileMedia(currentUser, mediaFor);
 
-            db.ProfileMedia.Add(new ProfileMedia()
+            await db.ProfileMedia.AddAsync(new ProfileMedia()
             {
                 ProfileId = currentUser.Id,
                 Path = pathToFile,
@@ -65,16 +58,61 @@ namespace SocNetwork.Controllers
             return Ok();
         }
 
-        // PUT api/<MediaController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [Authorize(Roles = "User")]
+        [HttpPost, DisableRequestSizeLimit]
+        public async Task<IActionResult> UploadMedia()
         {
+            var formCollection = await Request.ReadFormAsync();
+            var files = formCollection.Files;
+            var mediaDTOs = new List<MediaDTO>();
+
+            foreach(var file in files)
+            {
+                var pathToFile = MediaHelper.SaveToFileSystem(file);
+
+                var mediaDTO = new MediaDTO()
+                {
+                    Path = pathToFile,
+                    Size = (int)file.Length,
+                    MimeType = file.ContentType,
+                    CreationDate = DateTime.Now
+                };
+
+                mediaDTOs.Add(mediaDTO);
+            }
+
+            return Ok(new MediaResponse()
+            {
+                Result = true,
+                Media = mediaDTOs
+            });
         }
 
-        // DELETE api/<MediaController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpGet("{username}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetProfileMedia(string username)
         {
+            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            if (user == null)
+            {
+                return BadRequest(new MediaResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "User not found" }
+                });
+            }
+
+            var avatarDTOs = await db.ProfileMedia
+                .Where(pm => pm.Profile.Username == username && pm.MediaFor == MediaFor.Avatar)
+                .Select(pm => ConvertHelper.ToMediaDTO(pm))
+                .ToListAsync();
+
+            return Ok(new MediaResponse
+            {
+                Result = true,
+                Media = avatarDTOs
+            });
         }
     }
 }

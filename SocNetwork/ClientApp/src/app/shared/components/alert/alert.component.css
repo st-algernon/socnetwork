@@ -1,0 +1,29 @@
+.alert-wrapper {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    bottom: 20px;
+    z-index: 101;
+}
+
+.message-alert {
+    position: relative;
+    cursor: pointer;
+}
+
+.message-alert .messages-number {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    border-radius: 50%;
+    background-color: rgb(247, 10, 10);
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .alert-wrapper {
+        display: none;
+    }
+}

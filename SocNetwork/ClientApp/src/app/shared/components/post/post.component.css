@@ -1,100 +1,82 @@
-.post-wrap {
-	margin-top: 10px;
+.post {
 	background: #fff;
 	border-radius: 15px;
-	padding: 12px 15px;
+	padding: 12px 16px;
 	color: #272727;
+	margin-bottom: 10px;
+	cursor: pointer;
 }
 
-
-.without-top-b-radius:first-child {
-	border-radius: 0px 0px 15px 15px!important;
-}
-
-.post-wrap .no-posts {
-	text-align: center;
-	color: #777;
-	padding: 25px;
-}
-
-    .post-wrap .source-name {
-        font-family: 'Deezer', 'Open Sans', sans-serif;
-    }
-
-.post-wrap .nick-name {
-	font-size: 14px;
-}
-
-.post-wrap .published-date {
-	font-size: 14px;
-	color: #777;
-}
-
-.post-wrap .avatar-box {
+.post .post-header .avatar-box {
 	margin-right: 10px;
 }
 
-.post-wrap .to-right-post {
-	margin-left: 58px;
+.post-header .source-name {
+    font-family: 'Deezer', 'Open Sans', sans-serif;
 }
 
-.post-wrap .post-body {
+.post-header .nick-name {
+	font-size: 14px;
+}
+
+.post .post-body {
 	margin: 10px 0px 8px 0px;
 }
 
-.post-wrap .post-body .media-box {
-	max-height: 420px;
-	border-radius: 15px;
-	overflow: hidden;
-	margin-top: 8px;
+.post-body .post-text {
+	word-wrap: break-word;
+	margin-bottom: 5px;
+	cursor: auto;
 }
 
-.post-wrap .post-body .media-box img {
-	object-fit: cover;
-	object-position: center;
-	width: 40%;
-	max-height: 210px;
-	flex-grow: 1;
-	margin: 0px 2px 2px 0px;
-}
-
-.post-wrap .post-body .media-box img:first-of-type {
-	max-height: 420px;
-}
-
-.post-wrap .post-footer {
+.post .post-footer {
 	position: relative;
 }
 
-.post-wrap .post-footer::after {
-	content: "";
-	display: block;
-	width: 100%;
-	border-top: 1px solid #F1F1F1;
-	position: absolute;
-	bottom: -5px;
-	left: 0px;
-}
-
-.post-wrap .post-footer .content-actions {
+.post-footer .content-actions {
 	flex-basis: 200px;
 }
 
-.post-wrap .post-comments {
-	margin-top: 15px;
+.post-footer .published-date {
+	font-size: 14px;
+	color: #777;
 }
 
-.post-wrap .post-comments .to-right-comment {
-	margin-left: 50px;
+.post .comments-section {
+	border-top: 1px solid #f1f1f1;
+	margin-top: 5px;
+	padding-top: 10px;
 }
 
-.post-wrap .post-comments .media-box {
+.comments-container .comment {
+	margin-bottom: 5px;
+	font-size: 15px;
+	max-width: 75%;
+}
+
+.comment .comment-header-body-wrapper {
+	background-color: #f5f5f5;
+	border-radius: 15px;
+	padding: 8px 12px;
+	margin: 0px 6px 0px 10px;
+	width: 100%;
+}
+
+.comment .comment-header {
+	font-family: 'Deezer', 'Open Sans', sans-serif;
+}
+
+.comment .comment-header .source-name {
+	font-size: 15px;
+}
+
+/* .comment .comment-body .media-box {
 	width: 50%;
 	border-radius: 10px;
 	overflow: hidden;
 }
 
-.post-wrap .post-comments .media-box img {
+.comment-body .media-box img {
 	object-fit: cover;
 	object-position: center;
 	width: 40%;
@@ -103,52 +85,103 @@
 	margin: 0px 1px 1px 0px;
 }
 
-.post-wrap .post-comments .media-box img:first-of-type {
+.comment-body .media-box img:first-of-type {
 	max-height: 200px;
+} */
+
+.comment .comment-footer {
+	padding: 0px 60px 0px 20px;
 }
 
-.post-wrap .post-comments .show-more-btn {
+.comment-footer .replay-btn {
+	font-size: 14px;
+	font-weight: bold;
+	color: #444;
+	cursor: pointer;
+}
+
+.comment-footer .published-date {
+	font-size: 14px;
+	color: #777;
+}
+
+.comments-section .show-more-btn {
 	text-align: center;
 	color: #7f7f7f;
 	cursor: pointer;
 }
 
-.post-wrap .post-comments .show-more-btn:hover {
+.comments-section .show-more-btn:hover {
 	text-decoration: underline;
 }
 
-.post-wrap .post-comments form {
+.comments-footer .preview-container {
+	position: relative;
+	margin: 0px 42px;
+	margin-bottom: 5px;
+}
+
+.comments-footer .preview-container .close-btn {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	background-image: url(../../../../assets/images/plus-hover.png);
+	background-color: #fff;
+	transform: rotate(45deg);
+	border: 1px solid #eee;
+	outline: none;
+	z-index: 10;
+}
+
+.comments-footer .comment-maker form {
 	width: 100%;
 }
 
-.post-wrap .post-comments .textarea-attach-wrap {
+.comment-maker .textarea-attach-wrapper {
 	width: 100%;
 	border-radius: 15px;
 	border: 1px solid #F0F0F0;
+	margin: 0px 10px;
 }
 
-.post-wrap .post-comments .write-comment textarea {
+.comment-maker textarea {
 	font-size: 16px;
-	height: 22px;
-	padding: 0px 10px;
+	height: 18px;
+	line-height: 20px;
+	padding: 4px 10px;
 }
 
-.post-wrap .post-comments .submit-btn {
+.comment-maker .attach .add-picture-btn {
+	background-image: url(../../../../assets/images/picture.png);
+}
+
+.comment-maker .attach .add-music-btn {
+	background-image: url(../../../../assets/images/add-music.png);
+}
+
+.comment-maker .attach .add-video-btn {
+	background-image: url(../../../../assets/images/add-video.png);
+}
+
+.comment-maker .attach .add-emoji-btn {
+	position: relative;
+	background-image: url(../../../../assets/images/emoji.png);
+}
+
+
+.comment-maker .submit-btn {
+	background-image: url(../../../../assets/images/send.png);
 	background-repeat: no-repeat;
 	background-color: transparent;
 	background-size: contain;
 	border: none;
 	outline: none;
 	cursor: pointer;
-	margin-left: 20px;
 }
 
-.post-wrap .post-comments .submit-btn[data-state="unable"] {
+.comment-maker .submit-btn:disabled {
 	background-image: url(../../../../assets/images/send-disable.png);
-}
-
-.post-wrap .post-comments .submit-btn[data-state="able"] {
-	background-image: url(../../../../assets/images/send.png);
+	cursor: auto;
 }
 
 .content-actions {
@@ -165,11 +198,12 @@
 	background-color: #FFDCDD;
 }
 
-.content-actions .like-btn[data-state="clicked"] {
+.content-actions .like-btn.clicked {
 	background-image: url(../../../../assets/images/heart-click.png);
 }
 
-.content-actions .like-count[data-state="clicked"] {
+.content-actions .like-btn:hover ~ .count-likes,
+.content-actions .like-btn.clicked ~ .count-likes {
 	color: #f44336;
 }
 
@@ -183,11 +217,12 @@
 	background-color:#D5EFFF;
 }
 
-.content-actions .forward-btn[data-state="clicked"] {
+.content-actions .forward-btn.clicked {
 	background-image: url(../../../../assets/images/forward-click.png);
 }
 
-.content-actions .forward-count[data-state="clicked"] {
+.content-actions .forward-btn.clicked ~ .count-forwards,
+.content-actions .forward-btn:hover ~ .count-forwards {
 	color: #1da1f2;
 }
 
@@ -200,8 +235,7 @@
 	background-color:#D5EFFF;
 }
 
-.content-actions .like-count, .content-actions .forward-count {
-	font-size: 15px;
-	line-height: 32px;
+.content-actions .count {
+	font-size: 14px;
 	color: #444;
 }

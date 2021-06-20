@@ -31,7 +31,11 @@ namespace SocNetwork.Extensions.Middleware
 
             if (!string.IsNullOrEmpty(userId))
             {
-                var user = await db.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userId);
+                var user = await db.Users
+                    .Include(u => u.ProfileMedia)
+                    .Include(u => u.UserPosts)
+                    .Include(u => u.Chats)
+                    .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
                 context.Items.Add("User", user);
             }

@@ -8,15 +8,9 @@ namespace SocNetwork.DTO.Request
 {
     public class MessageRequest
     {
-        public Guid AuthorId { get; set; }
+        public string AuthorId { get; set; }
+        public string ChatId { get; set; } 
         public string Text { get; set; }
-        public DateTime CreationDate { get; set; }
-        public List<MediaDTO> MessageMediaDTO { get; set; }
-        public MessageStatus MessageStatus { get; set; }
-        public MessageState MessageState { get; set; }
-        public MessageRequest()
-        {
-            MessageMediaDTO = new List<MediaDTO>();
-        }
+        public List<MediaDTO> MediaDTOs { get; set; }
     }
 }

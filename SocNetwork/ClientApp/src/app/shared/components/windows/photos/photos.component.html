@@ -1,0 +1,14 @@
+<div class="photos">
+  <div class="photos-header">
+    <h2>Фото</h2>
+  </div>
+  <div 
+    *ngIf="photos"
+    class="photos-body flex fw-w"
+    [ngClass]="{'vertical': photos.length == 2, 'horizontal': photos.length != 2 }"
+  >
+    <div *ngFor="let photo of photos" class="photo-item fg-1">
+      <img [src]="photo.path" alt="photo">
+    </div>
+  </div>
+</div>

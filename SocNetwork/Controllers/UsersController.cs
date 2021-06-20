@@ -25,43 +25,30 @@ namespace SocNetwork.Controllers
         {
             db = context;
         }
-        // // GET: api/<UserController>
-        // [HttpGet("name/{name}")]
-        // public async Task<IActionResult> Get(string name)
-        // {
-        //     List<User> users = await db.Users.Where(u => u.Name == name).ToListAsync();
 
-        //     List<UserDTO> usersDTO = new List<UserDTO>();
-
-        //     users.ForEach(u => {
-        //             var userDTO = new UserDTO();
-        //             u.CopyPropertiesTo<User, UserDTO>(userDTO);
-        //             usersDTO.Add(userDTO);
-        //         }
-        //     );
-
-        //     return Ok(new UsersResponse()
-        //     {
-        //         Result = true,
-        //         Users = usersDTO
-        //     });
-        // }
-
-        [HttpGet("me")]
+        [HttpGet("current")]
         [Authorize(Roles = "User")]
-        public IActionResult Get()
+        public IActionResult GetCurrentUser()
         {
             var currentUser = HttpContext.Items["User"] as User;
 
-            return Ok(new { username = currentUser.Username });
+            var shortProfileDTO = ConvertHelper.ToShortProfileDTO(currentUser);
+
+            return Ok(new ShortProfilesResponse()
+            {
+                Result = true,
+                ShortProfiles = new List<ShortProfileDTO> { shortProfileDTO }
+            });
         }
 
         [HttpGet("{username}")]
-        public async Task<IActionResult> Get(string username)
+        public async Task<IActionResult> GetProfile(string username)
         {
-            var user = await db.Users.AnyAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
-            if (user == false)
+            if (user == null)
             {
                 return BadRequest(new ProfileResponse()
                 {
@@ -70,9 +57,7 @@ namespace SocNetwork.Controllers
                 });
             }
 
-            var usersHelper = new UsersHelper(db);
-
-            var profileDTO = usersHelper.GetProfileDTO(username);
+            var profileDTO = ConvertHelper.ToProfileDTO(user);
 
             return Ok(new ProfileResponse() 
             {
@@ -81,34 +66,40 @@ namespace SocNetwork.Controllers
             });
         }
 
-        
-        [HttpGet("relationship-with/{username}")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> GetRelationshipWith(string username)
+        [HttpGet("short/{username}")]
+        public async Task<IActionResult> GetShortProfile(string username)
         {
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
-            if (toUser == null)
+            if (user == null)
             {
-                return BadRequest();
+                return BadRequest(new ProfileResponse()
+                {
+                    Result = false,
+                    Errors = new List<string>() { "User not found" }
+                });
             }
 
-            var currentUser = HttpContext.Items["User"] as User;
+            var shortProfileDTO = ConvertHelper.ToShortProfileDTO(user);
 
-            var relationshipsHelper = new RelationshipsHelper(db);
-
-            var ur = relationshipsHelper.GetOrDefault(currentUser, toUser);
-
-            return Ok(ur);
+            return Ok(new ShortProfilesResponse()
+            {
+                Result = true,
+                ShortProfiles = new List<ShortProfileDTO> { shortProfileDTO }
+            });
         }
 
         [HttpGet("{username}/followers")]
-        public async Task<IActionResult> GetFollowers(string username)
+        public async Task<IActionResult> GetFollowers(string username, [FromQuery] UsersPageParams usersPageParams)
         {
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null) {
-                return BadRequest(new ProfileResponse()
+                return BadRequest(new ShortProfilesResponse()
                 {
                     Result = false,
                     Errors = new List<string> { "User doesn't exist" }
@@ -116,28 +107,34 @@ namespace SocNetwork.Controllers
             }
 
             var followers = await db.UserRelationships
-                .Where(u => u.ToUserId == user.Id && u.UserRelationshipType == UserRelationshipType.Followed)
-                .Include(u => u.FromUser)
-                .Select(u => new { u.FromUser })
+                .Where(ur => ur.ToUserId == user.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
+                .OrderBy(ur => ur.CreationDate)
+                .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
+                .Take(usersPageParams.Size)
+                .Include(ur => ur.FromUser)
+                .Select(ur => ur.FromUser)
                 .ToListAsync();
 
-            var usersHelper = new UsersHelper(db);
-            var followersDTO = new List<ProfileDTO>();
+            var followerDTOs = new List<ShortProfileDTO>();
 
-            followers.ForEach(f => followersDTO.Add(usersHelper.GetProfileDTO(f.FromUser)));
+            followers.ForEach(u => {
+                followerDTOs.Add(ConvertHelper.ToShortProfileDTO(u));
+            });
 
-            return Ok(new ProfilesResponse
+            return Ok(new ShortProfilesResponse
             { 
                 Result = true,
-                Profiles = followersDTO
+                ShortProfiles = followerDTOs
             });
         }
 
         [HttpGet("{username}/following")]
-        public async Task<IActionResult> GetFollowing(string username, [FromQuery] UsersPageParams usersPageParams)
+        public async Task<IActionResult> GetFollowings(string username, [FromQuery] UsersPageParams usersPageParams)
         {
-            var h = HttpContext;
-            var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            var currentUser = HttpContext.Items["User"] as User;
+            var user = await db.Users
+                .Include(u => u.ProfileMedia)
+                .FirstOrDefaultAsync(u => u.Username == username);
 
             if (user == null)
                 return BadRequest(new ProfileResponse()
@@ -146,24 +143,26 @@ namespace SocNetwork.Controllers
                     Errors = new List<string> { "Username doesn't exist" }
                 });
 
-            var following = await db.UserRelationships
+            var followings = await db.UserRelationships
                 .Where(ur => ur.FromUserId == user.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
                 .OrderBy(ur => ur.CreationDate)
                 .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
                 .Take(usersPageParams.Size)
                 .Include(ur => ur.ToUser)
-                .Select(ur => new { ur.ToUser })
+                .Select(ur => ur.ToUser)
                 .ToListAsync();
 
-            var usersHelper = new UsersHelper(db);
-            var followingDTO = new List<ProfileDTO>();
+            var currentUserDTO = ConvertHelper.ToShortProfileDTO(currentUser);
+            var followingDTOs = new List<ShortProfileDTO>();
 
-            following.ForEach(f => followingDTO.Add(usersHelper.GetProfileDTO(f.ToUser)));
+            followings.ForEach(u => {
+                followingDTOs.Add(ConvertHelper.ToShortProfileDTO(u));
+            });
 
-            return Ok(new ProfilesResponse
+            return Ok(new ShortProfilesResponse
             {
                 Result = true,
-                Profiles = followingDTO
+                ShortProfiles = followingDTOs
             });
         }
 
@@ -175,25 +174,24 @@ namespace SocNetwork.Controllers
 
             var blocked = await db.UserRelationships
                 .Where(u => u.FromUserId == currentUser.Id && u.UserRelationshipType == UserRelationshipType.Blocked)
-                .Select(u => new { u.ToUser })
                 .Include(u => u.ToUser)
+                .Select(u => u.ToUser)
                 .ToListAsync();
 
-            var usersHelper = new UsersHelper(db);
-            var blockedDTO = new List<ProfileDTO>();
+            var blockedDTOs = new List<ShortProfileDTO>();
 
-            blocked.ForEach(f => blockedDTO.Add(usersHelper.GetProfileDTO(f.ToUser)));
+            blocked.ForEach(u => blockedDTOs.Add(ConvertHelper.ToShortProfileDTO(u)));
 
-            return Ok(new ProfilesResponse
+            return Ok(new ShortProfilesResponse
             {
                 Result = true,
-                Profiles = blockedDTO
+                ShortProfiles = blockedDTOs
             });
         }
 
         [HttpPut("edit")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Put([FromBody] EditProfileInfoRequest request)
+        public async Task<IActionResult> EditProfile([FromBody] EditProfileInfoRequest request)
         {
             User currentUser = HttpContext.Items["User"] as User;
 
@@ -203,7 +201,7 @@ namespace SocNetwork.Controllers
             }
             else if (currentUser.Id.ToString() == request.Id)
             {
-                request.CopyPropertiesTo<EditProfileInfoRequest, User>(currentUser);
+                request.CopyPropertiesTo(currentUser);
 
                 db.Users.Update(currentUser);
 
@@ -217,89 +215,66 @@ namespace SocNetwork.Controllers
             }
         }
 
-        [HttpPut("follow/{username}")]
+        [HttpGet("search/{query}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Follow(string username) {
-
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
-
-            if (toUser == null) {
-                return BadRequest();
-            }
-
-            var currentUser = HttpContext.Items["User"] as User;
-
-            var relationshipsHelper = new RelationshipsHelper(db);
-
-            var ur = relationshipsHelper.CreateOrExisting(currentUser, toUser);
-            relationshipsHelper.Update(ur, UserRelationshipType.Followed);
-
-            return Ok();
-        }
-
-        [HttpPut("block/{username}")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> Block(string username) {
-
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
-
-            if (toUser == null) {
-                return BadRequest();
-            }
-
-            var currentUser = HttpContext.Items["User"] as User;
-
-            var relationshipHelper = new RelationshipsHelper(db);
-
-            var ur = relationshipHelper.CreateOrExisting(currentUser, toUser);
-            relationshipHelper.Update(ur, UserRelationshipType.Blocked);
-        
-            return Ok();
-        }
-        
-        [HttpDelete("unfollow/{username}")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> Unfollow(string username) {
-
-            var toUser = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
-
-            if (toUser == null) {
-                return BadRequest();
-            }
-
-            var currentUser = HttpContext.Items["User"] as User;
-
-            var relationshipHelper = new RelationshipsHelper(db);
-
-            var ur = relationshipHelper.GetOrDefault(currentUser, toUser);
-            relationshipHelper.Remove(ur);
-
-            return NoContent();
-        }
-
-        [HttpGet("{username}/media")]
-        public async Task<IActionResult> GetProfileMedia(string username)
+        public async Task<IActionResult> SearchUsers(string query, [FromQuery] UsersPageParams usersPageParams)
         {
-            var user = await db.Users
-                .Include(u => u.ProfileMedia)
-                .FirstOrDefaultAsync(u => u.Username == username);
+            var searchResults = new List<ShortProfileDTO>();
 
-            if (user == null)
+            if (query.StartsWith('@'))
             {
-                return BadRequest(new ProfileMediaResponse()
+                var username = query.Substring(1);
+
+                if (username.Length != 0)
                 {
-                    Result = false,
-                    Errors = new List<string>() { "User not found" }
-                });
+                    searchResults = await db.Users
+                        .Where(u => EF.Functions.Like(u.Username, $"%{username}%"))
+                        .Include(u => u.ProfileMedia)
+                        .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                        .ToListAsync();
+                }
+            } 
+            else
+            {
+                searchResults = await db.Users
+                .Where(u => EF.Functions.Like(u.Name, $"%{query}%"))
+                .Include(u => u.ProfileMedia)
+                .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                .ToListAsync();
             }
 
-            var usersHelper = new UsersHelper(db);
-            var mediaDTO = usersHelper.GetProfileMediaDTO(user);
-
-            return Ok(new ProfileMediaResponse
+            return Ok(new ShortProfilesResponse
             {
                 Result = true,
-                Media = mediaDTO
+                ShortProfiles = searchResults
+            });
+        }
+
+        [HttpGet("suggestions")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetSuggestions([FromQuery] UsersPageParams usersPageParams)
+        {
+            User currentUser = HttpContext.Items["User"] as User;
+
+            var followings = await db.UserRelationships
+                .Where(ur => ur.FromUserId == currentUser.Id && ur.UserRelationshipType == UserRelationshipType.Followed)
+                .Select(ur => ur.ToUser )
+                .ToListAsync();
+
+            var users = await db.Users.Include(u => u.ProfileMedia).ToListAsync();
+
+            var suggestionDTOs = users
+                .Except(followings)
+                .OrderByDescending(ur => ur.CreationDate)
+                .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
+                .Take(usersPageParams.Size)
+                .Select(u => ConvertHelper.ToShortProfileDTO(u))
+                .ToList();
+
+            return Ok(new ShortProfilesResponse
+            {
+                Result = true,
+                ShortProfiles = suggestionDTOs
             });
         }
     }

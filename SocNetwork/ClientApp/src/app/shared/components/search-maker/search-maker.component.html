@@ -1,0 +1,42 @@
+<div class="search-maker fg-1">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <input 
+            (input)="onInput()"
+            [(ngModel)]="query"
+            name="search"
+            required
+            #search="ngModel" 
+            type="search" 
+            placeholder="Search"
+            autocomplete="off" 
+        />
+    </form>
+    <div *ngIf="containerVisible" class="search-results-container">
+        <!-- <ng-scrollbar> -->
+            <ul *ngIf="wantedUsers.length != 0" class="wanted-users-wrapper">
+                <li *ngFor="let user of wantedUsers" class="found-user">
+                    <a [href]="'/' + user.username" class="flex jc-fs ai-c">
+                        <span class="avatar-box square-32">
+                            <img [src]="user.avatarPath" alt="" class="square-32" >
+                        </span>
+                        <span class="flex fd-c">
+                            <span class="source-name">{{ user.name}}</span>
+                            <span class="nick-name">@{{ user.username }}</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul *ngIf="wantedTags.length != 0" class="wanted-tags-wrapper">
+                <li *ngFor="let tag of wantedTags">
+                    <a [routerLink]="['/search', 'hashtag', tag.content]" class="tag-item">
+                        <div 
+                        class="tag-item-body"
+                        >#{{ tag.content }}</div>
+                        <div class="tag-item-footer"><span class="count-posts">{{ tag.amount }}</span> posts</div>
+                    </a>
+                </li>
+            </ul>
+        <!-- </ng-scrollbar> -->
+    </div>
+</div>

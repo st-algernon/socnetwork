@@ -1,0 +1,54 @@
+.photos {
+    margin-bottom: 15px;
+    border-radius: 15px;
+    padding: 0px 6px 8px 6px;
+    padding-top: 0px;
+    background-color: #fff;
+}
+
+.photos-header, 
+.photos-footer > a {
+    padding: 8px 16px;
+}
+
+.photos-header {
+    color: #222;
+}
+
+.photos-body {
+    height: 168px;
+    border-radius: 15px;
+    background-color: #f7f9fa;
+	overflow: hidden;
+}
+
+.photos-body .photo-item {
+	position: relative;
+}
+
+.photos-body.horizontal {
+	flex-direction: column;
+}
+
+.photos-body.horizontal .photo-item {
+	height: 50%;
+}
+
+.photos-body.vertical {
+	flex-direction: row;
+}
+
+.photos-body.vertical .photo-item {
+	width: 50%;
+}
+
+.photos-body .photo-item img {
+	position: absolute;
+	max-width: 100%;
+	min-width: 100%;
+	max-height: 100%;
+	min-height: 100%;
+	object-fit: cover;
+	padding: 0.5px;
+	box-sizing: border-box;
+}

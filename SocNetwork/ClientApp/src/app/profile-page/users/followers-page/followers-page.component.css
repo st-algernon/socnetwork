@@ -1,0 +1,30 @@
+.user-item {
+    padding: 0px 14px;
+	border-radius: 15px;
+	cursor: pointer;
+}
+
+.user-item .user-wrapper {
+	padding: 8px 0px;
+	border-bottom: 1px solid #ddd;
+}
+
+.user-item:hover {
+	background-color: #e5f2fc;
+}
+
+.user-item .source-name {
+	padding-left: 12px;
+}
+
+.user-item .nick-name {
+	padding-left: 12px;
+}
+
+.user-item .bio {
+	font-size: 14px;
+	max-height: 40px;
+	overflow: hidden;
+	color: #333;
+	padding: 5px 5px 0px 52px;
+}

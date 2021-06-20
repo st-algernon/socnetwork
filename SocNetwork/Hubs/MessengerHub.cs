@@ -23,23 +23,42 @@ namespace SocNetwork.Hubs
             db = context;
         }
 
-        public async Task Send(MessageDTO messageDTO)
+        public async Task Send(MessageRequest request)
         {
-            var chat = await db.Conversations
+            var chat = await db.Chats
                 .Include(c => c.Members)
-                .FirstOrDefaultAsync(c => c.Id == messageDTO.ConversationId);
+                .ThenInclude(m => m.ProfileMedia)
+                .FirstOrDefaultAsync(c => c.Id.ToString() == request.ChatId);
             var memberIds = chat.Members.Select(m => m.Id.ToString());
             var caller = Context.User.Identity.Name;
 
             if (memberIds.Contains(caller))
             {
-                var messagesHelper = new MessagesHelper(db);
-                var message = messagesHelper.ConvertFromDTO(messageDTO);
+                var message = new Message
+                {
+                    AuthorId = Guid.Parse(request.AuthorId),
+                    ChatId = Guid.Parse(request.ChatId),
+                    Text = request.Text,
+                    CreationDate = DateTime.Now
+                };
 
                 await db.Messages.AddAsync(message);
+
+                foreach (var mediaDTO in request.MediaDTOs)
+                {
+                    await db.MessageMedia.AddAsync(new MessageMedia
+                    {
+                        MessageId = message.Id,
+                        Path = mediaDTO.Path,
+                        MimeType = mediaDTO.MimeType,
+                        Size = mediaDTO.Size,
+                        CreationDate = mediaDTO.CreationDate
+                    });
+                }
+
                 await db.SaveChangesAsync();
 
-                messageDTO = messagesHelper.ConvertToDTO(message);
+                var messageDTO = ConvertHelper.ToMessageDTO(message);
                 await Clients.Users(memberIds).SendAsync("Receive", messageDTO);
             }
         }

@@ -1,0 +1,13 @@
+<div class="alert-wrapper flex fd-c jc-fe">
+    <ng-container *ngFor="let messageAlert of messageAlerts">
+        <div 
+            (click)="collapseMessageAlert(messageAlert)"
+            class="message-alert"
+        >
+            <div class="avatar-box square-44">
+                <img [src]="messageAlert.message.authorDTO.avatarPath" alt="" class="square-44">
+            </div>
+            <div class="messages-number square-16">{{ messageAlert.messagesNumber }}</div>
+        </div>
+    </ng-container>
+</div>

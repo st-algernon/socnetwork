@@ -3,37 +3,39 @@
     <form [formGroup]="form" (ngSubmit)="submit()">
 
       <div class="validation" *ngIf="name?.invalid && name?.touched">
-        <small *ngIf="name?.errors?.required">Name is required. </small>
+        <small *ngIf="name?.errors?.required">Ім'я є обов’язковим </small>
         <small *ngIf="name?.errors?.minlength"
-          >Name must be at least
-          {{ name?.errors?.minlength?.requiredLength }} characters long.</small
+          >Довжина імені повинна бути щонайменше 
+          {{ name?.errors?.minlength?.requiredLength }} символів.</small
         >
-        <small *ngIf="name?.errors?.pattern">The name can only contain letters and a space.</small>
+        <small *ngIf="name?.errors?.pattern">Ім'я може містити тільки літери і пробіли</small>
         <small *ngIf="name?.errors?.maxlength">
-          Name must be at least
-          {{ name?.errors?.maxlength?.requiredLength }} characters long
+          Максимальна довжина імені 
+          {{ name?.errors?.maxlength?.requiredLength }} символів.
         </small>
       </div>
       <div class="validation" *ngIf="username?.invalid && username?.touched">
-        <small *ngIf="username?.errors?.required">Username is required</small>
-        <small *ngIf="username?.errors?.pattern">The username can only contain Latin letters, numbers, and underscores</small>
+        <small *ngIf="username?.errors?.required">Username є обов’язковим </small>
+        <small *ngIf="username?.errors?.pattern">Username може містити тільки латинські літери, цифри та знаки підкреслення</small>
+        <small *ngIf="username?.errors?.forbiddenUsername">Користувач з таким username вже існує</small>
       </div>
       <div class="validation" *ngIf="email?.invalid && email?.touched">
-        <small *ngIf="email?.errors?.required">Email is required</small>
-        <small *ngIf="email?.errors?.email">Email must be like e-mail</small>
+        <small *ngIf="email?.errors?.required">Email є обов’язковим</small>
+        <small *ngIf="email?.errors?.forbiddenEmail">Користувач з таким e-mail вже існує</small>
+        <small *ngIf="email?.errors?.email">Email не валідний</small>
       </div>
       <div class="validation" *ngIf="password?.invalid && password?.touched">
-        <small *ngIf="password?.errors?.required">Password is required</small>
+        <small *ngIf="password?.errors?.required">Пароль є обов'язковим</small>
         <small *ngIf="password?.errors?.minlength"
-          >Password must be at least
-          {{ password?.errors?.minlength?.requiredLength }} characters long.
+          >Довжина паролю повинна бути щонайменше 
+          {{ password?.errors?.minlength?.requiredLength }} символів.
         </small>
       </div>
 
       <div class="controls-box">
         <div class="form-control flex fd-r jc-sb">
-          <label>Name:</label>
-          <input type="text" formControlName="name" placeholder="Ivan Ivanov" />
+          <label>Ім'я:</label>
+          <input type="text" formControlName="name" placeholder="Іван Іванов" />
         </div>
         <div class="form-control flex fd-r jc-sb">
           <label>Username:</label>
@@ -44,7 +46,7 @@
           />
         </div>
         <div class="form-control flex fd-r jc-sb">
-          <label>Email:</label>
+          <label>E-mail:</label>
           <input
             type="email"
             formControlName="email"
@@ -52,7 +54,7 @@
           />
         </div>
         <div class="form-control flex fd-r jc-sb">
-          <label>Password:</label>
+          <label>Пароль:</label>
           <input
             type="password"
             formControlName="password"
@@ -60,13 +62,26 @@
           />
         </div>
         <p class="sign-box-btn">
-          <button type="submit" [disabled]="form.invalid || submitted" class="sign-btn">Sign up</button>
+          <span *ngIf="submitted" class="loader">
+            <app-loader></app-loader>
+          </span>
+          <button 
+            (click)="captchaRef.execute()" 
+            type="submit" 
+            [disabled]="form.invalid || form.pending || submitted" class="sign-btn"
+          >Sign up</button>
         </p>
-        <p class="form-footer">
+        <re-captcha
+          (resolved)="resolved($event)"
+          size="invisible"
+          siteKey="6Lem90YbAAAAAPs2f74pe9FznGebVCDVDwrBUwCW"
+          #captchaRef="reCaptcha"
+        ></re-captcha>
+        <!-- <p class="form-footer">
           By clicking “Sign up”, you agree to our
           <a href="#">terms of service</a> and
           <a href="#">privacy statement</a>.
-        </p>
+        </p> -->
       </div>
 
     </form>

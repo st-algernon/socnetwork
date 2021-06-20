@@ -46,10 +46,6 @@
     <None Remove="ClientApp\src\app\data.service.ts" />
     <None Remove="ClientApp\src\app\tag.ts" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <TypeScriptExperimentalDecorators>True</TypeScriptExperimentalDecorators>
     <TypeScriptEmitDecoratorMetadata>True</TypeScriptEmitDecoratorMetadata>

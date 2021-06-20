@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { forbiddenEmailValidator, forbiddenUsernameValidator } from 'src/app/shared/directives/forbidden.validators';
 import { AccountRegistrationRequest } from 'src/app/shared/interfaces';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { UsersService } from 'src/app/shared/services/users.service';
 
 @Component({
   selector: 'app-registration-page',
@@ -32,20 +32,32 @@ export class RegistrationPageComponent implements OnInit {
   }
 
   constructor(
-    private auth: AuthService,
-    private router: Router,
+    private authService: AuthService,
+    private router: Router
     ) { }
 
   ngOnInit() {
     this.form = new FormGroup ({
-      email: new FormControl(null, [Validators.email, Validators.required]),
+      email: new FormControl(null, 
+        [
+          Validators.email, 
+          Validators.required
+        ],
+        forbiddenEmailValidator(this.authService)
+        ),
       name: new FormControl(null, [
         Validators.required,
-        Validators.pattern('^[A-Za-zА-Яа-я ]*$'), 
+        Validators.pattern(/(?:[^\x00-\x7F]|\w)+/g), 
         Validators.minLength(3),
         Validators.maxLength(35)]
       ),
-      username: new FormControl(null, [Validators.pattern('^[A-Za-z0-9_]{3,15}$'), Validators.required]),
+      username: new FormControl(null, 
+        [
+          Validators.pattern('^[A-Za-z0-9_]{3,15}$'), 
+          Validators.required
+        ],
+        forbiddenUsernameValidator(this.authService)
+      ),
       password: new FormControl(null, [Validators.minLength(6), Validators.required])
     });
   }
@@ -64,12 +76,16 @@ export class RegistrationPageComponent implements OnInit {
       password: this.form.value.password
     };
 
-    this.auth.register(registrationRequest).subscribe(() => {
+    this.authService.register(registrationRequest).subscribe(() => {
       this.form.reset();
       this.router.navigate(['/news']);
       this.submitted = false;
     }, () => {
       this.submitted = false;
     });
+  }
+
+  resolved(captchaResponse: string) {
+    console.log(`Resolved captcha with response: ${captchaResponse}`);
   }
 }

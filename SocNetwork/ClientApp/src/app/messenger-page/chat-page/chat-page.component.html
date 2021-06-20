@@ -1,50 +1,105 @@
-<main class="chat">
-    <section class="main-header">
-        <div class="header-content flex fd-r jc-sb">
-            <div></div>
-            <div *ngIf="chat" class="flex fd-c ai-c">
-                <div class="source-name">{{ chat.withUser?.name || 'Saved Messages'}}</div>
-                <div class="last-visited">14 October 2019 at 09:23 am</div>
+<div class="flex jc-c">
+    <main class="chat flex fd-c">
+        <section class="chat-header flex fd-r jc-sb">
+                <div>
+                    <button 
+                        routerLink="/messenger"
+                        class="back-btn square-40 round r-22"
+                    ></button>
+                </div>
+                <div *ngIf="chat" class="flex fd-c ai-c">
+                    <div class="source-name">{{ chat.title }}</div>
+                    <div class="last-visited">14 червня 2021 о 09:23</div>
+                </div>
+                <form action="" method="get" class="search-message-form flex fd-c jc-c" >
+                    <input type="search" name="search_field" placeholder="Search for people and groups" autocomplete="off" />
+                </form>
+        </section>
+        <section class="chat-body fg-1">
+            <ng-scrollbar 
+                visibility="hover" 
+                appearance="standard"
+                trackClass="scrollbar-track"
+                #ngScrollbar
+            >
+                <div 
+                    infiniteScroll 
+                    infiniteScrollUpDistance="2"
+                    [scrollWindow]="false" 
+                    (scrolledUp)="onScrollUp()"
+                    scrollViewport
+                >
+                    <div class="messages-container flex fd-c"
+                        [ngClass]="{'jc-fe': chat, 'jc-c': !chat}"
+                    >
+                        <ng-container *ngFor="let message of chat?.messageDTOs">
+                            <app-message 
+                                [message]="message" 
+                                [mine]="message.authorDTO.id === me.id"
+                                [invisibleAuthor]="checkAuthorVisibility(message)"
+                            ></app-message>
+                        </ng-container>
+                        <app-loader *ngIf="!chat"></app-loader>
+                    </div>
+                </div>
+            </ng-scrollbar>
+        </section>
+        <section class="chat-footer">
+            <div class="flex jc-c">
+                <div 
+                  *ngIf="previewImagesData.length > 0"
+                  class="preview-container fg-1"
+                >
+                    <div 
+                        class="close-btn round r-16 square-20" 
+                        (click)="unPreviewImages()"
+                    ></div>
+                    <app-photos-container 
+                        [photos]="previewImagesData"
+                    ></app-photos-container>
+                </div>
             </div>
-            <form action="" method="get" class="search-message-form flex fd-c jc-c" >
-                <input type="search" name="search_field" placeholder="Search for people and groups" autocomplete="off" />
-            </form>
-        </div>
-    </section>
-    <section
-        class="messages-box flex fd-c"
-        [ngClass]="chat ? 'jc-fe' : 'jc-c'"
-        #messageList
-    >
-        <div *ngIf="!chat" id="floatingCirclesG">
-            <div class="f_circleG" id="frotateG_01"></div>
-            <div class="f_circleG" id="frotateG_02"></div>
-            <div class="f_circleG" id="frotateG_03"></div>
-            <div class="f_circleG" id="frotateG_04"></div>
-            <div class="f_circleG" id="frotateG_05"></div>
-            <div class="f_circleG" id="frotateG_06"></div>
-            <div class="f_circleG" id="frotateG_07"></div>
-            <div class="f_circleG" id="frotateG_08"></div>
-        </div>
-    </section>
-    <section class="input-message">
-        <form 
-            [formGroup]="form"
-            (ngSubmit)="submit()"
-            class="flex fd-r ai-fe"
-        >
-            <ul class="attach flex fd-r jc-c" data-container="attach">
-                <li class="add-picture-btn round r-20 square-28" data-attach="picture"></li>
-                <li class="add-music-btn round r-20 square-28" data-attach="music"></li>
-                <li class="add-video-btn round r-22 square-28" data-attach="video"></li>
-            </ul>
-            <div class="textarea-attach-wrap flex fd-r ai-fe">
-                <textarea name="post-field" formControlName="messageText" placeholder="Write a message..." data-submit-btn="blink"></textarea>
-                <ul class="attach flex fd-r jc-sb" data-container="attach">
-                    <li class="add-emoji-btn round r-22 square-28" data-attach="emoji"></li>
+
+            <form 
+                #form="ngForm"
+                (ngSubmit)="onSubmit(form)"
+                novalidate
+                class="flex fd-r ai-fe"
+            >
+                <ul class="attach flex fd-r jc-c">
+                    <li class="add-picture-btn round r-20 square-28" (click)="input_image.click()">
+                        <input 
+                            type="file" 
+                            name="messageImages"
+                            class="hidden"
+                            (change)="previewImages(input_image.files)"
+                            #input_image 
+                            ngModel
+                            multiple
+                        >
+                    </li>
+                    <li class="add-music-btn round r-20 square-28"></li>
+                    <li class="add-video-btn round r-22 square-28"></li>
                 </ul>
-            </div>
-            <button type="submit" class="submit-btn square-32 fs-0"></button>
-        </form>
-    </section>
-</main>
+                <div class="textarea-attach-wrap flex fd-r ai-fe">
+                    <textarea 
+                        rows="1"
+                        name="messageText"
+                        [(ngModel)]="messageForm.text"
+                        (keydown)="onEnterSubmit(form, $event)"
+                        (input)="resizeTextarea($event)"
+                        placeholder="Написати повідомлення..."
+                    ></textarea>
+                    <ul class="attach flex fd-r jc-sb">
+                        <li class="add-emoji-btn round r-22 square-28"></li>
+                    </ul>
+                </div>
+                <button 
+                    type="submit" 
+                    [disabled]="!messageForm.text && messageForm.images.length == 0" 
+                    class="submit-btn square-32 fs-0"
+                ></button>
+            </form>
+        </section>
+    </main>
+</div>

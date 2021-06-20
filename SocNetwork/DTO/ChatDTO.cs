@@ -8,9 +8,10 @@ namespace SocNetwork.DTO
     public class ChatDTO
     {
         public Guid Id { get; set; }
-        public List<MessageDTO> MessagesDTO { get; set; }
+        public string Title { get; set; }
+        public MediaDTO CoverDTO { get; set; }
+        public List<MessageDTO> MessageDTOs { get; set; }
         public DateTime CreationDate { get; set; }
-        public List<ProfileDTO> MembersDTO { get; set; }
-        public bool IsDeleted { get; set; }
+        public List<ShortProfileDTO> MemberDTOs { get; set; }
     }
 }

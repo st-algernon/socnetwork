@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SocNetwork.Models
 {
-    [Table("Reposts")]
-    public class Repost : Post
+    [Table("RePosts")]
+    public class RePost : Post
     {
         public Guid OriginalPostId { get; set; }
     }

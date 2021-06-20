@@ -11,20 +11,22 @@ namespace SocNetwork.Models
         public DbSet<Account> Accounts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<Repost> Reposts { get; set; }
+        public DbSet<RePost> RePosts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<ReMessage> ReMessages { get; set; }
-        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Chat> Chats { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<MessageMedia> MessageMedia { get; set; }
         public DbSet<PostMedia> PostMedia { get; set; }
+        public DbSet<CommentMedia> CommentMedia { get; set; }
         public DbSet<ProfileMedia> ProfileMedia { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<UserPost> UserPost { get; set; }
+        public DbSet<UserComment> UserComment { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<PostNotification> PostNotifications { get; set; }
         public DbSet<UserRelationship> UserRelationships { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public SocNetworkContext(DbContextOptions<SocNetworkContext> options)
             : base(options)
@@ -58,11 +60,24 @@ namespace SocNetwork.Models
                 .WithMany(p => p.PostUsers)
                 .HasForeignKey(up => up.PostId);
 
+            modelBuilder.Entity<UserComment>()
+                .HasKey(t => new { t.UserId, t.CommentId });
+
+            modelBuilder.Entity<UserComment>()
+                .HasOne(uc => uc.User)
+                .WithMany(u => u.UserComments)
+                .HasForeignKey(uc => uc.UserId);
+
+            modelBuilder.Entity<UserComment>()
+                .HasOne(uc => uc.Comment)
+                .WithMany(c => c.CommentUsers)
+                .HasForeignKey(uc => uc.CommentId);
+
             modelBuilder.Entity<Notification>()
-             .HasOne(n => n.Sender)
-             .WithMany()
-             .HasForeignKey(pt => pt.SenderId)
-             .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(n => n.Sender)
+                .WithMany()
+                .HasForeignKey(pt => pt.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.Recipient)

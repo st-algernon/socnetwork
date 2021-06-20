@@ -48,3 +48,32 @@ export enum MessageStatus {
     IsEdited,
     IsDeleted
 }
+
+export enum PostStatus {
+    IsInitial,
+    IsEdited,
+    IsReported,
+    IsDeleted
+}
+
+export enum CommentStatus {
+    IsInitial,
+    IsEdited,
+    IsReported,
+    IsDeleted
+}
+
+export enum NotificType
+{
+    Followed,
+    Liked,
+    Reposted,
+    Commented
+}
+
+export enum SubjectType
+{
+    None,
+    Post,
+    Comment
+}

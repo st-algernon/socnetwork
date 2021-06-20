@@ -1,1 +1,43 @@
-<p>notifications-page works!</p>
+<div class="flex jc-c">
+    <main class="notifs flex fd-c">
+      <div class="notifs-header">
+        <h2>Оповіщення</h2>
+      </div>
+      <div class="notifs-body fg-1">
+        <ng-container *ngFor="let notif of notifs">
+            <a [routerLink]="getLinkToSubject(notif)" class="notif-item flex">
+                <a [routerLink]="'/' + notif.senderDTO.username" class="avatar-box square-40">
+                    <img 
+                        [src]="notif.senderDTO.avatarPath"
+                        alt="avatar"
+                        class="square-40"
+                    >
+                </a>
+                <div class="flex fd-c fg-1">
+                    <a [routerLink]="'/' + notif.senderDTO.username" class="flex">
+                        <div class="source-name">{{ notif.senderDTO.name }} </div>
+                        <div class="nick-name">&bull; @{{ notif.senderDTO.username }}</div>
+                    </a>
+                    <div class="notif-text">{{ translateNotific(notif) }}</div>
+                    <div class="notif-date">{{ notif.creationDate | date: 'medium':'':'uk' }}</div>
+                </div>
+            </a>
+        </ng-container>
+
+        <app-loader *ngIf="!loaded"></app-loader>
+        
+        <div *ngIf="notifs.length == 0 && loaded"class="notifs-lining flex jc-c ai-c">
+          <p class="lining-label">Ви поки що не маєте жодних оповіщень</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="flex jc-fe">
+    <div class="right-col">
+      <ng-scrollbar>
+        <app-trends></app-trends>
+        <app-follow-offers></app-follow-offers>
+      </ng-scrollbar>
+    </div>
+  </div>
+  

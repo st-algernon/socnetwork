@@ -1,0 +1,67 @@
+<section class="post-maker flex fd-r jc-sb ai-fs">
+    <span class="avatar-box square-48">
+        <img
+            *ngIf="me" 
+            [src]="me.avatarPath" 
+            class="square-48"
+            alt="photo"
+        >
+    </span>
+    <form 
+        #form="ngForm"
+        (ngSubmit)="onSubmit(form)"
+    >
+        <textarea 
+            rows="1"
+            name="postText"
+            placeholder="Що нового?"
+            (input)="resizeTextarea($event)"
+            [(ngModel)]="postForm.text"
+        ></textarea>
+        <div *ngIf="previewFiles.length > 0" class="flex jc-c">
+            <div class="preview-container fg-1">
+                <div 
+                    class="close-btn round r-16 square-20" 
+                    (click)="unPreviewImages()"
+                ></div>
+                <app-photos-container [photos]="previewFiles" size="large"></app-photos-container>
+            </div>
+        </div>
+        <div class="post-maker-footer flex ai-fe jc-sb">
+            <ul class="attach flex fd-r jc-sb">
+                <li class="add-picture-btn round r-20 square-28" (click)="input_image.click()">
+                    <input 
+                        type="file" 
+                        name="postImages"
+                        class="hidden"
+                        (change)="previewImages(input_image.files)"
+                        #input_image
+                        ngModel
+                        multiple
+                    >
+                </li>
+                <li class="add-music-btn round r-20 square-28">
+                    <input type="file" name="music" class="hidden"/>
+                </li>
+                <li class="add-video-btn round r-22 square-28">
+                    <input type="file" name="video" class="hidden"/>
+                </li>
+                <li class="add-emoji-btn round r-22 square-28">
+                    <!-- <emoji-mart 
+                        class="emoji-mart" 
+                        *ngIf="isEmojiPickerVisible" 
+                        (emojiSelect)="addEmoji($event)" 
+                        title="Choose your emoji"
+                        color="#1da1f2"
+                        [style]="position: absolute;"
+                    ></emoji-mart> -->
+                </li>
+            </ul>
+            <button 
+                type="submit" 
+                [disabled]="!postForm.text && postForm.images.length == 0" 
+                class="submit-btn"
+            >Post</button>
+        </div>
+    </form>
+</section>

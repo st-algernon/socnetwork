@@ -1,0 +1,105 @@
+:host {
+	display: block;
+	width: 100%;
+	height: 100vh;
+	position: relative;
+}
+
+ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
+}
+
+.users {
+	position: fixed;
+	top: 69px;
+	bottom: 0px;
+	width: 612px;
+	box-sizing: border-box;
+	border-radius: 15px;
+	padding: 8px;
+    padding-top: 0px;
+	margin-right: 60px;
+	background-color: #fff;
+	z-index: 1;
+}
+
+.users-header {
+	border-radius: 15px 15px 0px 0px;
+	padding-top: 8px;
+	background: #fff;
+	min-height: 87px;
+}
+
+.users-header .user-switches {
+    margin: 4px 16px;
+}
+
+.users-header .user-switches button {
+	box-sizing: border-box;
+	width: 50%;
+	padding: 10px;
+	outline: none;
+	font-size: 15px;
+	cursor: pointer;
+	color: #aaa;
+}
+
+.users-header .user-switches button:hover {
+	color: #1da1f2;
+}
+
+.users-header .user-switches button.active {
+	color: #1da1f2;
+	border-bottom: 2px solid #1da1f2;
+}
+
+.users-body {
+    border-radius: 15px;
+	box-sizing: border-box;
+	background-color: #f7f9fa;
+}
+
+.right-col {
+	position: fixed;
+	top: 69px;
+	bottom: 0px;
+	width: 320px;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
+	z-index: 9;
+	box-sizing: border-box;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1224px) {
+	.users {
+		width: 50%;
+		margin-right: 6%;
+	}
+
+	.right-col {
+		width: 27%;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	.users {
+		width: 56%;
+		margin-right: 25%;
+	}
+
+	.right-col {
+		width: 33%;
+	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	.users {
+		width: 87%;
+		margin-right: 0px;
+		margin-left: 75px;
+	}
+
+	.right-col {
+		display: none;
+	}
+}

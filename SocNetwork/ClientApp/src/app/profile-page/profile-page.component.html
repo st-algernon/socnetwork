@@ -1,105 +1,169 @@
-<main>
-    <section class="user-info">
-        <div class="photo-cover">
-          <img *ngIf="user?.mediaDTO?.length > 0" [src]="user.currentCoverPath" alt="cover">
-        </div>
-        <div class="user-avatar-back">
-          <div class="user-avatar">
-            <img *ngIf="user?.mediaDTO?.length > 0; else default_avatar" [src]="user.currentAvatarPath" alt="avatar">
-            <ng-template #default_avatar>
-              <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
-            </ng-template>
+<div class="flex jc-c">
+  <main>
+      <section class="user-info">
+          <div class="photo-cover">
+            <img *ngIf="user.profile?.mediaDTOs?.length > 0" [src]="user.profile.coverPath" alt="cover">
           </div>
-        </div>
-        <div class="flex fd-r jc-sb ai-c">
-          <div class="flex fd-c">
-            <span *ngIf="user; else empty_name" class="source-name">{{ user.name }}</span>
-            <ng-template #empty_name>
-              <span class="empty source-name"></span>
-            </ng-template>
-            <span *ngIf="user; else empty_username" class="nick-name">@{{ user.username }}</span>
-            <ng-template #empty_username>
-              <span class="empty nick-name"></span>
-            </ng-template>
+          <div class="user-avatar-back">
+            <div class="user-avatar">
+              <img *ngIf="user.profile?.mediaDTOs?.length > 0; else default_avatar" [src]="user.profile.avatarPath" alt="avatar">
+              <ng-template #default_avatar>
+                <img src="../../assets/images/default-avatar.jpg" alt="default-avatar">
+              </ng-template>
+            </div>
           </div>
-          <div class="flex ai-c fd-r">
-            <button *ngIf="user" class="square-40 create-chat" (click)="openChat()"></button>
-            <button *ngIf="isUnFollowed && !isMe" class="btn btn-outlined profile-action-btn" (click)="follow()">Follow</button>
-            <button 
-              *ngIf="isFollowed && !isMe"
-              class="btn btn-filled profile-action-btn"
-              (mouseover)="changeTitleToUnfollow($event)"
-              (mouseout)="changeTitleToUnfollow($event)"
-              (click)="unfollow()"
-              >Following</button>
-            <button *ngIf="isMe" class="btn btn-outlined profile-action-btn" (click)="editProfileFlag = true">Edit profile</button>
+          <div class="flex fd-r jc-sb ai-c">
+            <div class="flex fd-c">
+              <span *ngIf="user.profile; else empty_name" class="source-name">{{ user.profile.name }}</span>
+              <ng-template #empty_name>
+                <span class="empty source-name"></span>
+              </ng-template>
+              <span *ngIf="user.profile; else empty_username" class="nick-name">@{{ user.profile.username }}</span>
+              <ng-template #empty_username>
+                <span class="empty nick-name"></span>
+              </ng-template>
+            </div>
+            <div class="flex ai-c fd-r">
+              <button 
+                *ngIf="user.profile"
+                class="square-40 create-chat" 
+                (click)="openChat()"
+              ></button>
+              <button 
+                *ngIf="relationship.isUnFollowed && !relationship.isMe" 
+                class="btn btn-lg btn-outlined profile-action-btn"
+                (click)="follow()"
+              >Стежити</button>
+              <button 
+                *ngIf="relationship.isFollowed && !relationship.isMe"
+                class="btn btn-lg btn-filled profile-action-btn"
+                (mouseover)="changeTitleToUnfollow($event)"
+                (mouseout)="changeTitleToUnfollow($event)"
+                (click)="unfollow()"
+              >Відстежується</button>
+              <button 
+                *ngIf="relationship.isMe"
+                class="btn btn-lg btn-outlined profile-action-btn" 
+                (click)="editProfileFlag = true"
+              >Редагувати</button>
+            </div>
           </div>
-        </div>
-        <div class="flex fd-r jc-fe">
-          <div class="wrap-info flex fd-c">
-            <div *ngIf="user; else empty_bio" class="bio">{{ user.bio }}</div>
-            <ng-template #empty_bio>
-              <div class="empty bio"></div>
-            </ng-template>
-            <ul class="follow-wrap flex fd-r jc-sb">
-              <li class=""><span *ngIf="user; else empty_count_posts">30</span>
-                <ng-template #empty_count_posts>
-                  <span class="empty count"></span>
-                </ng-template> posts
-              </li>
-              <li class=""><span *ngIf="user; else empty_count_followers">24</span>
-                <ng-template #empty_count_followers>
-                  <span class="empty count"></span>
-                </ng-template> followers</li>
-              <li class=""><span *ngIf="user; else empty_count_following">10</span>
-                <ng-template #empty_count_following>
-                  <span class="empty count"></span>
-                </ng-template> following</li>
-            </ul>
-            <ul *ngIf="user; else empty_short_info" class="short-info flex fd-r">
-              <li class="residence">Zhytomyr</li>
-              <li class="birthday">Born June 26, 1998</li>
-              <li class="relationship">Married</li>
-              <li class="more-details"></li>
-            </ul>
-            <ng-template #empty_short_info>
-              <ul class="empty-short-info flex jc-sb">
-                <li></li>
-                <li></li>
-                <li></li>
+          <div class="flex fd-r jc-fe">
+            <div class="wrap-info flex fd-c">
+              <div *ngIf="user.profile; else empty_bio" class="bio">{{ user.profile.bio }}</div>
+              <ng-template #empty_bio>
+                <div class="empty bio"></div>
+              </ng-template>
+              <ul class="follow-wrap flex fd-r jc-sb">
+                <li class="">
+                  <a href="#">
+                    <span *ngIf="user.profile; else empty_count_posts">28</span>
+                    <ng-template #empty_count_posts>
+                      <span class="empty count"></span>
+                    </ng-template> 
+                    <span> публікацій</span>
+                  </a>
+                </li>
+                <li class="">
+                  <a [routerLink]="['followers']">
+                    <span *ngIf="user.profile; else empty_count_followers">24</span>
+                    <ng-template #empty_count_followers>
+                      <span class="empty count"></span>
+                    </ng-template> 
+                    <span class="followers-label"> відстежують</span>
+                  </a>
+                </li>
+
+                <li class="">
+                  <a [routerLink]="['following']">
+                    <span *ngIf="user.profile; else empty_count_following">10</span>
+                    <ng-template #empty_count_following>
+                      <span class="empty count"></span>
+                    </ng-template>
+                    <span class="following-label"> відстежує</span>
+                  </a>
+                </li>
               </ul>
+              <ul *ngIf="user.profile; else empty_short_info" class="short-info flex fd-r">
+                <li class="residence">Житомир</li>
+                <li class="birthday">Червень 26, 1999</li>
+                <li class="relationship">В шлюбі</li>
+                <li class="more-details"></li>
+              </ul>
+              <ng-template #empty_short_info>
+                <ul class="empty-short-info flex jc-sb">
+                  <li></li>
+                  <li></li>
+                  <li></li>
+                </ul>
+              </ng-template>
+            </div>
+          </div>
+      </section>
+
+      <section class="user-photo">
+        <app-photos 
+        *ngIf="user.profile" 
+        [photos]="user.profile.profileMediaDTO"
+        ></app-photos>
+      </section>
+
+      <section class="user-wall">
+          <app-post-maker [me]="me" (newPostEvent)="addNewPost($event)"></app-post-maker>
+          <section class="user-wall-header-wrapper">
+            <div class="user-wall-header flex row jc-sb">
+              <div data-container="post-switches">
+                <button data-action="loadAll" data-state="active">Всі публікації</button>
+                <button data-action="loadByMe" data-state="inactive">Оригінальні</button>
+              </div>
+              <form action="" method="get" class="search-form flex col jc-c">
+                <input
+                  type="search"
+                  name="search_field"
+                  placeholder="Search for people and groups"
+                  autocomplete="off"
+                />
+              </form>
+            </div>
+          </section>
+          <section class="user-wall-body">
+            <div 
+              *ngIf="user.posts; else empty_post"
+              infinite-scroll
+              infiniteScrollDistance="2"
+              infiniteScrollThrottle="500"
+              (scrolled)="onScroll()"
+            >
+              <ng-container *ngFor="let post of user.posts">
+                <app-post [post]="post" [me]="me" commentsBehavior="best"></app-post>
+              </ng-container>
+            </div>
+            <ng-template #empty_post>
+              <app-empty-post></app-empty-post>
             </ng-template>
-          </div>
-        </div>
-    </section>
+            <div *ngIf="user.posts?.length == 0" class="user-wall-lining flex jc-c ai-c">
+              <p class="lining-label">Тут будуть розміщуватись ваші публікації</p>
+            </div>
+          </section>
+      </section>
+  </main>
+</div>
 
-    <app-edit-profile-popup
-        *ngIf="editProfileFlag && isMe"
-        (onClose)="editProfileFlag = false"
-        [user] = "user"
-    ></app-edit-profile-popup>    
+<div class="flex jc-fe">
+  <section class="right-col">
+    <ng-scrollbar>
+      <app-photos 
+        *ngIf="user.profile" 
+        [photos]="user.profile.mediaDTOs"
+      ></app-photos>
+      <app-trends></app-trends>
+      <app-follow-offers></app-follow-offers>
+    </ng-scrollbar>
+  </section>   
+</div>
 
-    <section class="user-wall">
-        <app-post-form [me]="me"></app-post-form>
-        <section class="wall-header flex row jc-sb">
-          <div data-container="post-switches">
-            <button data-action="loadAll" data-state="active">All posts</button>
-            <button data-action="loadByMe" data-state="inactive">
-              Written by me
-            </button>
-          </div>
-          <form action="" method="get" class="search-form flex col jc-c">
-            <input
-              type="search"
-              name="search_field"
-              placeholder="Search for people and groups"
-              autocomplete="off"
-            />
-          </form>
-        </section>
-        <app-post [isOnWall]="true"></app-post>
-    </section>
-    <section class="right-col">
-      
-    </section>   
-</main>
+<app-edit-profile-popup
+  *ngIf="editProfileFlag && relationship.isMe"
+  (onClose)="editProfileFlag = false"
+  [user] = "user.profile"
+></app-edit-profile-popup>    

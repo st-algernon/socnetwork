@@ -7,7 +7,8 @@ namespace SocNetwork.DTO
 {
     public class UserDTO
     {
-        public ProfileDTO Profile;
-        // ...
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Username { get; set; }
     }
 }

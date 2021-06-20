@@ -2,8 +2,8 @@ import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MessengerHub } from '../shared/hubs/messenger.hub';
-import { Chat, Profile } from '../shared/interfaces';
-import { MessengerService } from '../shared/services/messenger.service';
+import { ShortChat, ShortProfile } from '../shared/interfaces';
+import { ChatsService } from '../shared/services/chats.service';
 import { UsersService } from '../shared/services/users.service';
 
 @Component({
@@ -13,24 +13,24 @@ import { UsersService } from '../shared/services/users.service';
 })
 export class MessengerPageComponent implements OnInit, OnDestroy {
 
-  me: Profile;
-  chats: Chat[];
+  me: ShortProfile;
+  chats: ShortChat[];
   subs: Subscription[] = [];
 
   constructor(
     private messengerHub: MessengerHub,
-    private messengerService: MessengerService,
+    private messengerService: ChatsService,
     private usersService: UsersService
     ) { }
 
   ngOnInit() {
     this.subs.push(
-      this.usersService.me$.subscribe((response: Profile) => this.me = response),
+      this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
 
-      this.messengerService.getChats().subscribe((response: Chat[]) => { 
-        this.chats = response.map(c => this.messengerService.includeWithUser(c, this.me));
-        console.log(this.chats);
-      }),
+      this.messengerService.getShortChats().subscribe((shortChats: ShortChat[]) => { 
+        console.log(shortChats);
+        this.chats = shortChats;
+      })
     );
   }
 

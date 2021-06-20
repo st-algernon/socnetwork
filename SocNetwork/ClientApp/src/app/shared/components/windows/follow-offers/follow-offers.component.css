@@ -1,0 +1,66 @@
+ng-scrollbar {
+	--scrollbar-track-color: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
+}
+
+.follow-offers {
+    margin-bottom: 15px;
+    border-radius: 15px;
+    padding: 0px 6px 8px 6px;
+    background-color: #fff;
+}
+
+.follow-offers-header,
+.follow-offers-footer > a {
+    padding: 8px 16px;
+}
+
+.follow-offers-header {
+    color: #222;
+}
+
+.follow-offers-body {
+    padding: 4px 0px 4px 4px;
+    height: 168px;
+    border-radius: 15px;
+    background-color: #f7f9fa;
+}
+
+.follow-offers-body li {
+    border-radius: 15px;
+}
+
+.follow-offers-body li:hover {
+    background-color: #e5f2fc;
+}
+
+.follow-offers-body li:last-of-type .follow-offer-item {
+    border-bottom: none;
+}
+
+.follow-offers-body .follow-offer-item {
+    border-bottom: 1px solid #e6eef5;
+    padding: 8px 0px;
+    margin: 0px 5%;
+}
+
+.follow-offer-item .source-name,
+.follow-offer-item .nick-name {
+	padding-left: 12px;
+    max-width: 180px;
+    overflow: hidden;
+}
+
+.follow-offer-item .bio {
+	font-size: 14px;
+	max-height: 40px;
+	overflow: hidden;
+	color: #333;
+	padding: 5px 5px 0px 12px;
+}
+
+.follow-offers-footer > a {
+    display: block;
+    cursor: pointer;
+}

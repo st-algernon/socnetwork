@@ -1,0 +1,15 @@
+
+<div 
+  *ngIf="photos"
+  class="photos-container flex fw-w"
+  [ngClass]="{
+    'vertical': photos.length == 2,
+    'horizontal': photos.length != 2,
+    'sm': size == 'small',
+    'lg': size == 'large'
+  }"
+>
+  <div *ngFor="let photo of photos" class="photo-item fg-1">
+    <img [src]="photo.path" alt="photo">
+  </div>
+</div>

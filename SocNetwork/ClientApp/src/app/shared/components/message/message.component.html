@@ -1,0 +1,27 @@
+<div 
+    class="message-item flex ai-fe"
+    [ngClass]="{'fd-rr': mine}"
+>
+    <div 
+        class="message-author" 
+        [ngClass]="{'invisible': invisibleAuthor}"
+        [attr.data-author-id]="message.authorDTO.id"
+    >
+        <div class="avatar-box square-32">
+            <img [src]="message.authorDTO.avatarPath" alt="" class="square-32">
+        </div>
+    </div>
+    <div 
+        class="message-body"
+        [ngClass]="{'me': mine, 'other': !mine, 'fg-1': message.mediaDTOs.length > 0}"
+    >
+        <app-photos-container 
+            *ngIf="message.mediaDTOs.length > 0"
+            [photos]="message.mediaDTOs"
+        ></app-photos-container>
+        <div class="message-text">{{ message.text }}</div>
+        <div class="flex jc-fe">
+            <div class="message-date">{{ message.creationDate | date:'shortTime':'':'uk'}}</div>
+        </div>
+    </div>
+</div>

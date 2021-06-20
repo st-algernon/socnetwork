@@ -1,0 +1,33 @@
+<div class="flex jc-c">
+    <main class="users flex fd-c">
+        <section class="users-header flex fd-c ai-s jc-sb">
+            <div class="flex fd-c ai-c">
+                <div *ngIf="user" class="source-name">{{ user.name }}</div>
+                <div *ngIf="user" class="nick-name">@{{ user.username }}</div>
+            </div>
+            <div class="user-switches flex fd-r" data-container="user-switches">
+                <button 
+                    [routerLink]="['/', user.username, 'followers']"
+                    routerLinkActive="active"
+                >Відстежують</button>
+                <button 
+                    [routerLink]="['/', user.username, 'following']"
+                    routerLinkActive="active"
+                >Відстежує</button>
+            </div>
+        </section>
+        <section class="users-body fg-1">
+            <ng-scrollbar trackClass="scrollbar-track">
+                <router-outlet></router-outlet>
+            </ng-scrollbar>
+        </section>
+    </main>
+</div>
+<div class="flex jc-fe">
+    <div class="right-col">
+        <ng-scrollbar>
+            <app-trends></app-trends>
+            <app-follow-offers></app-follow-offers>
+        </ng-scrollbar>
+    </div>
+</div>

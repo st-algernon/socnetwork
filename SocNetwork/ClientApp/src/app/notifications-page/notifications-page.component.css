@@ -1,0 +1,114 @@
+:host {
+	display: block;
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+}
+
+main {
+    position: absolute;
+	width: 612px;
+    min-height: 90.2%;
+	margin: 69px 60px 0px 0px;
+    padding: 0px 8px;
+	box-sizing: border-box;
+    border-radius: 15px;
+    background-color: #fff;
+}
+
+.notifs-header {
+    padding: 8px 16px;
+}
+
+.notifs-body {
+    margin-bottom: 10px;
+    background-color: #f7f9fa;
+    border-radius: 15px;
+}
+
+.notifs-body .notif-item {
+	padding: 6px 12px;
+	border-radius: 15px;
+}
+
+.notifs-body .notif-item:hover {
+	background-color: #e5f2fc;
+}
+
+.notif-item .avatar-box {
+	margin-right: 8px;
+}
+
+.notif-item .source-name {
+	margin-right: 4px;
+}
+
+.notif-item .notif-date {
+	font-size: 13px;
+	color: #7a8b9b;
+}
+
+.notifs-lining {
+	border-radius: 15px;
+	height: 100%;
+	margin-bottom: 15px;
+	padding: 0px 10px; 
+	background-color: #fff;
+	z-index: 0;
+}
+
+.notifs-lining .lining-label {
+	padding: 8px 12px;
+	background-color: #f0f4f7;
+	color: #1da1f2;
+	border-radius: 20px;
+}
+
+.right-col {
+	position: fixed;
+	top: 69px;
+	bottom: 0px;
+	width: 320px;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
+	z-index: 9;
+	box-sizing: border-box;
+}
+
+.right-col ng-scrollbar {
+	--scrollbar-thumb-color: transparent;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1224px) {
+	main {
+		width: 50%;
+		margin-right: 6%;
+	}
+
+	.right-col {
+		width: 27%;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+	main {
+		width: 56%;
+		margin-right: 25%;
+	}
+
+	.right-col {
+		width: 33%;
+	}
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+	main {
+		width: 87%;
+		margin-right: 0px;
+		margin-left: 73px;
+	}
+
+	.right-col {
+		display: none;
+	}
+}

@@ -12,7 +12,7 @@ namespace SocNetwork.Configuration
         public const string ISSUER = "SocNetworkServer";
         public const string AUDIENCE = "SocNetworkClient";
         private const string KEY = "nnuFFSju3Hh0Eamzeey3kznqbvqyYK8Q";
-        public const int LIFETIME = 60;
+        public const int LIFETIME = 600;
 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {

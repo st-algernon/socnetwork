@@ -1,56 +1,63 @@
-<main>
-    <router-outlet></router-outlet>
-    <section class="chat flex jc-c ai-c">
-        <p class="select-chat-label">Select a chat to start messaging</p>
-    </section>
-    <section class="messenger">
-        <section class="messenger-header flex fd-r ai-c">
-            <form action="" method="get" class="search-box" >
-                <input type="search" name="search" placeholder="Search for people and groups" />
-            </form>
-            <button class="new-chat-btn square-32 round r-22"></button>
+<div class="flex jc-c">
+    <main class="flex jc-c">
+        <router-outlet></router-outlet>
+        <section class="chat-lining flex jc-c ai-c">
+            <p class="select-chat-label">Оберіть чат, щоб почати спілкування</p>
         </section>
-        <ng-container *ngIf="chats; else loading">
-            <section *ngFor="let chat of chats">
-                <a 
-                    [routerLink]="chat.withUser ? ['chat', chat.withUser?.id] : ['chat', me.id]" 
-                    routerLinkActive="is-active"
-                    class="chat-item flex fd-r ai-c"
+    </main>
+</div>
+<div class="messenger-wrapper flex jc-fe">
+    <section class="messenger flex fd-c">
+        <div class="messenger-header flex jc-sb ai-c">
+            <h2>Чати</h2>
+            <div class="flex jc-sb ai-c">
+                <!-- <form action="" method="get" class="search-box" >
+                    <input type="search" name="search" placeholder="Search for people and groups" />
+                </form> -->
+                <button class="search-chats-btn square-32 round r-22"></button>
+                <button class="new-chat-btn square-32 round r-22"></button>
+            </div>
+        </div>
+        <div class="messenger-body fg-1">
+            <ng-container *ngIf="chats; else loading">
+                <ng-scrollbar 
+                    visibility="hover" 
+                    appearance="standard"
+                    trackClass="scrollbar-track"
                 >
-                    <div class="avatar-box square-48">
-                        <img 
-                            [src]="chat.withUser?.currentAvatarPath || '../../assets/images/saved-messages.jpg'"
-                            class="square-48"
-                            alt="user"
+                    <section *ngFor="let chat of chats" class="chat-item-wrapper">
+                        <a 
+                            [routerLink]="['chat', chat.id]"
+                            routerLinkActive="active"
+                            class="chat-item flex fd-r ai-c"
                         >
-                    </div>
-                    <div class="message-wrap flex fd-c">
-                        <div class="source-name">{{ chat.withUser?.name || 'Saved Messages' }}</div>
-                        <div *ngIf="chat.messagesDTO[0]" class="last-message flex fd-r ai-c">
-                            <div class="avatar-box square-24">
+                            <div class="avatar-box square-48">
                                 <img 
-                                    [src]="chat.messagesDTO[0].author?.currentAvatarPath" 
-                                    class="square-24" 
+                                    [src]="chat.coverPath"
+                                    class="square-48"
                                     alt="user"
                                 >
                             </div>
-                            <div class="message-text">{{ chat.messagesDTO[0].text }}</div>
-                        </div>
-                    </div>
-                </a>
-            </section>
-        </ng-container>
-        <ng-template #loading>
-            <div id="floatingCirclesG">
-                <div class="f_circleG" id="frotateG_01"></div>
-                <div class="f_circleG" id="frotateG_02"></div>
-                <div class="f_circleG" id="frotateG_03"></div>
-                <div class="f_circleG" id="frotateG_04"></div>
-                <div class="f_circleG" id="frotateG_05"></div>
-                <div class="f_circleG" id="frotateG_06"></div>
-                <div class="f_circleG" id="frotateG_07"></div>
-                <div class="f_circleG" id="frotateG_08"></div>
-            </div>
-        </ng-template>
+                            <div class="message-wrap flex fd-c">
+                                <div class="source-name">{{ chat.title }}</div>
+                                <div *ngIf="chat.lastMessageDTO" class="last-message flex fd-r ai-c">
+                                    <div class="avatar-box square-24">
+                                        <img 
+                                            [src]="chat.lastMessageDTO.authorDTO.avatarPath" 
+                                            class="square-24" 
+                                            alt="user"
+                                        >
+                                    </div>
+                                    <div class="message-text">{{ chat.lastMessageDTO.text }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    </section>
+                </ng-scrollbar>
+            </ng-container>
+            <ng-template #loading>
+                <app-loader></app-loader>
+            </ng-template>
+        </div>
     </section>
-</main>
+</div>

@@ -1,102 +1,182 @@
-<section [ngClass]="{'without-top-b-radius':isOnWall}" class="post-wrap flex fd-c">
-    <div class="post-header flex fd-r ai-c">
-        <div class="avatar-box square-48">
-            <img 
-                src="../../../../assets/images/empty_photo.jpg"
-                class="square-48"
-                alt=""
-            >
-        </div>
-        <div class="flex fd-c">
-            <span class="source-name">Rick and Morty</span>
-            <span class="nick-name">@rickandmorty</span>
-        </div>
-    </div>
-    <div class="to-right-post">
-        <div class="post-body">
-            <p class="post-text">The new season is coming soon! <a href="#" class="hashtag">#rickandmorty</a></p>
-            <div class="media-box flex fd-r wrap">
-                <img src="../../../../assets/images/rick-and-morty-1.jpg" alt="">
-                <img src="../../../../assets/images/rick-and-morty-3.jpg" alt="">
-            </div>
-        </div>
-        <div class="post-footer flex fd-r jc-sb ai-c">
-            <ul class="content-actions flex fd-r jc-sb" data-container="content-actions">
-                <li class="flex fd-r">
-                    <span class="like-btn round r-22 square-32" data-action="like" data-state=""></span>
-                    <span class="like-count" data-state="">1</span>
-                </li>
-                <li class="flex fd-r">
-                    <span class="forward-btn round r-22 square-32" data-action="forward" data-state=""></span>
-                    <span class="forward-count" data-state="">2</span>
-                </li>
-                <li class="flex fd-r">
-                    <span class="comment-btn round r-22 square-32" data-action="comment" data-state=""></span>
-                </li>
-            </ul>
-            <div class="published-date">yesterday at 1:01 pm</div>
-        </div>
-        <div class="post-comments">
-            <div class="best-comment">
-                <div class="comment-header flex fd-r ai-c">
-                    <div class="avatar-box square-48">
-                        <img 
-                            src="../../../../assets/images/empty_photo.jpg"
-                            class="square-48"
-                            alt=""
-                        >
-                    </div>
-                    <div class="flex fd-c">
-                        <span class="source-name">Mr. Algernon</span>
-                        <span class="nick-name">@AwakE</span>
-                    </div>
-                </div>
-                <div class="to-right-comment">
-                    <div class="comment-body">
-                        <p class="comment-text">i'm waiting <a href="#" class="hashtag">#rickandmorty</a></p>
-                        <div class="media-box flex fd-r wrap">
-                            <img src="../../../../assets/images/zhdun.jpg" alt="">
-                        </div>
-                    </div>
-                    <div class="comment-footer flex fd-r ai-c jc-sb">
-                        <span class="published-date">yesterday at 5:07 pm</span>
-                        <ul class="content-actions flex fd-r" data-container="content-actions">
-                            <li class="flex fd-r">
-                                <span class="like-btn round r-22 square-32" data-action="like" data-state=""></span>
-                                <span class="like-count" data-state="">2</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="show-more-btn">show more comments</div>
-            <div class="write-comment flex fd-r">
-                <div class="avatar-box square-48">
+<section [routerLink]="['/', post.authorDTO.username, 'post', post.id]" class="post">
+        <div class="post-header flex ai-c">
+                <div [routerLink]="['/', post.authorDTO.username]" class="avatar-box square-48">
                     <img 
-                        src="../../../../assets/images/empty_photo.jpg"
+                        [src]="post.authorDTO.avatarPath"
                         class="square-48"
                         alt=""
                     >
                 </div>
-                <form action="" method="post" class="flex fd-r ai-c">
-                    <div class="textarea-attach-wrap flex fd-r ai-c">
-                        <textarea name="comment-field" placeholder="Leave a comment..." data-submit-btn="blink"></textarea>
-                        <ul class="attach flex fd-r jc-sb" data-container="attach">
-                            <li class="add-picture-btn round r-18 square-28" data-action="picture">
-                                <input type="file" name="picture" class="hidden"/>
-                            </li>
-                            <li class="add-music-btn round r-18 square-28" data-action="music">
-                                <input type="file" name="music" class="hidden"/>
-                            </li>
-                            <li class="add-video-btn round r-20 square-28" data-action="video">
-                                <input type="file" name="video" class="hidden"/>
-                            </li>
-                            <li class="add-emoji-btn round r-20 square-28" data-action="emoji"></li>
-                        </ul>
+                <div (click)="stopPropagation($event)" [routerLink]="['/', post.authorDTO.username]" class="flex fd-c">
+                    <span class="source-name">{{ post.authorDTO.name }}</span>
+                    <span class="nick-name">@{{ post.authorDTO.username }}</span>
+                </div>
+        </div>
+        <div class="post-body">
+            <span #post_text_container (click)="stopPropagation($event)" class="post-text">
+               
+            </span>
+            <app-photos-container 
+                *ngIf="post.mediaDTOs.length > 0"
+                [photos]="post.mediaDTOs"
+                size="large"
+            ></app-photos-container>
+        </div>
+        <div (click)="stopPropagation($event)" class="post-footer flex fd-r jc-sb ai-c">
+            <ul class="content-actions flex fd-r jc-sb">
+                <li class="flex ai-c">
+                    <span 
+                        #likePostBtn 
+                        class="like-btn round r-20 square-32" 
+                        [ngClass]="{'clicked': postLiked()}"
+                        (click)="toggleLikePost(likePostBtn)"
+                    ></span>
+                    <span
+                        [ngClass]="{'invisible': post.likesNumber == 0}" 
+                        class="count count-likes"
+                    >{{ post.likesNumber }}</span>
+                </li>
+                <li class="flex ai-c">
+                    <span class="forward-btn round r-20 square-32"></span>
+                    <!-- <span class="count count-forwards" data-state="">2</span> -->
+                </li>
+                <li class="flex fd-r">
+                    <span (click)="commentMaker = true" class="comment-btn round r-20 square-32"></span>
+                </li>
+            </ul>
+            <div *ngIf="isToday()" class="published-date">{{ post.creationDate | date:'shortTime':'':'uk'}}</div>
+            <div *ngIf="isToday() == false" class="published-date">{{ post.creationDate | date:'mediumDate':'':'uk'}}</div>
+        </div>
+
+        <div *ngIf="commentMaker" (click)="stopPropagation($event)" class="comments-section">
+            <div *ngIf="commentsBehavior == 'all' || commentsBehavior == 'best'" class="comments-container">
+                <div 
+                    *ngFor="let comment of comments" 
+                    class="comment flex ai-fs"
+                >
+                    <div class="comment-author-avatar">
+                        <div class="avatar-box square-32">
+                            <img 
+                                [src]="comment.authorDTO.avatarPath"
+                                class="square-32"
+                                alt=""
+                            >
+                        </div>
                     </div>
-                    <button type="submit" class="submit-btn square-32" data-state="unable"></button>
-                </form>
+                    <div 
+                        class="flex fd-c"
+                        [ngClass]="{'fg-1': comment.mediaDTOs.length > 0}"
+                    >
+                        <div class="flex ai-c">
+                            <div class="comment-header-body-wrapper">
+                                <div class="comment-header">
+                                    <div class="flex fd-c">
+                                        <span class="source-name">{{ comment.authorDTO.name }}</span>
+                                    </div>
+                                </div>
+                                <div class="comment-body">
+                                    <div class="comment-text">
+                                        {{ comment.text }}
+                                    </div>
+                                    <app-photos-container
+                                        *ngIf="comment.mediaDTOs.length > 0"
+                                        [photos]="comment.mediaDTOs"
+                                    ></app-photos-container>
+                                </div>
+                            </div>
+                            <div class="content-actions">
+                                <div class="flex ai-c">
+                                    <span 
+                                        #likeCommentBtn
+                                        class="like-btn round r-20 square-28" 
+                                        [ngClass]="{'clicked': commentLiked(comment)}"
+                                        (click)="likeComment(comment, likeCommentBtn)"
+                                    ></span>
+                                    <span 
+                                        [ngClass]="{'invisible': comment.likesNumber == 0}" 
+                                        class="count count-likes"
+                                    >{{ comment.likesNumber }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="comment-footer flex jc-sb">
+                            <span class="replay-btn">Відповісти</span>
+                            <div *ngIf="isToday()" class="published-date">{{ comment.creationDate | date:'shortTime':'':'uk'}}</div>
+                            <div *ngIf="isToday() == false" class="published-date">{{ comment.creationDate | date:'mediumDate':'':'uk'}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div 
+                    *ngIf="comments.length > 0 && !commentsLoaded"
+                    class="show-more-btn"
+                    (click)="loadComments()"
+                >показати більше коментарів</div>
+            </div>
+            <div *ngIf="commentMaker" class="comments-footer">
+                <div class="flex jc-c">
+                    <div 
+                    *ngIf="previewImagesData.length > 0"
+                    class="preview-container fg-1"
+                    >
+                        <div 
+                            class="close-btn round r-16 square-20" 
+                            (click)="unPreviewImages()"
+                        ></div>
+                        <app-photos-container 
+                            [photos]="previewImagesData"
+                        ></app-photos-container>
+                    </div>
+                </div>
+                <div class="comment-maker flex fd-r">
+                    <div class="avatar-box square-32">
+                        <img 
+                            [src]="me.avatarPath"
+                            class="square-32"
+                        >
+                    </div>
+                    <form 
+                        #form="ngForm"
+                        (ngSubmit)="onSubmitComment(form)"
+                        novalidate
+                        class="flex fd-r ai-c"
+                    >
+                        <div class="textarea-attach-wrapper flex fd-r ai-c">
+                            <textarea 
+                                rows="1"
+                                name="commentText"
+                                [(ngModel)]="commentForm.text"
+                                (keydown)="onEnterSubmit(form, $event)"
+                                (input)="resizeTextarea($event)"
+                                placeholder="Залишити коментар..."
+                            ></textarea>
+                            <ul class="attach flex fd-r jc-sb" data-container="attach">
+                                <li class="add-picture-btn round r-18 square-28" (click)="input_image.click()">
+                                    <input 
+                                        type="file" 
+                                        name="commentImages" 
+                                        class="hidden"
+                                        (change)="previewImages(input_image.files)"
+                                        #input_image
+                                        ngModel
+                                        multiple
+                                    />
+                                </li>
+                                <!-- <li class="add-music-btn round r-18 square-28" data-action="music">
+                                    <input type="file" name="music" class="hidden"/>
+                                </li>
+                                <li class="add-video-btn round r-20 square-28" data-action="video">
+                                    <input type="file" name="video" class="hidden"/>
+                                </li> -->
+                                <li class="add-emoji-btn round r-20 square-28"></li>
+                            </ul>
+                        </div>
+                        <button 
+                            type="submit"
+                            [disabled]="!commentForm.text && commentForm.images.length == 0" 
+                            class="submit-btn square-32"
+                        ></button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 </section>

@@ -4,9 +4,10 @@ import { ProfilePageComponent } from './profile-page.component';
 
 
 const routes: Routes = [
-  { path: '', component: ProfilePageComponent },
-  { path: 'following', loadChildren: () => import('./following-page/following.module').then(m => m.FollowingModule) },
-  { path: 'followers', loadChildren: () => import('./followers-page/followers.module').then(m => m.FollowersModule) }
+  { path: '', component: ProfilePageComponent, pathMatch: 'full' },
+  { path: 'photos', loadChildren: () => import('./photos-page/photos.module').then(m => m.PhotosModule) },
+  { path: 'post/:id', loadChildren: () => import('./post-page/post.module').then(m => m.PostModule) },
+  { path: '', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
 ];
 
 @NgModule({

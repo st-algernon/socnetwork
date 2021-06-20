@@ -1,0 +1,55 @@
+header {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  padding: 7px 20px;
+  background: url(../../assets/images/bg.png) !important;
+  z-index: 11;
+  border-bottom: 1px solid #f4f4f4;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-family: "Concert One", cursive;
+  width: 200px;
+  height: 40px;
+  color: #00a3e8 !important;
+  font-size: 30px;
+  text-align: right;
+  line-height: 35px;
+}
+
+.logo::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  display: inline-block;
+  background: url(../../assets/images/logo.png) no-repeat;
+  background-size: 100%;
+  vertical-align: top;
+}
+
+.logo a {
+  color: #00a3e8 !important;
+  text-decoration: none;
+  outline: none;
+}
+
+h1, h2, p {
+  text-align: center;
+}
+
+h1 {
+  color: #1da1f2;
+  font-size: 156px;
+  margin: 100px 0px 50px 0px;
+}
+
+h2 {
+  font-size: 54px;
+}
+
+p {
+  font-size: 24px;
+}

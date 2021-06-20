@@ -1,0 +1,62 @@
+ng-scrollbar {
+	--scrollbar-track-color: rgba(0, 0, 0, 0.05);
+	--scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+	--scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.3);
+}
+
+.trends {
+    margin-bottom: 15px;
+    border-radius: 15px;
+    padding: 0px 6px 8px 6px;
+    background-color: #fff;
+}
+
+.trends-header, 
+.trends-footer > a {
+    padding: 8px 16px;
+}
+
+.trends-header {
+    color: #222;
+}
+
+.trends-body {
+    padding: 4px 0px 4px 4px;
+    height: 168px;
+    border-radius: 15px;
+    background-color: #f7f9fa;
+}
+
+.trends-body li {
+    border-radius: 15px;
+}
+
+.trends-body li:hover {
+    background-color: #e5f2fc;
+}
+
+.trends-body li:last-of-type .trend-item {
+    border-bottom: none;
+}
+
+.trends .trend-item {
+    display: block;
+    border-bottom: 1px solid #e6eef5;
+    padding: 8px 0px;
+    margin: 0px 5%;
+}
+
+.trend-item-body {
+    color: #222;
+    font-weight: bold;
+}
+
+.trend-item-footer {
+    font-size: 13px;
+    color: rgb(145, 145, 145);
+}
+
+.trends-footer > a {
+    display: block;
+    cursor: pointer;
+}

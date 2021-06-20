@@ -12,52 +12,39 @@ namespace SocNetwork.Helpers
     public class UsersHelper
     {
         private readonly SocNetworkContext db;
+        public const string DEFAULT_AVATAR_PATH = "Resources\\defaults\\default-avatar.jpg";
 
         public UsersHelper(SocNetworkContext context)
         {
             db = context;
         }
 
-        public ProfileDTO GetProfileDTO(string username)
+        public static void ResetCurrentProfileMedia(User user, MediaFor resetFor)
         {
-            var user = db.Users
-                .Include(u => u.ProfileMedia)
-                .FirstOrDefault(u => u.Username == username);
+            var media = user.ProfileMedia.Where(m => m.IsCurrent == true && m.MediaFor == resetFor).ToList();
 
-            var profileDTO = new ProfileDTO();
-
-            user.CopyPropertiesTo<User, ProfileDTO>(profileDTO);
-
-            profileDTO.MediaDTO = GetProfileMediaDTO(user);
-
-            return profileDTO;
+            media.ForEach(m => m.IsCurrent = false);
         }
 
-        public ProfileDTO GetProfileDTO(User user)
+        public static ProfileMedia GetCurrentAvatar(User user)
         {
-            var profileDTO = new ProfileDTO();
-
-            user.CopyPropertiesTo<User, ProfileDTO>(profileDTO);
-
-            profileDTO.MediaDTO = GetProfileMediaDTO(user);
-
-            return profileDTO;
+            return user?.ProfileMedia?.FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Avatar);
         }
 
-        public List<ProfileMediaDTO> GetProfileMediaDTO(User user)
+        public static ProfileMedia GetCurrentCover(User user)
         {
-            var media = user.ProfileMedia.ToList();
+            return user?.ProfileMedia?.FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Cover);
+        }
 
-            var mediaDTO = new List<ProfileMediaDTO>();
+        public static ProfileMediaDTO GetCurrentAvatarDTO(User user)
+        {
+            var avatar = user.ProfileMedia
+                .FirstOrDefault(pm => pm.IsCurrent == true && pm.MediaFor == MediaFor.Avatar);
+            var avatarDTO = new ProfileMediaDTO();
 
-            media.ForEach(m =>
-            {
-                var mDTO = new ProfileMediaDTO();
-                m.CopyPropertiesTo<ProfileMedia, ProfileMediaDTO>(mDTO);
-                mediaDTO.Add(mDTO);
-            });
+            avatar.CopyPropertiesTo(avatarDTO);
 
-            return mediaDTO;
+            return avatarDTO;
         }
     }
 }

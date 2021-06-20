@@ -3,15 +3,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './shared/services/auth.guard';
 import { UserLayoutComponent } from './shared/components/user-layout/user-layout.component';
-import { ProfileMenuPopupComponent } from './shared/components/user-layout/profile-menu-popup/profile-menu-popup.component';
-import { SearchResultPopupComponent } from './shared/components/user-layout/search-result-popup/search-result-popup.component';
-import { NotFoundPageComponent } from './shared/components/not-found-page/not-found-page.component';
+import { AccountMenuPopupComponent } from './shared/components/user-layout/account-menu-popup/account-menu-popup.component';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { AuthInterceptor } from './shared/auth.interceptor';
+import { SharedModule } from './shared/shared.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -23,9 +24,8 @@ const INTERCEPTOR_PROVIDER: Provider = {
   declarations: [
     AppComponent,
     UserLayoutComponent,
-    ProfileMenuPopupComponent,
-    SearchResultPopupComponent,
-    NotFoundPageComponent
+    AccountMenuPopupComponent,
+    NotFoundPageComponent,
   ],
   imports: [
     CommonModule,
@@ -33,7 +33,9 @@ const INTERCEPTOR_PROVIDER: Provider = {
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgScrollbarModule,
+    SharedModule
   ],
   providers: [INTERCEPTOR_PROVIDER, AuthGuard],
   bootstrap: [AppComponent]

@@ -90,6 +90,17 @@ label {
   background: #373737 url("../../../assets/images/bg.png") 0 0 repeat;
 }
 
+.sign-box-btn .loader {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  z-index: 3;
+}
+
+.sign-box-btn .loader ~ .sign-btn:after {
+  background: none;
+}
+
 .sign-btn {
   position: relative;
   z-index: 2;
