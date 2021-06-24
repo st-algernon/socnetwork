@@ -12,7 +12,7 @@ namespace SocNetwork.Helpers
     public class UsersHelper
     {
         private readonly SocNetworkContext db;
-        public const string DEFAULT_AVATAR_PATH = "Resources\\defaults\\default-avatar.jpg";
+        public const string DEFAULT_AVATAR_PATH = "asssets\\images\\default-avatar.jpg";
 
         public UsersHelper(SocNetworkContext context)
         {

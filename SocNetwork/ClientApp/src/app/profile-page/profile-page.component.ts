@@ -48,7 +48,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
         profile: null,
         posts: null
       };
-
       this.relationship = {
         isMe: false,
         isUnFollowed: false,
@@ -58,7 +57,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
     }
 
   ngOnInit(): void {
-
     this.subs.push(
       
       this.usersService.me$.subscribe((shortProfile: ShortProfile) => this.me = shortProfile),
@@ -72,6 +70,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
           ),
           this.relationshipsService.getRelationshipWith(params['username']).subscribe(
             (relationship: Relationship) => {
+              console.log(relationship);
               this.defineRelationship(relationship);
             }
           ),
@@ -96,6 +95,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   ngAfterContentChecked(): void {
     if (this.me?.id == this.user.profile?.id) {
       this.relationship.isMe = true;
+    }
+    else {
+      this.relationship.isMe = false;
     }
   }
 
@@ -155,13 +157,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterContentChec
   defineRelationship(relationship: Relationship) {
     if (relationship.userRelationshipType == UserRelationshipType.Followed) {
       this.relationship.isFollowed = true;
+      this.relationship.isUnFollowed = false;
     }
     if (relationship.userRelationshipType == UserRelationshipType.UnFollowed) {
       this.relationship.isUnFollowed = true;
+      this.relationship.isFollowed = false;
     }
     if (relationship.userRelationshipType == UserRelationshipType.Blocked) {
       this.relationship.isBlocked = true;
     }
+    console.log(this.relationship);
   }
 
   onScroll() {

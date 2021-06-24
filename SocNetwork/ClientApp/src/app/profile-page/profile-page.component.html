@@ -30,6 +30,11 @@
                 (click)="openChat()"
               ></button>
               <button 
+                *ngIf="relationship.isMe"
+                class="btn btn-lg btn-outlined profile-action-btn" 
+                (click)="editProfileFlag = true"
+              >Редагувати</button>
+              <button 
                 *ngIf="relationship.isUnFollowed && !relationship.isMe" 
                 class="btn btn-lg btn-outlined profile-action-btn"
                 (click)="follow()"
@@ -41,11 +46,6 @@
                 (mouseout)="changeTitleToUnfollow($event)"
                 (click)="unfollow()"
               >Відстежується</button>
-              <button 
-                *ngIf="relationship.isMe"
-                class="btn btn-lg btn-outlined profile-action-btn" 
-                (click)="editProfileFlag = true"
-              >Редагувати</button>
             </div>
           </div>
           <div class="flex fd-r jc-fe">
@@ -57,7 +57,7 @@
               <ul class="follow-wrap flex fd-r jc-sb">
                 <li class="">
                   <a href="#">
-                    <span *ngIf="user.profile; else empty_count_posts">28</span>
+                    <span *ngIf="user.profile; else empty_count_posts">8</span>
                     <ng-template #empty_count_posts>
                       <span class="empty count"></span>
                     </ng-template> 
@@ -66,7 +66,7 @@
                 </li>
                 <li class="">
                   <a [routerLink]="['followers']">
-                    <span *ngIf="user.profile; else empty_count_followers">24</span>
+                    <span *ngIf="user.profile; else empty_count_followers">14</span>
                     <ng-template #empty_count_followers>
                       <span class="empty count"></span>
                     </ng-template> 
@@ -76,7 +76,7 @@
 
                 <li class="">
                   <a [routerLink]="['following']">
-                    <span *ngIf="user.profile; else empty_count_following">10</span>
+                    <span *ngIf="user.profile; else empty_count_following">6</span>
                     <ng-template #empty_count_following>
                       <span class="empty count"></span>
                     </ng-template>
@@ -104,7 +104,7 @@
       <section class="user-photo">
         <app-photos 
         *ngIf="user.profile" 
-        [photos]="user.profile.profileMediaDTO"
+        [photos]="user.profile.mediaDTOs"
         ></app-photos>
       </section>
 

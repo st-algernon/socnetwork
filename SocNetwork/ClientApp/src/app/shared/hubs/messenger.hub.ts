@@ -20,8 +20,6 @@ export class MessengerHub {
             this.hubConnection = new signalR.HubConnectionBuilder()
             .withUrl('/hubs/messenger', { accessTokenFactory: () => this.auth.token })
             .build();
-
-            this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
             
             this.hubConnection
             .start()
@@ -37,6 +35,7 @@ export class MessengerHub {
     }
 
     sendMessage(request: MessageRequest) {
+        console.log(this.hubConnection.state);
         this.hubConnection.invoke('Send', request);
     }
 }

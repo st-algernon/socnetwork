@@ -134,6 +134,13 @@ export interface VerificationResponse {
     result: boolean
 }
 
+export interface RecaptchaResponse {
+    success: boolean;
+    challenge_ts: string;
+    hostname: string;
+    errorCodes: any[];
+}
+
 export interface Post {
     id: string,
     text: string,

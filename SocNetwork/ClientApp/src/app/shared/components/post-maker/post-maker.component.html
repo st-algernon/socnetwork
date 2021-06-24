@@ -1,11 +1,14 @@
 <section class="post-maker flex fd-r jc-sb ai-fs">
     <span class="avatar-box square-48">
         <img
-            *ngIf="me" 
+            *ngIf="me.avatarPath; else default_avatar" 
             [src]="me.avatarPath" 
             class="square-48"
             alt="photo"
         >
+        <ng-template #default_avatar>
+            <img src="../../../../assets/images/default-avatar.jpg" class="square-48" alt="default-avatar">
+        </ng-template>
     </span>
     <form 
         #form="ngForm"
@@ -61,7 +64,7 @@
                 type="submit" 
                 [disabled]="!postForm.text && postForm.images.length == 0" 
                 class="submit-btn"
-            >Post</button>
+            >Опублікувати</button>
         </div>
     </form>
 </section>

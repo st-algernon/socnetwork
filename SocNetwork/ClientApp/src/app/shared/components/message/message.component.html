@@ -8,7 +8,15 @@
         [attr.data-author-id]="message.authorDTO.id"
     >
         <div class="avatar-box square-32">
-            <img [src]="message.authorDTO.avatarPath" alt="" class="square-32">
+            <img 
+                *ngIf="message.authorDTO.avatarPath; else default_avatar" 
+                [src]="message.authorDTO.avatarPath" 
+                alt="message-author" 
+                class="square-32"
+            >
+            <ng-template #default_avatar>
+                <img src="../../../../assets/images/default-avatar.jpg" class="square-32" alt="default-avatar">
+            </ng-template>
         </div>
     </div>
     <div 

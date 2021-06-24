@@ -187,8 +187,7 @@ namespace SocNetwork.Helpers
                 profileDTO.MediaDTOs.Add(ToProfileMediaDTO(m));
             });
 
-            profileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path
-                ?? UsersHelper.DEFAULT_AVATAR_PATH;
+            profileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path;
             profileDTO.CoverPath = UsersHelper.GetCurrentCover(user)?.Path;
 
             return profileDTO;
@@ -200,9 +199,8 @@ namespace SocNetwork.Helpers
 
             user.CopyPropertiesTo(shortProfileDTO);
 
-            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path
-                ?? UsersHelper.DEFAULT_AVATAR_PATH;
-
+            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path;
+            
             return shortProfileDTO;
         }
 

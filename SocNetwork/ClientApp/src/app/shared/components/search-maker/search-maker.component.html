@@ -15,9 +15,17 @@
         <!-- <ng-scrollbar> -->
             <ul *ngIf="wantedUsers.length != 0" class="wanted-users-wrapper">
                 <li *ngFor="let user of wantedUsers" class="found-user">
-                    <a [href]="'/' + user.username" class="flex jc-fs ai-c">
+                    <a [routerLink]="'/' + user.username" class="flex jc-fs ai-c">
                         <span class="avatar-box square-32">
-                            <img [src]="user.avatarPath" alt="" class="square-32" >
+                            <img 
+                                *ngIf="user.avatarPath; else default_avatar"
+                                [src]="user.avatarPath"
+                                alt="user-avatar" 
+                                class="square-32" 
+                            >
+                            <ng-template #default_avatar>
+                                <img src="../../assets/images/default-avatar.jpg" class="square-32" alt="default-avatar">
+                            </ng-template>
                         </span>
                         <span class="flex fd-c">
                             <span class="source-name">{{ user.name}}</span>

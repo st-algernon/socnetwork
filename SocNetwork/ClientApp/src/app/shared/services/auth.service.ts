@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, Subject, throwError } from "rxjs";
 import { catchError, map, tap } from "rxjs/operators";
@@ -7,6 +7,7 @@ import {
   AccountLoginRequest,
   AccountRegistrationRequest,
   AuthResponse,
+  RecaptchaResponse,
   TokenRequest,
   VerificationResponse,
 } from "../interfaces";
@@ -83,6 +84,14 @@ export class AuthService {
       .pipe(
           map((response: VerificationResponse) => response.result)
       );
+  }
+
+  solveRecaptcha(token: string): Observable<boolean> {
+    return this.http.post<RecaptchaResponse>(`${environment.apiUrl}/auth/recaptcha`, { token })
+    .pipe(
+      tap(console.log),
+      map((response: RecaptchaResponse) => response.success)
+    );
   }
 
   logout() {

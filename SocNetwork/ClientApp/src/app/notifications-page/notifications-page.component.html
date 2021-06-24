@@ -8,10 +8,14 @@
             <a [routerLink]="getLinkToSubject(notif)" class="notif-item flex">
                 <a [routerLink]="'/' + notif.senderDTO.username" class="avatar-box square-40">
                     <img 
+                        *ngIf="notif.senderDTO.avatarPath; else default_avatar"
                         [src]="notif.senderDTO.avatarPath"
                         alt="avatar"
                         class="square-40"
                     >
+                    <ng-template #default_avatar>
+                      <img src="../../assets/images/default-avatar.jpg" class="square-40" alt="default-avatar">
+                    </ng-template>
                 </a>
                 <div class="flex fd-c fg-1">
                     <a [routerLink]="'/' + notif.senderDTO.username" class="flex">
@@ -26,7 +30,7 @@
 
         <app-loader *ngIf="!loaded"></app-loader>
         
-        <div *ngIf="notifs.length == 0 && loaded"class="notifs-lining flex jc-c ai-c">
+        <div *ngIf="notifs.length == 0 && loaded" class="notifs-lining flex jc-c ai-c">
           <p class="lining-label">Ви поки що не маєте жодних оповіщень</p>
         </div>
       </div>

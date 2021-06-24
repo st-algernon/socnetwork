@@ -33,20 +33,28 @@
                         >
                             <div class="avatar-box square-48">
                                 <img 
+                                    *ngIf="chat.coverPath; else default_avatar"
                                     [src]="chat.coverPath"
                                     class="square-48"
                                     alt="user"
                                 >
+                                <ng-template #default_avatar>
+                                    <img src="../../assets/images/default-avatar.jpg" class="square-48" alt="default-avatar">
+                                </ng-template>
                             </div>
                             <div class="message-wrap flex fd-c">
                                 <div class="source-name">{{ chat.title }}</div>
                                 <div *ngIf="chat.lastMessageDTO" class="last-message flex fd-r ai-c">
                                     <div class="avatar-box square-24">
                                         <img 
+                                            *ngIf="chat.lastMessageDTO.authorDTO.avatarPath; else default_avatar"
                                             [src]="chat.lastMessageDTO.authorDTO.avatarPath" 
                                             class="square-24" 
                                             alt="user"
                                         >
+                                        <ng-template #default_avatar>
+                                            <img src="../../assets/images/default-avatar.jpg" class="square-24" alt="default-avatar">
+                                        </ng-template>
                                     </div>
                                     <div class="message-text">{{ chat.lastMessageDTO.text }}</div>
                                 </div>

@@ -11,6 +11,7 @@
 *.userprefs
 
 Resources/
+wwwwroot/
 
 # Build results
 [Dd]ebug/

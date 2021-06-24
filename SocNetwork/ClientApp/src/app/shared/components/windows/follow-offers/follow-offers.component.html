@@ -12,10 +12,14 @@
                 <a [routerLink]="['/', user.username]" class="follow-offer-item flex">
                     <div class="avatar-box square-40">
                         <img 
+                            *ngIf="user.avatarPath; else default_avatar"
                             [src]="user.avatarPath"
                             alt="avatar"
                             class="square-40"
                         >
+                        <ng-template #default_avatar>
+                            <img src="../../../../assets/images/default-avatar.jpg" class="square-40" alt="default-avatar">
+                        </ng-template>
                     </div>
                     <div class="flex fg-1 fd-c">
                         <div class="flex fd-r jc-sb ai-c">

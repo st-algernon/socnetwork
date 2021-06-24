@@ -75,7 +75,7 @@ export class EditProfilePopupComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.form = new FormGroup({
-      name: new FormControl(this.user.name, [Validators.pattern(RegExp('^[A-Za-zА-Яа-я ]*$')), Validators.minLength(3), Validators.maxLength(35)]),
+      name: new FormControl(this.user.name, [Validators.pattern(/(?:[^\x00-\x7F]|\w)+/g), Validators.minLength(3), Validators.maxLength(35)]),
       username: new FormControl(this.user.username, [Validators.pattern('^[A-Za-z0-9_]*$'), Validators.minLength(3), Validators.maxLength(20)]),
       dayOfBirth: new FormControl(null, [Validators.min(1), Validators.max(31)]),
       monthOfBirth: new FormControl(null, [Validators.min(1), Validators.max(12)]),

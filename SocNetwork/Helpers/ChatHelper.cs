@@ -13,7 +13,7 @@ namespace SocNetwork.Helpers
     {
         private readonly SocNetworkContext db;
         public const int DEFAULT_LAST_MESSAGES_NUM = 25;
-        public const string SAVED_MESSAGES_PATH = "Resources\\defaults\\saved-messages.jpg";
+        public const string SAVED_MESSAGES_PATH = "assets\\images\\saved-messages.jpg";
 
         public ChatHelper(SocNetworkContext context)
         {

@@ -17,7 +17,8 @@ namespace SocNetwork.Helpers
         {
             try
             {
-                var folderName = Path.Combine("Resources", file.ContentType);
+                var folderName = Path.Combine("wwwroot/resources", file.ContentType);
+                var dbFolderName = Path.Combine("resources", file.ContentType);
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
                 if (!Directory.Exists(pathToSave))
@@ -32,7 +33,7 @@ namespace SocNetwork.Helpers
                     var fullFileName = name + '.' + format;
 
                     var fullPath = Path.Combine(pathToSave, fullFileName);
-                    var dbPath = Path.Combine(folderName, fullFileName);
+                    var dbPath = Path.Combine(dbFolderName, fullFileName);
 
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {

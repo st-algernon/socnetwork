@@ -112,6 +112,7 @@ namespace SocNetwork.Controllers
                 .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
                 .Take(usersPageParams.Size)
                 .Include(ur => ur.FromUser)
+                .ThenInclude(u => u.ProfileMedia)
                 .Select(ur => ur.FromUser)
                 .ToListAsync();
 
@@ -149,6 +150,7 @@ namespace SocNetwork.Controllers
                 .Skip((usersPageParams.Number - 1) * usersPageParams.Size)
                 .Take(usersPageParams.Size)
                 .Include(ur => ur.ToUser)
+                .ThenInclude(u => u.ProfileMedia)
                 .Select(ur => ur.ToUser)
                 .ToListAsync();
 
@@ -175,6 +177,7 @@ namespace SocNetwork.Controllers
             var blocked = await db.UserRelationships
                 .Where(u => u.FromUserId == currentUser.Id && u.UserRelationshipType == UserRelationshipType.Blocked)
                 .Include(u => u.ToUser)
+                .ThenInclude(u => u.ProfileMedia)
                 .Select(u => u.ToUser)
                 .ToListAsync();
 

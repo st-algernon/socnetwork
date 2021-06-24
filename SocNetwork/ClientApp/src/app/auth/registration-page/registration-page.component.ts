@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { forbiddenEmailValidator, forbiddenUsernameValidator } from 'src/app/shared/directives/forbidden.validators';
 import { AccountRegistrationRequest } from 'src/app/shared/interfaces';
 import { AuthService } from 'src/app/shared/services/auth.service';
@@ -10,10 +11,11 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   templateUrl: './registration-page.component.html',
   styleUrls: ['./registration-page.component.css']
 })
-export class RegistrationPageComponent implements OnInit {
+export class RegistrationPageComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
-  submitted = false;;
+  submitted: boolean = false;
+  subs: Subscription[] = [];
 
   get email() {
     return this.form.get('email');
@@ -62,6 +64,10 @@ export class RegistrationPageComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.subs.forEach(s => s.unsubscribe());
+  }
+
   submit() {
     if (this.form.invalid) {
       return
@@ -76,16 +82,26 @@ export class RegistrationPageComponent implements OnInit {
       password: this.form.value.password
     };
 
-    this.authService.register(registrationRequest).subscribe(() => {
-      this.form.reset();
-      this.router.navigate(['/news']);
-      this.submitted = false;
-    }, () => {
-      this.submitted = false;
-    });
+    this.subs.push(
+      this.authService.register(registrationRequest).subscribe(() => {
+        this.form.reset();
+        this.router.navigate(['/news']);
+        this.submitted = false;
+      }, () => {
+        this.submitted = false;
+      })
+    );
   }
 
   resolved(captchaResponse: string) {
     console.log(`Resolved captcha with response: ${captchaResponse}`);
+
+    this.subs.push(
+
+      this.authService.solveRecaptcha(captchaResponse).subscribe((isPassed: boolean) => {
+        console.log(isPassed);
+      })
+      
+    );
   }
 }

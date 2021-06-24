@@ -2,10 +2,14 @@
         <div class="post-header flex ai-c">
                 <div [routerLink]="['/', post.authorDTO.username]" class="avatar-box square-48">
                     <img 
+                        *ngIf="post.authorDTO.avatarPath; else default_avatar"
                         [src]="post.authorDTO.avatarPath"
                         class="square-48"
                         alt=""
                     >
+                    <ng-template #default_avatar>
+                        <img src="../../../../assets/images/default-avatar.jpg" class="square-48" alt="default-avatar">
+                    </ng-template>
                 </div>
                 <div (click)="stopPropagation($event)" [routerLink]="['/', post.authorDTO.username]" class="flex fd-c">
                     <span class="source-name">{{ post.authorDTO.name }}</span>
@@ -57,10 +61,14 @@
                     <div class="comment-author-avatar">
                         <div class="avatar-box square-32">
                             <img 
+                                *ngIf="comment.authorDTO.avatarPath; else default_avatar"
                                 [src]="comment.authorDTO.avatarPath"
                                 class="square-32"
-                                alt=""
+                                alt="comment-author"
                             >
+                            <ng-template #default_avatar>
+                                <img src="../../../../assets/images/default-avatar.jpg" class="square-32" alt="default-avatar">
+                            </ng-template>
                         </div>
                     </div>
                     <div 
@@ -130,9 +138,13 @@
                 <div class="comment-maker flex fd-r">
                     <div class="avatar-box square-32">
                         <img 
+                            *ngIf="me.avatarPath; else default_avatar"
                             [src]="me.avatarPath"
                             class="square-32"
                         >
+                        <ng-template #default_avatar>
+                            <img src="../../../../assets/images/default-avatar.jpg" class="square-32" alt="default-avatar">
+                        </ng-template>
                     </div>
                     <form 
                         #form="ngForm"

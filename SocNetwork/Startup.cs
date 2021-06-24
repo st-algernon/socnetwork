@@ -39,8 +39,6 @@ namespace SocNetwork
 
             services.AddSignalR(hubOptions =>
             {
-                hubOptions.KeepAliveInterval = TimeSpan.FromMinutes(50);
-                hubOptions.ClientTimeoutInterval = TimeSpan.FromMinutes(55);
                 hubOptions.EnableDetailedErrors = true;
             });
             services.AddSingleton<IUserIdProvider, UserIdProvider>();
@@ -49,7 +47,7 @@ namespace SocNetwork
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "wwwroot";
             });
 
             services.Configure<FormOptions>(o => {
@@ -110,13 +108,25 @@ namespace SocNetwork
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions()
+            app.Use(async (context, next) =>
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-                RequestPath = new PathString("/Resources")
+
+                await next();
+
+                if (context.Response.StatusCode == 404 && !Path.HasExtension(context.Request.Path.Value))
+                {
+                    context.Request.Path = "/index.html";
+
+                    await next();
+
+                }
+
             });
+
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseHttpsRedirection();
 
             if (!env.IsDevelopment())
             {
@@ -142,9 +152,6 @@ namespace SocNetwork
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())

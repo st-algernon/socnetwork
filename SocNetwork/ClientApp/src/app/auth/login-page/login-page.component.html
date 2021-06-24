@@ -34,8 +34,8 @@
           <span *ngIf="submitted" class="loader">
             <app-loader></app-loader>
           </span>
+          <!-- (click)="captchaRef.execute()"  -->
           <button 
-            (click)="captchaRef.execute()" 
             type="submit" 
             [disabled]="form.invalid || submitted" 
             class="sign-btn"

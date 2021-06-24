@@ -3,10 +3,14 @@
     <span class="flex fd-r ai-c">
       <span class="avatar-box square-40">
         <img 
+          *ngIf="me?.avatarPath; else default_avatar"
           [src]="me?.avatarPath"
           class="square-40"
           alt="photo" 
         />
+        <ng-template #default_avatar>
+          <img src="../../../../../assets/images/default-avatar.jpg" class="square-40" alt="default-avatar">
+        </ng-template>
       </span>
       <span>{{ me?.name }}</span>
     </span>

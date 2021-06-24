@@ -21,8 +21,6 @@ export class PostsHub {
             .withUrl('/hubs/posts', { accessTokenFactory: () => this.auth.token })
             .build();
 
-            this.hubConnection.serverTimeoutInMilliseconds = 1000 * 60 * 60;
-
             this.hubConnection
             .start()
             .then(() => console.log('Connection started'))

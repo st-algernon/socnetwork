@@ -65,8 +65,8 @@
           <span *ngIf="submitted" class="loader">
             <app-loader></app-loader>
           </span>
+          <!-- (click)="captchaRef.execute()"  -->
           <button 
-            (click)="captchaRef.execute()" 
             type="submit" 
             [disabled]="form.invalid || form.pending || submitted" class="sign-btn"
           >Sign up</button>
@@ -83,7 +83,6 @@
           <a href="#">privacy statement</a>.
         </p> -->
       </div>
-
     </form>
   </div>
 </main>

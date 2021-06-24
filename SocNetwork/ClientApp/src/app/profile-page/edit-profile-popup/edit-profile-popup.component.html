@@ -12,7 +12,7 @@
       >
         <div class="photo-cover" data-container="image-box">
           <img
-            *ngIf="user && user?.coverPath && !previewCoverData"
+            *ngIf="user && user.coverPath && !previewCoverData"
             [src]="user.coverPath"
             alt="photo-cover"
           />
@@ -40,7 +40,7 @@
         <div class="user-avatar-back">
           <div class="user-avatar">
             <img
-              *ngIf="user && !previewAvatarData"
+              *ngIf="user && user.avatarPath && !previewAvatarData; else default_avatar"
               [src]="user.avatarPath"
               alt="avatar"
             />
@@ -49,6 +49,9 @@
               [src]="previewAvatarData.path"
               alt="avatar"
             />
+            <ng-template #default_avatar>
+              <img src="../../../assets/images/default-avatar.jpg" alt="default-avatar">
+            </ng-template>
             <div class="photo-upload-wrap">
               <div class="upload-btn flex jc-c ai-c">
                 <img

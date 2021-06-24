@@ -2,7 +2,7 @@ import { NotificType, SubjectType } from "./enums"
 import { NotifOptions as NotificsOptions, Options } from "./interfaces"
 
 export const GenderOptions: Options[] = [
-    { key: '0', value: 'Невизначений' },
+    { key: '0', value: 'Не вказано' },
     { key: '1', value: 'Чоловік' },
     { key: '2', value: 'Жінка' },
     { key: '3', value: 'Гендерквір' },
@@ -11,10 +11,10 @@ export const GenderOptions: Options[] = [
 ]
 
 export const MaritalStatusOptions: Options[] = [
-    { key: '0', value: 'Невизначений' },
+    { key: '0', value: 'Не вказано' },
     { key: '1', value: 'Заручений(на)' },
     { key: '2', value: 'В стосунках' },
-    { key: '3', value: 'Самотній' },
+    { key: '3', value: 'Самотній(на)' },
     { key: '4', value: "Все складно" },
     { key: '5', value: "В шлюбі" }
 ]

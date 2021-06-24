@@ -24,6 +24,7 @@ main {
     margin-bottom: 10px;
     background-color: #f7f9fa;
     border-radius: 15px;
+	position: relative;
 }
 
 .notifs-body .notif-item {
@@ -49,9 +50,12 @@ main {
 }
 
 .notifs-lining {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
 	border-radius: 15px;
-	height: 100%;
-	margin-bottom: 15px;
 	padding: 0px 10px; 
 	background-color: #fff;
 	z-index: 0;

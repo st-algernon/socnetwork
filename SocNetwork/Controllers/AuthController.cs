@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 using System.Text;  
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace SocNetwork.Controllers
 {
@@ -140,6 +143,34 @@ namespace SocNetwork.Controllers
             {
                 Result = result
             });
+        }
+
+        [HttpPost("recaptcha")]
+        public IActionResult SolveRecaptcha([FromBody] RecaptchaRequest request)
+        {
+            const string secretKey = "6Lem90YbAAAAAJnzHCaL82ei2jJR9B9zfZYNr1PD";
+            string responseFromServer = "";
+
+            var uri = new Uri("https://www.google.com/recaptcha/api/siteverify" +
+                                  $"?secret={secretKey}&response={request.Token}");
+            var webRequest = WebRequest.CreateHttp(uri);
+            webRequest.Method = "POST";
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.ContentLength = 0;
+
+            using (WebResponse resp = webRequest.GetResponse())
+            using (Stream dataStream = resp.GetResponseStream())
+            {
+                if (dataStream != null)
+                {
+                    using var reader = new StreamReader(dataStream);
+                    responseFromServer = reader.ReadToEnd();
+                }
+            }
+
+            var recaptchaResponse = JsonConvert.DeserializeObject<RecaptchaResponse>(responseFromServer);
+
+            return Ok(recaptchaResponse);
         }
     }
 }
