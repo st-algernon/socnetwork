@@ -70,24 +70,13 @@
 	font-size: 15px;
 }
 
-/* .comment .comment-body .media-box {
-	width: 50%;
-	border-radius: 10px;
-	overflow: hidden;
+.comment .comment-body {
+	margin: 0px -6px;
 }
 
-.comment-body .media-box img {
-	object-fit: cover;
-	object-position: center;
-	width: 40%;
-	max-height: 100px;
-	flex-grow: 1;
-	margin: 0px 1px 1px 0px;
+.comment .comment-body .comment-text {
+	margin: 0px 6px;
 }
-
-.comment-body .media-box img:first-of-type {
-	max-height: 200px;
-} */
 
 .comment .comment-footer {
 	padding: 0px 60px 0px 20px;

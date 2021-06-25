@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SocNetwork.DTO;
 using SocNetwork.Extensions;
 using SocNetwork.Models;
@@ -51,6 +53,39 @@ namespace SocNetwork.Helpers
             {
                 return null;
             }
+        }
+
+        public void Upload(FileInfo file, string connectionString, string container)
+        {
+            var containerClient = new BlobContainerClient(connectionString, container);
+
+            try
+            {
+                var blobClient = containerClient.GetBlobClient(file.Name);
+                using (var fileStream = File.OpenRead(file.FullName))
+                {
+                    blobClient.Upload(fileStream);
+                }
+
+                File.Delete(file.FullName);
+            }
+            catch (Exception)
+            { }
+        }
+
+        public FileInfo GetFile(string sourceFolder, string fileName)
+        {
+            return new DirectoryInfo(sourceFolder)
+                .GetFiles()
+                .FirstOrDefault(f => f.Name == fileName && f.Attributes.HasFlag(FileAttributes.Hidden));
+        }
+
+        public IConfigurationRoot GetConfiguration()
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                .AddJsonFile("appsettings.json")
+                .Build();
         }
     }
 }

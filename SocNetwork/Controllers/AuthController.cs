@@ -76,8 +76,7 @@ namespace SocNetwork.Controllers
                 Username = request.Username,
                 Password = HashHelper.ComputeSha256Hash(request.Password),
                 CreationDate = DateTime.UtcNow,
-                ProfileMedia = new List<ProfileMedia> {  }
-
+                ProfileMedia = new List<ProfileMedia> { }
             };
 
             await db.Users.AddAsync(user);

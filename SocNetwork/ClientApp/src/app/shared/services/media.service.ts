@@ -16,7 +16,7 @@ export class MediaService {
     const header = new HttpHeaders({
       'Media-For': mediaFor.toString()
     });
-    
+
     return this.http.post(`${environment.apiUrl}/media/profile`, formData, { headers: header })
     .pipe(
       tap(console.log)
@@ -35,5 +35,5 @@ export class MediaService {
     .pipe(
       map((response: MediaResponse) => response.media)
     )
-}
+  }
 }

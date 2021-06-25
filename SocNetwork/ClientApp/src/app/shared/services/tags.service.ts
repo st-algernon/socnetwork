@@ -24,5 +24,4 @@ export class TagsService {
         map((response: TagsResponse) => response.tags)
     );
   }
-
 }
