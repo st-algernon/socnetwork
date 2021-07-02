@@ -199,8 +199,7 @@ namespace SocNetwork.Helpers
 
             user.CopyPropertiesTo(shortProfileDTO);
 
-            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path
-                ?? UsersHelper.DEFAULT_AVATAR_PATH;
+            shortProfileDTO.AvatarPath = UsersHelper.GetCurrentAvatar(user)?.Path;
             
             return shortProfileDTO;
         }
